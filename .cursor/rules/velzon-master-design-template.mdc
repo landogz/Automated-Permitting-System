@@ -1,0 +1,56 @@
+---
+description: Always use the Velzon design template in public/master for all UI across this project. Match layouts, components, and assets from that template before inventing new styles.
+alwaysApply: true
+---
+
+# Design Template: Velzon (`public/master`) — Mandatory
+
+For **all** UI in this project (public, auth, applicant, staff, admin), the visual design system is the **Velzon** HTML admin template stored at:
+
+**`public/master/`** (served as `/master/...`)
+
+This rule **overrides** generic “Tailwind-only / invent a new aesthetic” guidance for layout and look-and-feel. Backend remains Laravel API + Axios SPA; the **screen chrome and components** must follow Velzon.
+
+## Source of truth
+
+Before building or restyling any page:
+
+1. Open the closest demo HTML under `public/master/` (examples below).
+2. Reuse its structure, CSS classes, spacing, cards, tables, forms, modals, and auth shells.
+3. Wire Blade/JS to those patterns; load Velzon assets from `/master/assets/...`.
+4. Do **not** invent a parallel design system (custom slate/glass landing, one-off Tailwind themes, Bootstrap-from-scratch, etc.).
+
+## Reference demos (use the matching one)
+
+| Screen type | Start from |
+|-------------|------------|
+| Admin / staff dashboard | `public/master/index.html`, `pages-starter.html` |
+| Vertical layout / sidebar | `layouts-vertical-hovered.html`, `index.html` |
+| Sign in | `auth-signin-basic.html` or `auth-signin-cover.html` |
+| Sign up / register | `auth-signup-basic.html` or `auth-signup-cover.html` |
+| Password reset / change | `auth-pass-reset-*.html`, `auth-pass-change-*.html` |
+| Data tables | `tables-datatables.html`, `tables-listjs.html` |
+| Forms | `forms-elements.html`, `forms-layouts.html`, `forms-validation.html`, `forms-wizard.html` |
+| Modals / alerts | `ui-modals.html`, `ui-alerts.html`, `advance-ui-sweetalerts.html` |
+| Profile / settings | `pages-profile.html`, `pages-profile-settings.html` |
+| Public marketing (if needed) | `landing.html` (adapt branding to CSFP/APICS) |
+
+## Required implementation patterns
+
+- Shell: `#layout-wrapper`, `#page-topbar`, `.app-menu` / sidebar, `.main-content`, `.page-content`, footer — as in Velzon.
+- CSS/JS stack from template: Bootstrap + Velzon `app.min.css` / `bootstrap.min.css` / `icons.min.css` / `custom.min.css`, `layout.js`, `app.js`, and libs as the demo uses.
+- Asset URLs: prefer `asset('master/assets/...')` so paths stay relative to this project.
+- Keep enterprise SPA rules for **behavior**: Axios `/api/v1`, no full-page reload on CRUD, toast for success/error, Swal for confirmations, DataTables where listing, audit on mutations.
+- Branding: replace Velzon logos/titles with **APICS / CSFP OCBO**; keep Velzon visual language (Poppins/Public Sans, cards, badges, sidebar).
+- Responsive: preserve Velzon’s responsive sidebar/topbar behavior; still verify device matrix (320px→1920+, Apple Safari).
+
+## Do not
+
+- Rebuild auth/admin pages with a custom Tailwind-only look that ignores `public/master`.
+- Copy huge HTTrack demos verbatim into Blade without stripping unused widgets — **reuse structure + needed parts**.
+- Hardcode absolute machine paths; always use project-relative `public/master`.
+- Mix conflicting UI kits on the same screen (e.g. heavy custom Tailwind cards beside Velzon layout without adapting).
+
+## When unsure
+
+Open `public/master/` demos first, pick the closest page, then implement APICS content inside that shell. If no demo fits, extend from `pages-starter.html` using Velzon components from `ui-*.html` / `forms-*.html` / `tables-*.html`.

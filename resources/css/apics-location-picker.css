@@ -1,0 +1,146 @@
+/* MapLibre location picker — Velzon-compatible */
+
+.apics-location-picker__map {
+    width: 100%;
+    height: min(280px, 48vh);
+    min-height: 220px;
+    background: #dfe3e8;
+    position: relative;
+}
+
+.apics-location-picker--compact .apics-location-picker__map {
+    height: 160px;
+    min-height: 140px;
+    max-height: 180px;
+}
+
+.apics-location-picker.is-map-collapsed .apics-location-picker__map-wrap {
+    display: none;
+}
+
+.apics-location-picker__map .maplibregl-map,
+.apics-location-picker__map .maplibregl-canvas-container,
+.apics-location-picker__map .maplibregl-canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.apics-location-picker__results {
+    background: var(--vz-secondary-bg, #fff);
+}
+
+.apics-location-picker .maplibregl-ctrl-attrib {
+    font-size: 10px;
+}
+
+@media (max-width: 575.98px) {
+    .apics-location-picker__map {
+        height: min(240px, 42vh);
+        min-height: 200px;
+    }
+}
+
+/* Apple Safari: avoid flex overflow clipping map canvas */
+.apics-location-picker {
+    min-width: 0;
+}
+
+/* Read-only site map (application details) */
+.apics-site-map {
+    background: var(--vz-secondary-bg, #fff);
+}
+
+.apics-site-map__toolbar {
+    min-width: 0;
+}
+
+.apics-site-map__meta {
+    min-width: 0;
+    overflow: visible;
+}
+
+.apics-site-map__title,
+.apics-site-map__address,
+.apics-site-map__coords {
+    line-height: 1.45;
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.apics-site-map__actions .btn {
+    white-space: nowrap;
+}
+
+.apics-site-map__canvas {
+    width: 100%;
+    height: min(280px, 46vh);
+    min-height: 220px;
+    background: #dfe3e8;
+    position: relative;
+}
+
+.apics-site-map__canvas--thumb,
+.apics-site-map--thumb .apics-site-map__canvas {
+    height: 180px;
+    min-height: 160px;
+    max-height: 220px;
+}
+
+.apics-site-map__expand {
+    position: absolute;
+    right: 0.65rem;
+    bottom: 0.65rem;
+    z-index: 2;
+}
+
+.apics-site-map--thumb {
+    min-height: 180px;
+}
+
+.apics-site-map__loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+    background: #eef2f6;
+    z-index: 1;
+}
+
+.apics-site-map__canvas .maplibregl-map,
+.apics-site-map__canvas .maplibregl-canvas-container,
+.apics-site-map__canvas .maplibregl-canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.apics-site-map .maplibregl-ctrl-attrib {
+    font-size: 10px;
+}
+
+.apics-site-map--empty .avatar-title {
+    width: 2rem;
+    height: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 575.98px) {
+    .apics-site-map__canvas {
+        height: min(240px, 40vh);
+        min-height: 200px;
+    }
+
+    .apics-site-map__actions {
+        width: 100%;
+    }
+
+    .apics-site-map__actions .btn-group,
+    .apics-site-map__actions > .btn {
+        flex: 1 1 auto;
+    }
+}

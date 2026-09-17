@@ -1,0 +1,178 @@
+/**
+ * Full-screen document lightbox — sits above any open Bootstrap modal
+ * so PDFs are not trapped in a nested modal stack.
+ */
+
+body.apics-doc-lightbox-open {
+    overflow: hidden;
+}
+
+.apics-doc-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: none;
+    background: rgb(15 23 42 / 0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0)
+        env(safe-area-inset-left, 0);
+}
+
+.apics-doc-lightbox.is-open {
+    display: flex;
+    flex-direction: column;
+}
+
+.apics-doc-lightbox__chrome {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    margin: 0.5rem;
+    border-radius: 0.85rem;
+    overflow: hidden;
+    background: #0f172a;
+    box-shadow: 0 1.25rem 3rem rgb(0 0 0 / 0.35);
+}
+
+@media (min-width: 768px) {
+    .apics-doc-lightbox__chrome {
+        margin: 0.85rem 1.25rem 1.1rem;
+    }
+}
+
+.apics-doc-lightbox__bar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 3.25rem;
+    padding: 0.45rem 0.65rem;
+    background: #1e293b;
+    border-bottom: 1px solid rgb(255 255 255 / 0.08);
+    color: #f8fafc;
+}
+
+.apics-doc-lightbox__titles {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0 0.35rem;
+}
+
+.apics-doc-lightbox__title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: #f8fafc;
+}
+
+.apics-doc-lightbox__subtitle {
+    font-size: 0.72rem;
+    color: rgb(248 250 252 / 0.55);
+    line-height: 1.3;
+}
+
+.apics-doc-lightbox__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+}
+
+.apics-doc-lightbox__icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    min-height: 2.5rem;
+    min-width: 2.5rem;
+    padding: 0.35rem 0.65rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    transition: background-color 0.15s ease;
+}
+
+.apics-doc-lightbox__icon-btn i {
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.apics-doc-lightbox__icon-btn:hover,
+.apics-doc-lightbox__icon-btn:focus-visible {
+    background: rgb(255 255 255 / 0.1);
+    color: #fff;
+    outline: none;
+}
+
+.apics-doc-lightbox__icon-btn:focus-visible {
+    box-shadow: 0 0 0 2px rgb(99 102 241 / 0.7);
+}
+
+.apics-doc-lightbox__stage {
+    flex: 1 1 auto;
+    min-height: 0;
+    position: relative;
+    background: #0b1220;
+}
+
+.apics-doc-lightbox__frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #525659;
+}
+
+.apics-doc-lightbox__loading,
+.apics-doc-lightbox__fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1.5rem;
+    color: #e2e8f0;
+}
+
+.apics-doc-lightbox__fallback i {
+    font-size: 3rem;
+    opacity: 0.55;
+    margin-bottom: 0.75rem;
+}
+
+.apics-doc-lightbox__image-wrap {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    overflow: auto;
+    background: #0f172a;
+}
+
+.apics-doc-lightbox__image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 0.35rem;
+    box-shadow: 0 0.5rem 2rem rgb(0 0 0 / 0.45);
+}
+
+/* Keep nested Bootstrap modals from fighting for focus while lightbox is open */
+body.apics-doc-lightbox-open .modal {
+    pointer-events: none;
+}
+
+body.apics-doc-lightbox-open .apics-doc-lightbox {
+    pointer-events: auto;
+}

@@ -1,0 +1,169 @@
+/**
+ * Canonical application status colors — use across landing, applications, and admin lists.
+ * Contrast targets WCAG AA on white/light surfaces (solid text on tinted chips).
+ */
+:root {
+    --apics-status-draft-bg: #fff4de;
+    --apics-status-draft-fg: #7a4d00;
+    --apics-status-submitted-bg: #e0f7fa;
+    --apics-status-submitted-fg: #006064;
+    --apics-status-evaluation-bg: #e8eaf6;
+    --apics-status-evaluation-fg: #283593;
+    --apics-status-inspection-bg: #e3f2fd;
+    --apics-status-inspection-fg: #0d47a1;
+    --apics-status-compliance-bg: #fdecea;
+    --apics-status-compliance-fg: #b71c1c;
+    --apics-status-payment-bg: #fff3e0;
+    --apics-status-payment-fg: #e65100;
+    --apics-status-released-bg: #e8f5e9;
+    --apics-status-released-fg: #1b5e20;
+    --apics-status-disapproved-bg: #fce4ec;
+    --apics-status-disapproved-fg: #880e4f;
+}
+
+.apics-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35em 0.65em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+    border-radius: 0.25rem;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+}
+
+.apics-status--draft {
+    background: var(--apics-status-draft-bg);
+    color: var(--apics-status-draft-fg);
+}
+
+.apics-status--submitted {
+    background: var(--apics-status-submitted-bg);
+    color: var(--apics-status-submitted-fg);
+}
+
+.apics-status--under_evaluation,
+.apics-status--under-evaluation {
+    background: var(--apics-status-evaluation-bg);
+    color: var(--apics-status-evaluation-fg);
+}
+
+.apics-status--for_inspection,
+.apics-status--for-inspection {
+    background: var(--apics-status-inspection-bg);
+    color: var(--apics-status-inspection-fg);
+}
+
+.apics-status--for_compliance,
+.apics-status--for-compliance {
+    background: var(--apics-status-compliance-bg);
+    color: var(--apics-status-compliance-fg);
+}
+
+.apics-status--for_payment,
+.apics-status--for-payment {
+    background: var(--apics-status-payment-bg);
+    color: var(--apics-status-payment-fg);
+}
+
+.apics-status--released {
+    background: var(--apics-status-released-bg);
+    color: var(--apics-status-released-fg);
+}
+
+.apics-status--disapproved {
+    background: var(--apics-status-disapproved-bg);
+    color: var(--apics-status-disapproved-fg);
+}
+
+/* Landing: high-contrast phase chip (replaces low-contrast soft badges) */
+.landing-phase-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #0b3d2e;
+    background: #d1fae5;
+    border: 1px solid #059669;
+    border-radius: 0.375rem;
+}
+
+/* Hero product chrome — match Velzon admin card, not mockup float */
+.landing-product-chrome {
+    border: 1px solid var(--vz-border-color, #e9ebec);
+    box-shadow: none;
+}
+
+.landing-product-chrome .card-header {
+    background: var(--vz-secondary-bg, #f3f6f9);
+    border-bottom: 1px solid var(--vz-border-color, #e9ebec);
+}
+
+/* Hero applications preview — stacked rows, no horizontal scroll */
+.landing-app-queue {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.landing-app-queue__item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 0.85rem;
+    background: var(--vz-secondary-bg, #f3f6f9);
+    border: 1px solid var(--vz-border-color, #e9ebec);
+    border-radius: 0.375rem;
+}
+
+.landing-app-queue__main {
+    min-width: 0;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.landing-app-queue__no {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--vz-body-color, #212529);
+    word-break: break-word;
+}
+
+.landing-app-queue__meta {
+    font-size: 0.75rem;
+    color: var(--vz-secondary-color, #878a99);
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.landing-app-queue__item .apics-status {
+    flex: 0 0 auto;
+    max-width: 100%;
+    white-space: normal;
+    text-align: right;
+}
+
+@media (max-width: 575.98px) {
+    .landing-hero-brand {
+        flex-wrap: wrap;
+    }
+
+    .landing-hero-brand .display-5 {
+        font-size: clamp(1.75rem, 8vw, 2.5rem);
+    }
+
+    .landing-app-queue__item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .landing-app-queue__item .apics-status {
+        text-align: left;
+    }
+}

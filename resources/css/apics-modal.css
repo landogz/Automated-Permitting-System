@@ -1,0 +1,89 @@
+/**
+ * Scrollable modals with fixed header + footer.
+ * Fixes Bootstrap when a <form> wraps .modal-body + .modal-footer
+ * (overflow chain otherwise breaks and the body cannot scroll).
+ */
+
+.modal-dialog.apics-modal,
+.modal-dialog.modal-dialog-scrollable {
+    max-height: calc(100% - 1.5rem);
+    max-height: calc(100dvh - 1.5rem);
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.modal-dialog.apics-modal .modal-content,
+.modal-dialog.modal-dialog-scrollable .modal-content {
+    max-height: calc(100dvh - 1.5rem);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.modal-dialog.apics-modal .modal-header,
+.modal-dialog.modal-dialog-scrollable .modal-header,
+.modal-dialog.apics-modal .modal-footer,
+.modal-dialog.modal-dialog-scrollable .modal-footer {
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    background-color: var(--bs-modal-bg, #fff);
+}
+
+.modal-dialog.apics-modal .modal-body,
+.modal-dialog.modal-dialog-scrollable .modal-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+/* Form wrapping body + footer (applications, forms builder, users, etc.) */
+.modal-dialog.apics-modal .modal-content > form,
+.modal-dialog.modal-dialog-scrollable .modal-content > form {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+.modal-dialog.apics-modal .modal-content > form > .modal-body,
+.modal-dialog.modal-dialog-scrollable .modal-content > form > .modal-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+.modal-dialog.apics-modal .modal-content > form > .modal-footer,
+.modal-dialog.modal-dialog-scrollable .modal-content > form > .modal-footer {
+    flex-shrink: 0;
+    background-color: var(--bs-modal-bg, #fff);
+    border-top: var(--bs-modal-footer-border-width, 1px) solid var(--bs-modal-footer-border-color, #e9ebec);
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+    .modal-dialog.apics-modal .modal-footer,
+    .modal-dialog.modal-dialog-scrollable .modal-footer {
+        padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    }
+}
+
+@media (max-width: 575.98px) {
+    .modal-dialog.apics-modal,
+    .modal-dialog.modal-dialog-scrollable {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        max-width: calc(100% - 1rem);
+        max-height: calc(100dvh - 1rem);
+    }
+
+    .modal-dialog.apics-modal .modal-content,
+    .modal-dialog.modal-dialog-scrollable .modal-content {
+        max-height: calc(100dvh - 1rem);
+    }
+}

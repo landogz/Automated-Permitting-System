@@ -1,0 +1,281 @@
+/**
+ * Landing page motion — transform/opacity only.
+ * Content stays visible until JS sets [data-motion="on"] (progressive enhancement).
+ */
+
+/* ---- Scroll reveals (enabled only when JS opts in) ---- */
+[data-landing-home][data-motion='on'] .landing-reveal:not(.is-visible) {
+    opacity: 0;
+    transform: translateY(16px);
+}
+
+[data-landing-home] .landing-reveal {
+    transition:
+        opacity 0.45s ease-out,
+        transform 0.45s ease-out;
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+}
+
+[data-landing-home] .landing-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ---- Hero entrance (CSS only; harmless if reduced-motion) ---- */
+.landing-hero-copy {
+    animation: landing-fade-up 0.55s ease-out both;
+}
+
+.landing-hero-visual {
+    animation: landing-fade-up 0.55s ease-out 0.1s both;
+}
+
+@keyframes landing-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---- Hero wave parallax (JS sets --hero-parallax) ---- */
+.hero-section .hero-shape-svg {
+    transform: translate3d(0, var(--hero-parallax, 0px), 0);
+    will-change: transform;
+    pointer-events: none;
+}
+
+/* ---- Sticky nav shrink ---- */
+.navbar-landing {
+    transition:
+        padding 0.2s ease-out,
+        box-shadow 0.2s ease-out,
+        background-color 0.2s ease-out;
+}
+
+.navbar-landing.is-scrolled {
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+    box-shadow: 0 0.25rem 0.75rem rgb(15 23 42 / 0.08);
+    background-color: rgb(255 255 255 / 0.96);
+    backdrop-filter: blur(8px);
+}
+
+.navbar-landing.is-scrolled .navbar-brand img {
+    transform: scale(0.9);
+    transition: transform 0.2s ease-out;
+}
+
+.navbar-landing .navbar-brand img {
+    transition: transform 0.2s ease-out;
+}
+
+/* ---- Nav underline slide-in ---- */
+.navbar-landing .navbar-nav .nav-link {
+    position: relative;
+    transition: color 0.2s ease-out;
+}
+
+.navbar-landing .navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.35rem;
+    height: 2px;
+    background: var(--vz-primary, #405189);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.2s ease-out;
+}
+
+.navbar-landing .navbar-nav .nav-link:hover::after,
+.navbar-landing .navbar-nav .nav-link:focus-visible::after,
+.navbar-landing .navbar-nav .nav-link.active::after {
+    transform: scaleX(1);
+}
+
+/* ---- Card hover lift (feature + step cards) ---- */
+.landing-lift {
+    transition:
+        transform 0.18s ease-out,
+        box-shadow 0.18s ease-out;
+    will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .landing-lift:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 0.5rem 1.25rem rgb(15 23 42 / 0.1);
+    }
+}
+
+.landing-lift:active {
+    transform: translateY(-1px) scale(0.99);
+}
+
+/* ---- Buttons tactile press ---- */
+[data-landing-home] .btn:active {
+    transform: scale(0.98);
+}
+
+[data-landing-home] .btn {
+    transition:
+        transform 0.15s ease-out,
+        background-color 0.15s ease-out,
+        border-color 0.15s ease-out,
+        color 0.15s ease-out,
+        box-shadow 0.15s ease-out;
+}
+
+/* ---- Arrow nudge on link hover ---- */
+[data-landing-home] a .ri-arrow-right-line,
+[data-landing-home] a .ri-arrow-right-s-line {
+    display: inline-block;
+    transition: transform 0.18s ease-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    [data-landing-home] a:hover .ri-arrow-right-line,
+    [data-landing-home] a:hover .ri-arrow-right-s-line {
+        transform: translateX(3px);
+    }
+}
+
+/* ---- Status pipeline sequential highlight ---- */
+.landing-pipeline .apics-status {
+    transition:
+        transform 0.35s ease-out,
+        box-shadow 0.35s ease-out,
+        opacity 0.35s ease-out;
+    opacity: 0.72;
+}
+
+.landing-pipeline .apics-status.is-pipeline-active {
+    opacity: 1;
+    transform: scale(1.06);
+    box-shadow: 0 0 0 2px rgb(64 81 137 / 0.35);
+}
+
+.landing-pipeline.is-pipeline-done .apics-status {
+    opacity: 1;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Soft one-time pulse on hero status cells */
+.landing-status-pulse.is-pulsed {
+    animation: landing-status-soft-pulse 0.7s ease-out 1;
+}
+
+@keyframes landing-status-soft-pulse {
+    0% {
+        transform: scale(1);
+    }
+    40% {
+        transform: scale(1.04);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* ---- Mini live counters in hero card header ---- */
+.landing-live-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.landing-live-stat {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--vz-secondary-color, #878a99);
+    background: var(--vz-secondary-bg, #f3f6f9);
+    border-radius: 0.25rem;
+}
+
+.landing-live-stat strong {
+    color: var(--vz-primary, #405189);
+    font-variant-numeric: tabular-nums;
+    min-width: 1ch;
+}
+
+/* ---- Section boundary soft fades ---- */
+.landing-section-fade {
+    position: relative;
+}
+
+.landing-section-fade::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 2.5rem;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgb(255 255 255 / 0.55), transparent);
+    z-index: 1;
+}
+
+.landing-section-fade.bg-light::before {
+    background: linear-gradient(to bottom, rgb(243 246 249 / 0.9), transparent);
+}
+
+.landing-section-fade.bg-primary::before {
+    background: linear-gradient(to bottom, rgb(64 81 137 / 0.35), transparent);
+}
+
+/* ---- Reduced motion: hard disable ---- */
+@media (prefers-reduced-motion: reduce) {
+    [data-landing-home] .landing-reveal,
+    [data-landing-home][data-motion='on'] .landing-reveal:not(.is-visible) {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    .landing-hero-copy,
+    .landing-hero-visual,
+    .landing-status-pulse.is-pulsed {
+        animation: none !important;
+    }
+
+    .hero-section .hero-shape-svg {
+        transform: none !important;
+    }
+
+    .navbar-landing,
+    .navbar-landing .navbar-brand img,
+    .navbar-landing .navbar-nav .nav-link::after,
+    .landing-lift,
+    [data-landing-home] .btn,
+    [data-landing-home] a .ri-arrow-right-line,
+    [data-landing-home] a .ri-arrow-right-s-line,
+    .landing-pipeline .apics-status {
+        transition: none !important;
+    }
+
+    .landing-lift:hover,
+    .landing-lift:active,
+    [data-landing-home] .btn:active {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .landing-pipeline .apics-status,
+    .landing-pipeline .apics-status.is-pipeline-active,
+    .landing-pipeline.is-pipeline-done .apics-status {
+        opacity: 1 !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+}

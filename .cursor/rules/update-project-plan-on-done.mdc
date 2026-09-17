@@ -1,0 +1,24 @@
+---
+description: After every completed function/feature, update the APICS project plan (todos, status, changelog) before saying done. Always apply.
+alwaysApply: true
+---
+
+# Update Project Plan On Every Done
+
+Before telling the user that any function, feature, module slice, bug fix, or documentation deliverable is **done**, you MUST update the living APICS project plan.
+
+## Required updates
+
+1. Open the APICS plan (e.g. `.cursor/plans/apics_phase_i_plan*.plan.md` or the active plan file) and:
+   - Mark matching frontmatter `todos` as `completed` (or add new todos if scope grew).
+   - Append a **Progress changelog** row: date, what shipped, what’s next, blockers.
+   - Note module/phase progress when a Phase I slice finishes.
+2. Sync `config/apics_project_plan.php` **fallback** with the same statuses when needed; the admin dashboard prefers `.cursor/plans/apics_phase_i_plan_5d06a183.plan.md` frontmatter todos via `ProjectPlanService`.
+3. Keep `.cursor/plans/apics_phase_i_plan.plan.md` as a pointer/stub in sync with the canonical plan.
+4. If `docs/` status docs exist, keep them consistent with reality.
+5. Do **not** claim done if the plan was not updated.
+
+## Works with
+
+- `senior-multi-role-gate.mdc` — still verify Frontend, Graphic Artist, QA, Bug Checker, Cybersecurity, and device matrix before done.
+- `pcspc-universal-master-guidelines.mdc` — architecture, security, audit logging still apply.

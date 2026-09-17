@@ -1,0 +1,67 @@
+---
+description: Global DataTable standards for every listing table in APICS (search, filters, export, responsive, actions, context menu)
+alwaysApply: true
+---
+
+# Global DataTable Rules (ALL tables)
+
+Apply to **every** DataTable / listing table in this project. Do **not** ship basic static HTML tables for management lists.
+
+## Stack (mandatory)
+
+- Use the shared factory: `resources/js/utils/datatable/` (`createApicsDataTable`).
+- Library: **DataTables** (`datatables.net` + Responsive + Buttons) already in `package.json`.
+- Do **not** introduce a second table library (no Grid.js / List.js for new admin lists).
+- Axios SPA: no full-page reload on search/filter/sort/paginate/CRUD; toast success/error; Swal/`confirmAction` for destructive confirms only.
+- Visual chrome: Velzon (`public/master`) card + Bootstrap table classes; sticky Actions column.
+
+## Required capabilities (every applicable table)
+
+1. **Core:** global search, sort, multi-sort where supported, pagination, page-size, first/prev/next/last, record counts, clear/reset, loading / empty / no-results / error states.
+2. **Filters:** relevant dropdowns only (status/type/etc.); compose with search; provide **Clear filters**.
+3. **Export:** Copy / CSV / Excel / PDF / Print when appropriate; export **current filtered** rows; exclude Actions column. **Export → Print** must use the government letterhead via `printDataTableGovernment` (never stock DataTables print).
+4. **Column visibility:** Columns menu; **Actions column must stay visible** (never hideable).
+5. **Row actions (icon-only):** Action column uses a compact icon-only `[⋮]` (kebab) button — **no visible text labels on the trigger button** (never “Edit”, “Delete”, “Approve”, etc. as cell buttons). Labels belong **only** inside the dropdown / right-click menu. Only **real** API-backed actions.
+6. **Right-click context menu:** same core actions as the Actions menu; no fake items; dismissible; disable browser menu on rows.
+7. **Delete:** never immediate — confirm → loading → toast → refresh table **preserving** page/search/filters/sort.
+8. **Responsive:** progressive column hide by priority; expandable child row (label/value); **Actions fixed on the right** (not shoved into child details); no “scroll forever to find Edit”.
+9. **Mobile:** same icon-only `[⋮]` — never a row of labeled buttons in the Actions cell.
+10. **Performance:** server-side search/paginate when datasets grow; debounce search; avoid loading thousands of rows client-side.
+11. **One standard UX:** pages differ only by columns, filters, and actions — not by reinventing table behavior.
+
+### Actions column — icon-only (mandatory)
+
+```text
+✅ Cell trigger: icon only (⋮ / ri-more-2-fill), with aria-label="Row actions"
+✅ Menu items: full text labels (View, Edit, Delete, …)
+❌ Never: [Edit] [Delete] [Approve] text buttons in the Actions cell
+❌ Never: icon + text on the Actions trigger button
+```
+
+Keep dropdown / context menus wide enough that labels are **not truncated**.
+
+## Implementation checklist (before saying done)
+
+- [ ] Built via `createApicsDataTable` (or extended it — not a one-off fork)
+- [ ] Search, sort, pagination, page-size work
+- [ ] Filters compose + Clear filters
+- [ ] Export respects filter/search state
+- [ ] Colvis keeps Actions visible
+- [ ] Right-click ≡ Actions menu (same real handlers)
+- [ ] Delete confirms; table refreshes without full reload; state preserved
+- [ ] Actions cell is **icon-only** `[⋮]` (no text on the trigger button); menu labels are full and untruncated
+- [ ] Responsive child rows; Actions sticky/visible; tested ~375–1920px
+- [ ] No console errors; no duplicate table libraries
+
+## Anti-patterns
+
+```text
+❌ Manual <tbody> string HTML as the only “table”
+❌ Horizontal scroll as the only mobile strategy
+❌ Hiding Actions inside responsive child details
+❌ Text buttons / labeled CTAs in the Actions column (must be icon-only ⋮)
+❌ Truncated action menu labels
+❌ Fake context-menu items
+❌ alert()/confirm() instead of toast + confirmAction
+❌ Page reload after CRUD
+```

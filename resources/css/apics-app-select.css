@@ -1,0 +1,67 @@
+/**
+ * Searchable application picker (staff forms).
+ */
+
+.apics-app-select {
+    position: relative;
+}
+
+.apics-app-select-toggle {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-height: 2.5rem;
+}
+
+.apics-app-select-toggle:focus {
+    z-index: 3;
+}
+
+.apics-app-select-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 1080;
+    max-width: 100%;
+}
+
+.apics-app-select-results {
+    max-height: min(240px, 45vh);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.apics-app-select-results .list-group-item {
+    cursor: pointer;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+}
+
+.apics-app-select-results .list-group-item:hover,
+.apics-app-select-results .list-group-item:focus {
+    background-color: var(--vz-tertiary-bg, #f3f6f9);
+}
+
+.apics-app-select-results .list-group-item.active {
+    background-color: var(--vz-primary-bg-subtle, #e2e5ed);
+    color: inherit;
+    border-color: var(--vz-border-color, #e9ebec);
+}
+
+.apics-app-select.is-open .apics-app-select-toggle {
+    border-color: var(--vz-primary, #405189);
+    box-shadow: 0 0 0 0.15rem rgba(64, 81, 137, 0.15);
+}
+
+/* Keep results visible inside Bootstrap modals */
+.modal-body:has(.apics-app-select),
+.modal-content:has(.apics-app-select) {
+    overflow: visible;
+}
+
+@media (max-width: 575.98px) {
+    .apics-app-select-results {
+        max-height: min(200px, 40vh);
+    }
+}

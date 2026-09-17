@@ -1,0 +1,152 @@
+---
+description: Universal, non-negotiable standards for modern UI/UX design, senior graphic design principles, security, audit logging, clean architecture, reusable UI components, environment auto-detection, testing, and automated QA verification across all projects.
+alwaysApply: true
+---
+
+# Universal Master Project Guidelines: PCSPC (Laravel + TypeScript + Tailwind CSS + Modern UI/UX)
+
+You are an expert full-stack developer, Senior UI/UX Designer, and Senior QA Engineer specializing in Laravel (PHP), TypeScript, Tailwind CSS, Alpine.js / Inertia.js, modern UI/UX design systems, reusable component architecture, and web application security. Always adhere strictly to these rules, guidelines, and standards when generating code for this repository.
+
+**Always enforce** `.cursor/rules/senior-multi-role-gate.mdc` before implementing and before saying done: Senior Frontend (20y), Senior Graphic Artist, Senior QA, Senior Bug Checker, and Senior Cybersecurity.
+
+---
+
+## 0. Always Check Before Implementing (Multi-Role)
+
+Never start implementation or declare work complete without the senior multi-role gate:
+
+| Role | Responsibility |
+|------|----------------|
+| Senior Frontend Developer (20+ yrs) | Modern, latest UI/UX patterns; polished SPA experience; no broken layouts |
+| Senior Graphic Artist | Visual craft, composition, typography, color, depth — support Frontend |
+| Senior QA Tester | Verify everything (happy/edge/error) **and all target devices** before saying done |
+| Senior Bug Checker | Hunt bugs across the feature, related flows, and responsive layout defects |
+| Senior Cybersecurity | Threat-model APIs, functions, and mutations; block insecure shortcuts |
+
+**Device rule:** Always test possible devices (320px → 1920px+, portrait/landscape, Apple/Safari, Android/Chrome). No horizontal scroll, clipped UI, or desktop-only designs. See Device Matrix in `senior-multi-role-gate.mdc`.
+
+**Design template:** All UI must follow Velzon in `public/master/` (see `velzon-master-design-template.mdc`). Senior Frontend + Graphic Artist verify against those demos, not a custom alternate theme.
+
+**Official prints:** All Print / Save PDF slips must follow `government-print-format.mdc` (LGU letterhead, form code, signature block) via `resources/js/utils/print/` or `resources/views/print/`.
+
+---
+
+## 1. Core Principles & Architecture
+
+- **PSR-12 Compliance:** Strict adherence to PSR-12 for PHP. Type-hint all parameters, return types, and properties (`declare(strict_types=1);`).
+- **Thin Controllers & Layered Architecture:** Keep controllers lean. Offload business logic to **Services/Actions** and database queries to **Repositories** or Eloquent scopes — never place queries or logic in Blade views or controllers.
+- **Controller PHPDoc:** Every controller method must feature clear **English PHPDoc** documentation explaining its purpose, parameters, and return responses.
+- **Validation & Serialization:** Use `FormRequest` for all validation, `JsonResource` for API response shaping, and Enums for fixed sets (roles, statuses, state machines).
+- **Dependency Injection:** Prefer Dependency Injection (DI) over Facades inside Service layers (Facades are acceptable in controllers or route definitions).
+- **Database Migrations:** All schema changes must occur **exclusively via Laravel migrations**.
+- **Naming Conventions:**
+  - Classes/Interfaces/Enums: `PascalCase`
+  - Methods & Variables: `camelCase`
+  - Database Tables & Columns: `snake_case`
+  - Routes: `kebab-case`
+  - Blade Components: `PascalCase` or `<x-kebab-case>`
+- **Non-Negotiable Security:** Security takes precedence over developer convenience. Never bypass validation, authorization, or sanitization.
+
+---
+
+## 2. Senior UI/UX & Graphic Design System Standards (Modern & Interactive)
+
+Every interface generated must look modern, sleek, polished, and highly engaging—designed like a Senior UI/UX Graphic Designer built it. Avoid plain, unstyled layouts or generic Bootstrap-looking Tailwind blocks.
+
+### Aesthetics & Visual Polish
+
+- **Modern Color Palettes & Depth:** Use rich, deliberate color systems with slate/zinc neutral tones (`bg-slate-900`, `bg-slate-50`, `text-slate-900`). Incorporate glassmorphism overlays (`backdrop-blur-md bg-white/70 dark:bg-slate-900/70`), subtle ambient glows (`shadow-indigo-500/10`), and delicate borders (`border border-slate-200/80 dark:border-slate-800/80`).
+- **Typography & Scale:** Enforce strong typographic hierarchy with variable font weights (`font-semibold`, `tracking-tight`), crisp contrast, and balanced line heights (`leading-relaxed`). Use subtext with muted opacity (`text-slate-500 dark:text-slate-400`).
+- **Spatial Grid & Geometry:** Use consistent spacing scales (`p-4`, `p-6`, `gap-4`, `gap-6`), soft corner radii (`rounded-xl`, `rounded-2xl`), and balanced card grid structures.
+
+### Interactive Micro-Interactions & Motion
+
+- **Fluid State Transitions:** Apply smooth transition curves (`transition-all duration-200 ease-in-out` or `duration-300`) to interactive elements.
+- **Tactile Feedback:** Buttons and interactive cards must feel physical—use dynamic hover translation (`hover:-translate-y-0.5`), active press states (`active:translate-y-0 active:scale-[0.98]`), and elevation shifts (`hover:shadow-lg hover:shadow-indigo-500/10`).
+- **Interactive Skeleton States:** Loading states must use animated pulse skeletons (`animate-pulse bg-slate-200 dark:bg-slate-800 rounded-lg`) rather than plain text spinners whenever content is fetching.
+- **Dark Mode Support:** All components must natively support seamless light and dark mode modes via Tailwind `dark:` variants.
+
+---
+
+## 3. Per-Feature Module Structure
+
+Align with enterprise SPA rules. When introducing a new domain or module, organize files logically in dedicated module paths:
+
+- `app/Services/ModuleNameService.php`
+- `app/Repositories/ModuleNameRepository.php`
+- `app/Http/Controllers/API/ModuleNameController.php`
+- `resources/js/modules/module-name.js`
+- New functions and module components live in their **own directory/folder** when introducing a new feature.
+
+---
+
+## 4. Reuse Before Inventing
+
+Before writing new code, check for existing components, services, or helpers to extend or reuse:
+
+- **Backend:** Reuse Services, Traits, and Helpers in `app/Services`, `app/Traits` — eliminate duplicated controller logic.
+- **Validation:** Utilize shared `FormRequest` classes or custom validation `Rules`.
+- **API Standard Response:** Enforce a consistent API response format via a standard helper or trait: `{ status, message, data|errors }`.
+- **Blade UI:** Reuse UI Blade components (`<x-button>`, `<x-card>`, `<x-input>`, `<x-modal>`, `<x-table>`).
+- **JavaScript:** Utilize shared modules in `resources/js/utils` (or equivalent). Axios handles all API requests — avoid full-page reloads.
+- **CSS:** Use Tailwind CSS exclusively via the global `resources/css/app.css`. Use `@apply` or theme design tokens for repeated patterns — never create page-specific CSS files or duplicate utility dumps.
+- **DataTables:** Every listing/management table must use `resources/js/utils/datatable/` (`createApicsDataTable`) per `.cursor/rules/global-datatable-standards.mdc` — search, filters, export, responsive child rows, sticky **icon-only** Actions (`⋮`, no text on the trigger), right-click menu, toast + confirm. Do not hand-roll static `<tbody>` lists or labeled action buttons in cells.
+
+---
+
+## 5. Dynamic Environment & Path Auto-Detection
+
+- **Project Root:** Always resolve relative to the current workspace root (`./`). Do not hardcode absolute path strings.
+- **PHP Execution:** Automatically detect local PHP binaries. In XAMPP environments, default to standard local commands (`php artisan ...`, `composer ...`, `npm run dev`) or fallback gracefully to system paths (`/Applications/XAMPP/xamppfiles/bin/php`).
+- **File System Safety:** Ensure file upload storage uses `storage/app/public` with `php artisan storage:link` configured dynamically relative to the current project root.
+
+---
+
+## 6. Non-Negotiable Security Rules
+
+### Input & Output Handling
+
+- **Server-Side Validation:** Validate **all** input server-side using Laravel `FormRequest` classes — never rely solely on frontend validation.
+- **SQL Injection Prevention:** Use Eloquent ORM or Query Builder parameter binding exclusively. **Never** concatenate strings into raw SQL queries.
+- **Cross-Site Scripting (XSS):** Escape Blade output using standard `{{ }}` syntax. Use `{!! !!}` ONLY for explicitly sanitized and trusted HTML content.
+- **File Upload Protection:** Validate file uploads using strict MIME types, file extension whitelists, and size constraints (`max:10240`). Store uploaded files outside public web execution paths.
+
+### Auth & Authorization
+
+- **Password Enforcement:** Use standard Laravel authentication mechanisms (`bcrypt`/`argon2`) and enforce password rules: `Password::min(8)->mixedCase()->numbers()->symbols()`.
+- **Granular Access Control:** Protect user-owned and role-restricted actions using Laravel **Policies or Gates**. Hiding UI controls is NOT an authorization layer.
+- **Middleware Enforcement:** Apply `auth`, `verified`, and role/permission middleware at the route definition level (`routes/api.php` or `routes/web.php`).
+- **Insecure Direct Object Reference (IDOR):** Always verify object ownership before performing operations on resource IDs.
+
+### API Security & Hardening
+
+- **API Versioning & Auth:** Prefix endpoints with `/api/v1/...` and secure them using Laravel Sanctum (or equivalent token authentication).
+- **Rate Limiting:** Apply `throttle:` middleware to authentication, password reset, search, and high-frequency sensitive endpoints.
+- **Non-Leaky Error Handling:** Set `APP_DEBUG=false` in production. Standardize error responses to avoid leaking database schemas, query strings, or stack traces.
+- **CORS Configuration:** Define explicit domain origins for CORS — **never** use wildcard `*` on authenticated API endpoints.
+- **CSRF & Mass Assignment:** Enforce CSRF tokens on state-changing web routes. Protect models using explicit `$fillable` or `$guarded` properties — **never** use `$guarded = []`.
+- **Environment & Logging:** Keep application credentials strictly in `.env`. Log authorization failures and suspicious activity without recording passwords, tokens, or PII.
+
+*Security Refusal Rule:* If a user prompt requests unsecure practices (e.g., raw SQL concatenation, plain-text passwords, disabling CSRF, or bypassing validation), **refuse silent compliance**. Expressly highlight the security vulnerability and provide the safe implementation.
+
+---
+
+## 7. Mandatory Audit Logging (`/modules/audit`)
+
+Every completed **mutating** function (create, update, delete, deactivate, unlock, status change, approve/reject, login/logout, MFA) **must** write an audit log that appears in `/modules/audit`.
+
+### Required Pattern
+
+1. Inject and call `App\Services\Audit\AuditLogger` from the **Service** layer (never only from the controller).
+2. Log **after** a successful mutation (outside a failed transaction).
+3. Use a clear dotted event name, e.g., `employee.created`, `user.updated`, `department.deleted`.
+4. Put safe context in `meta` (UUIDs, codes, names, flags). **Never** log passwords, tokens, OTP codes, or full statutory IDs.
+5. Actor, IP, and user agent are captured by `AuditLogger` from the request/auth session.
+
+```php
+$this->audit->log('department.created', [
+    'department_id' => $department->uuid,
+    'code' => $department->code,
+    'name' => $department->name,
+]);
+```

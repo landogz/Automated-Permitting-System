@@ -1,0 +1,62 @@
+---
+description: All printable documents (G-02, logbooks, notices, slips) must use a modern professional Philippine LGU / government print format — never bare HTML dumps.
+alwaysApply: true
+---
+
+# Government Print Format (ALL prints)
+
+Every **Print / Print PDF / Save as PDF** output in APICS must look like a modern, professional **Philippine LGU / government office** form — not a plain `document.write` table dump or browser-default page.
+
+Applies to: Orders of Payment (G-02), logbooks (G-01/O-02/E/G-05/G-06), compliance notices, routing slips, evaluation sheets, **DataTables Export → Print** (every listing table), and any future printable form.
+
+## Mandatory layout
+
+1. **Letterhead band**
+   - LGU / office identity: City of San Fernando, Pampanga · Office of the City Building Official (OCBO)
+   - System line: APICS (Automated Permitting, Inspection, and Compliance System)
+   - Optional seal/logo (`/images/branding/apics-logo.png`) — left or centered; never clip on print
+2. **Document identity**
+   - Clear form code + title (e.g. **G-02 · Order of Payment**, or **LIST · Evaluation Queue**)
+   - Document / control number (OoP no., logbook no., notice no., or listing date) in mono or bold
+   - Issue / print timestamp and “Page X of Y” when multi-page
+3. **Structured body**
+   - Meta grid (Application No., Project, Applicant/Owner, Status, Date) — label/value, not a wall of paragraphs
+   - Tabular figures for money: right-aligned, tabular numerals, PHP currency
+   - Section rules / hairlines; consistent margins (~15–18mm); A4 / Letter friendly
+4. **Authority / certification block**
+   - Signature lines (Prepared by / Assessed by / Noted by) with name + position space
+   - Footer: “This is a system-generated document from APICS · CSFP OCBO” + print datetime
+5. **Screen vs print**
+   - On-screen: “Print / Save PDF” control with class `no-print`
+   - `@media print`: hide chrome, expand to full page, black text, no shadows/gradients that waste ink
+
+## Implementation rules
+
+- **Reuse** shared helpers — do not reinvent per page:
+  - Client: `resources/js/utils/print/` (`openGovernmentPrint`, `printDataTableGovernment`)
+  - Server Blade: `resources/views/print/` layouts / partials (letterhead, footer, signature block)
+- Prefer **one print window API**: open blank window **without** `noopener` in the feature string (browsers return `null` otherwise); set `win.opener = null` after open; then `print()` after layout.
+- Escape all dynamic values; never inject raw user HTML into print documents.
+- Official prints that need authz must use signed URLs or authenticated routes (see logbook print).
+- **DataTables Export → Print** must call `printDataTableGovernment` (wired in `createApicsDataTable`) — never the stock DataTables `extend: 'print'` bare dump.
+
+## Anti-patterns
+
+```text
+❌ Bare <h1> + unstyled <table> in a blank popup
+❌ Stock DataTables `extend: 'print'` (unstyled list dump)
+❌ window.open(..., 'noopener') then treating null as “popup blocked”
+❌ Missing LGU/OCBO letterhead or form code
+❌ Left-aligned currency; informal fonts only (Comic Sans, etc.)
+❌ Truncated titles, cut-off tables, or content outside printable margins
+❌ Printing the full Velzon admin chrome (sidebar/topbar)
+```
+
+## Checklist before saying done
+
+- [ ] Letterhead + form code + document number present
+- [ ] Meta grid + professional table/sections
+- [ ] Signature / authority block + system footer
+- [ ] `@media print` clean; `no-print` on screen-only controls
+- [ ] Opens reliably; toast if pop-up blocked
+- [ ] Looks acceptable on A4 preview (desktop + Safari print)

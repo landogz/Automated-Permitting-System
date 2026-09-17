@@ -1,0 +1,12 @@
+/**
+ * APICS Velzon font overrides.
+ * HK Grotesk files are not shipped with this theme dump; use free stacks to avoid 404s.
+ */
+[data-theme="default"] {
+    --vz-font-family-primary: "Poppins", "Roboto", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --vz-font-family-secondary: "Poppins", "Roboto", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+body {
+    font-family: var(--vz-font-family-primary);
+}
