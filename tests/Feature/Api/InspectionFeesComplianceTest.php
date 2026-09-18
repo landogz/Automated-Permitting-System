@@ -145,11 +145,16 @@ class InspectionFeesComplianceTest extends TestCase
             ->postJson("/api/v1/staff/orders-of-payment/{$oopUuid}/mark-paid")
             ->assertOk()
             ->assertJsonPath('data.status', 'paid_stub')
-            ->assertJsonPath('data.next_step.step', 'records');
+            ->assertJsonPath('data.next_step.step', 'releasing')
+            ->assertJsonPath('data.next_step.path', '/admin/logbooks')
+            ->assertJsonPath(
+                'data.next_step.message',
+                'Payment cleared — proceed to the Releasing area. Status becomes Released only after G-01 logbook release.',
+            );
 
         $this->assertDatabaseHas('permit_applications', [
             'uuid' => $uuid,
-            'status' => 'released',
+            'status' => 'for_releasing',
         ]);
 
         $this->assertDatabaseHas('audit_logs', ['event' => 'inspection.scheduled']);

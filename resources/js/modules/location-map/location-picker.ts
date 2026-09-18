@@ -155,6 +155,7 @@ export function createLocationPicker(options: Options): LocationPickerApi {
         try {
             const { data } = await window.axios.get('/api/v1/geo/reverse', {
                 params: { latitude: lat, longitude: lng },
+                skipLoading: true,
             });
             const label = String(data.data?.label || '');
             if (label) {
@@ -210,6 +211,7 @@ export function createLocationPicker(options: Options): LocationPickerApi {
         try {
             const { data } = await window.axios.get('/api/v1/geo/search', {
                 params: { q, limit: 6 },
+                skipLoading: true,
             });
             renderResults(data.data?.items || []);
         } catch {

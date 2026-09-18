@@ -14,6 +14,7 @@ export type StaffApplicationDetail = {
     payload?: Record<string, unknown> | null;
     submitted_at?: string | null;
     created_at?: string | null;
+    updated_at?: string | null;
     applicant?: {
         uuid?: string;
         name?: string;
@@ -52,9 +53,24 @@ export type StaffApplicationDetail = {
             department?: { code?: string; name?: string };
         }>;
     }>;
+    evaluations?: Array<{ decided_at?: string | null; status?: string | null; result?: string | null }>;
+    inspections?: Array<{
+        scheduled_at?: string | null;
+        completed_at?: string | null;
+        status?: string | null;
+        result?: string | null;
+    }>;
+    orders_of_payment?: Array<{
+        issued_at?: string | null;
+        paid_at?: string | null;
+        status?: string | null;
+    }>;
+    compliance_notices?: Array<{ issued_at?: string | null; status?: string | null; type?: string | null }>;
 };
 
 export type TimelineEvent = {
+    key: string;
     label: string;
-    at: string;
+    at?: string | null;
+    state: 'done' | 'current' | 'pending';
 };

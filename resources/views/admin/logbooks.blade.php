@@ -97,7 +97,7 @@
                         <div class="d-flex">
                             <i class="ri-information-line fs-16 me-2 mt-1"></i>
                             <div class="fs-13 mb-0">
-                                G-01 releasing entries linked to an application will set that application status to <strong>released</strong>.
+                                G-01 releasing entries linked to an application with status <strong>For Releasing</strong> will set that application to <strong>Released</strong>.
                                 Print uses a short-lived signed URL.
                             </div>
                         </div>
@@ -122,7 +122,8 @@
                                 id="lb-app-uuid"
                                 label="Application"
                                 :required="false"
-                                help="Optional. Link to a permit application when the entry relates to a specific project."
+                                for-step="releasing"
+                                help="For G-01, pick a For Releasing application (paid). Other book types may leave this blank."
                             />
                         </div>
                         <div class="col-md-6">

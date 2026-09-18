@@ -37,7 +37,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'admin' => $permissions,
             'building_official' => [
                 'applications.manage',
-                'audit.view',
                 'users.manage',
                 'workflow.manage',
                 'evaluations.manage',
@@ -48,37 +47,30 @@ class RolesAndPermissionsSeeder extends Seeder
             ],
             'receiving' => [
                 'applications.manage',
-                'audit.view',
                 'evaluations.manage',
             ],
             'evaluator' => [
                 'applications.manage',
-                'audit.view',
                 'evaluations.manage',
             ],
             'inspector' => [
                 'applications.manage',
-                'audit.view',
                 'inspections.manage',
             ],
             'assessor' => [
                 'applications.manage',
-                'audit.view',
                 'fees.manage',
             ],
             'compliance' => [
                 'applications.manage',
-                'audit.view',
                 'compliance.manage',
             ],
             'records' => [
                 'applications.manage',
-                'audit.view',
                 'records.manage',
             ],
             'staff' => [
                 'applications.manage',
-                'audit.view',
                 'evaluations.manage',
                 'inspections.manage',
                 'fees.manage',

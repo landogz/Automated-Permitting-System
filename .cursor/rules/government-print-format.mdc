@@ -14,7 +14,7 @@ Applies to: Orders of Payment (G-02), logbooks (G-01/O-02/E/G-05/G-06), complian
 1. **Letterhead band**
    - LGU / office identity: City of San Fernando, Pampanga · Office of the City Building Official (OCBO)
    - System line: APICS (Automated Permitting, Inspection, and Compliance System)
-   - Optional seal/logo (`/images/branding/apics-logo.png`) — left or centered; never clip on print
+   - Official CSFP seal (`/images/branding/csfp-seal.png`) — left or centered; never clip on print
 2. **Document identity**
    - Clear form code + title (e.g. **G-02 · Order of Payment**, or **LIST · Evaluation Queue**)
    - Document / control number (OoP no., logbook no., notice no., or listing date) in mono or bold

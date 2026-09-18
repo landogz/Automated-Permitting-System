@@ -386,7 +386,7 @@ final class WorkflowNotifier
                 'name' => $applicant->name,
                 'application_no' => $appNo,
                 'oop_no' => (string) $order->oop_no,
-                'message' => "Payment for {$order->oop_no} ({$appNo}) was recorded. Your permit is ready for release.",
+                'message' => "Payment for {$order->oop_no} ({$appNo}) was recorded. Status is For Releasing — please proceed to the OCBO Releasing area to claim your permit.",
             ],
             [
                 'url' => '/applications',
@@ -403,7 +403,7 @@ final class WorkflowNotifier
                 [
                     'name' => $records->name,
                     'application_no' => $appNo,
-                    'message' => "{$appNo} is paid and ready for releasing / logbook entry.",
+                    'message' => "{$appNo} is For Releasing — record G-01 in Logbooks to release the permit.",
                 ],
                 [
                     'url' => '/admin/logbooks',

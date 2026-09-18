@@ -7,20 +7,20 @@
 <div class="app-menu navbar-menu">
     <div class="navbar-brand-box">
         <a href="{{ route('home') }}" class="logo logo-dark">
-            <span class="logo-sm"><x-branding.logo :height="32" class="rounded-circle" /></span>
+            <span class="logo-sm"><x-branding.logo :height="34" class="rounded-circle" /></span>
             {{-- No Bootstrap display utilities on logo-lg/sm — Velzon toggles them on sidebar collapse --}}
             <span class="logo-lg">
                 <span class="logo-text apics-brand-lockup">
-                    <x-branding.logo :height="36" class="rounded-circle" />
+                    <x-branding.logo :height="40" class="rounded-circle" />
                     <span class="apics-brand-lockup__name">APICS</span>
                 </span>
             </span>
         </a>
         <a href="{{ route('home') }}" class="logo logo-light">
-            <span class="logo-sm"><x-branding.logo :height="32" class="rounded-circle" /></span>
+            <span class="logo-sm"><x-branding.logo :height="34" class="rounded-circle" /></span>
             <span class="logo-lg">
                 <span class="logo-text apics-brand-lockup">
-                    <x-branding.logo :height="36" class="rounded-circle" />
+                    <x-branding.logo :height="40" class="rounded-circle" />
                     <span class="apics-brand-lockup__name apics-brand-lockup__name--light">APICS</span>
                 </span>
             </span>
@@ -167,6 +167,12 @@
                 <li class="menu-title d-none" data-nav-roles="admin" data-nav-permissions="audit.view"><span>Governance</span></li>
 
                 <li class="nav-item d-none" data-nav-roles="admin" data-nav-permissions="audit.view">
+                    <a class="nav-link menu-link {{ request()->routeIs('admin.project-plan') ? 'active' : '' }}" href="{{ route('admin.project-plan') }}">
+                        <i class="ri-roadmap-line"></i> <span>Project Plan</span>
+                    </a>
+                </li>
+
+                <li class="nav-item d-none" data-nav-roles="admin" data-nav-permissions="audit.view" data-nav-require-role="admin">
                     <a class="nav-link menu-link {{ request()->routeIs('admin.audit') ? 'active' : '' }}" href="{{ route('admin.audit') }}">
                         <i class="ri-history-line"></i> <span>Audit Trail</span>
                     </a>

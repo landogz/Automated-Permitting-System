@@ -35,7 +35,11 @@ function currentAudience(): LandingAudience {
         return 'admin';
     }
 
-    return 'applicant';
+    if (hasRole('applicant')) {
+        return 'applicant';
+    }
+
+    return 'guest';
 }
 
 async function ensureLandingSession(): Promise<void> {

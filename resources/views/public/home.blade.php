@@ -14,7 +14,7 @@
                     <span class="landing-phase-chip mb-3">{{ __('CSFP · OCBO · Phase I') }}</span>
 
                     <div class="d-flex align-items-center gap-3 mb-3 landing-hero-brand">
-                        <x-branding.logo :height="64" class="rounded-circle border border-2 border-white shadow-sm" />
+                        <x-branding.logo :height="80" class="rounded-circle border border-2 border-white shadow-sm" />
                         <div>
                             <h1 class="display-5 fw-semibold mb-0 lh-base" id="hero-heading">APICS</h1>
                             <p class="text-muted mb-0 fs-13">{{ __('City of San Fernando, Pampanga · OCBO') }}</p>
@@ -36,7 +36,7 @@
 
                     <div class="d-flex flex-wrap gap-2 d-none" data-auth-visible="admin">
                         <a href="{{ route('admin.dashboard') }}" class="btn btn-primary btn-lg">{{ __('Open admin console') }} <i class="ri-arrow-right-line align-middle ms-1" aria-hidden="true"></i></a>
-                        <a href="{{ route('applications.index') }}" class="btn btn-outline-primary btn-lg">{{ __('Applications') }}</a>
+                        <a href="{{ route('admin.evaluation-queue') }}" class="btn btn-outline-primary btn-lg">{{ __('Evaluation queue') }}</a>
                     </div>
 
                     <p class="text-muted fs-13 mt-3 mb-0">{{ __('For applicants, evaluators, and OCBO administrators — aligned with LGU QMS, P.D. 1096, and RA 11032.') }}</p>
@@ -83,7 +83,7 @@
                         </ul>
                         <p class="text-muted fs-11 text-uppercase mb-2 mt-3">{{ __('Status pipeline') }}</p>
                         <div class="d-flex flex-wrap gap-1 landing-pipeline" role="list" aria-label="{{ __('Permit status pipeline') }}">
-                            @foreach (['draft', 'submitted', 'under_evaluation', 'for_inspection', 'for_payment', 'released'] as $step)
+                            @foreach (['draft', 'submitted', 'under_evaluation', 'for_inspection', 'for_payment', 'for_releasing', 'released'] as $step)
                                 <x-status.badge :status="$step" role="listitem" />
                             @endforeach
                         </div>
@@ -180,6 +180,7 @@
             <div class="col-lg-10 landing-reveal">
                 <div class="card landing-product-chrome mb-0">
                     <div class="card-header align-items-center d-flex flex-wrap gap-2 py-3">
+                        <x-branding.logo :height="28" class="rounded-circle" />
                         <h3 class="card-title mb-0 flex-grow-1 fs-15">APICS · {{ __('Admin console') }}</h3>
                         <a href="{{ route('admin.dashboard') }}" class="btn btn-sm btn-primary">{{ __('Open console') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
                     </div>
@@ -386,7 +387,7 @@
                     <a href="{{ route('login') }}" class="btn btn-outline-light" data-auth-visible="guest">{{ __('Sign in') }}</a>
                     <a href="{{ route('applications.index') }}" class="btn btn-light d-none" data-auth-visible="applicant">{{ __('My applications') }}</a>
                     <a href="{{ route('admin.dashboard') }}" class="btn btn-light d-none" data-auth-visible="admin">{{ __('Admin console') }}</a>
-                    <a href="{{ route('applications.index') }}" class="btn btn-outline-light d-none" data-auth-visible="admin">{{ __('Applications') }}</a>
+                    <a href="{{ route('admin.evaluation-queue') }}" class="btn btn-outline-light d-none" data-auth-visible="admin">{{ __('Evaluation queue') }}</a>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -429,7 +430,7 @@
                     <a href="{{ route('login') }}" class="btn btn-outline-primary btn-lg" data-auth-visible="guest">{{ __('Sign in') }}</a>
                     <a href="{{ route('applications.index') }}" class="btn btn-primary btn-lg d-none" data-auth-visible="applicant">{{ __('My applications') }}</a>
                     <a href="{{ route('admin.dashboard') }}" class="btn btn-success btn-lg d-none" data-auth-visible="admin">{{ __('Admin console') }}</a>
-                    <a href="{{ route('applications.index') }}" class="btn btn-outline-primary btn-lg d-none" data-auth-visible="admin">{{ __('Applications') }}</a>
+                    <a href="{{ route('admin.evaluation-queue') }}" class="btn btn-outline-primary btn-lg d-none" data-auth-visible="admin">{{ __('Evaluation queue') }}</a>
                 </div>
             </div>
         </div>

@@ -15,6 +15,8 @@
     --apics-status-compliance-fg: #b71c1c;
     --apics-status-payment-bg: #fff3e0;
     --apics-status-payment-fg: #e65100;
+    --apics-status-releasing-bg: #e0f2f1;
+    --apics-status-releasing-fg: #00695c;
     --apics-status-released-bg: #e8f5e9;
     --apics-status-released-fg: #1b5e20;
     --apics-status-disapproved-bg: #fce4ec;
@@ -65,6 +67,12 @@
 .apics-status--for-payment {
     background: var(--apics-status-payment-bg);
     color: var(--apics-status-payment-fg);
+}
+
+.apics-status--for_releasing,
+.apics-status--for-releasing {
+    background: var(--apics-status-releasing-bg);
+    color: var(--apics-status-releasing-fg);
 }
 
 .apics-status--released {

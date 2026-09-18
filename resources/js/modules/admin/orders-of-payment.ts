@@ -417,13 +417,16 @@ export function initOrdersOfPaymentPage(): void {
     };
 
     const markPaid = async (row: OopRow): Promise<void> => {
-        if (!(await confirmAction('Mark this OoP as paid?', `${row.oop_no} will be recorded as paid via CTO stub and the application may be released.`))) {
+        if (!(await confirmAction(
+            'Mark this OoP as paid?',
+            `${row.oop_no} will be recorded as paid (CTO stub). Application moves to For Releasing — Released only after G-01 logbook.`,
+        ))) {
             return;
         }
         try {
             const { data: res } = await window.axios.post(`/api/v1/staff/orders-of-payment/${row.uuid}/mark-paid`);
             hideModal('modal-oop-detail');
-            toastSuccessAndGoNext('Marked paid (CTO stub)', res.data?.next_step);
+            toastSuccessAndGoNext('Payment recorded', res.data?.next_step);
             await reloadBoth();
         } catch (error: any) {
             toastError(error?.response?.data?.message || 'Update failed');

@@ -74,7 +74,9 @@ final class PermitApplicationRepository
             ->with([
                 'formDefinition',
                 'documents',
+                'evaluations' => fn ($q) => $q->latest('decided_at'),
                 'inspections' => fn ($q) => $q->latest('completed_at'),
+                'ordersOfPayment' => fn ($q) => $q->latest('issued_at'),
                 'complianceNotices' => fn ($q) => $q
                     ->with([
                         'inspection',
@@ -96,7 +98,9 @@ final class PermitApplicationRepository
                 'formDefinition',
                 'documents',
                 'user:id,uuid,name,email,phone',
+                'evaluations' => fn ($q) => $q->latest('decided_at'),
                 'inspections' => fn ($q) => $q->latest('completed_at'),
+                'ordersOfPayment' => fn ($q) => $q->latest('issued_at'),
                 'complianceNotices' => fn ($q) => $q
                     ->with([
                         'inspection',

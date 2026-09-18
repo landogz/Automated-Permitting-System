@@ -7,6 +7,7 @@ const STATUS_LABELS: Record<string, string> = {
     for_inspection: 'For Inspection',
     for_compliance: 'For Compliance',
     for_payment: 'For Payment',
+    for_releasing: 'For Releasing',
     released: 'Released',
     disapproved: 'Disapproved',
     scheduled: 'Scheduled',

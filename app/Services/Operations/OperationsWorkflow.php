@@ -9,7 +9,7 @@ use Illuminate\Validation\ValidationException;
 
 /**
  * Sequential Operations gate:
- * Evaluation → Inspection → Orders of Payment → Compliance (branch after failed inspection).
+ * Evaluation → Inspection → Orders of Payment → Compliance (branch) → Releasing (G-01).
  */
 final class OperationsWorkflow
 {
@@ -20,6 +20,8 @@ final class OperationsWorkflow
     public const STEP_PAYMENT = 'payment';
 
     public const STEP_COMPLIANCE = 'compliance';
+
+    public const STEP_RELEASING = 'releasing';
 
     /**
      * Statuses eligible for staff application pickers per operations step.
@@ -33,6 +35,7 @@ final class OperationsWorkflow
             self::STEP_INSPECTION => ['for_inspection'],
             self::STEP_PAYMENT => ['for_payment'],
             self::STEP_COMPLIANCE => ['for_compliance'],
+            self::STEP_RELEASING => ['for_releasing'],
             default => [],
         };
     }
@@ -95,7 +98,7 @@ final class OperationsWorkflow
     }
 
     /**
-     * @return array{step: string, label: string, path: string, status: string}
+     * @return array{step: string, label: string, path: string, status: string, message?: string}
      */
     public function nextStepMeta(string $status): array
     {
@@ -118,11 +121,26 @@ final class OperationsWorkflow
                 'path' => '/admin/compliance-notices',
                 'status' => $status,
             ],
-            'released', 'disapproved' => [
-                'step' => 'records',
-                'label' => 'Logbooks / Records',
+            'for_releasing' => [
+                'step' => self::STEP_RELEASING,
+                'label' => 'Releasing area (G-01 Logbooks)',
                 'path' => '/admin/logbooks',
                 'status' => $status,
+                'message' => 'Payment cleared — proceed to the Releasing area. Status becomes Released only after G-01 logbook release.',
+            ],
+            'released' => [
+                'step' => self::STEP_RELEASING,
+                'label' => 'Released (G-01 recorded)',
+                'path' => '/admin/logbooks',
+                'status' => $status,
+                'message' => 'Permit released via G-01 logbook.',
+            ],
+            'disapproved' => [
+                'step' => self::STEP_COMPLIANCE,
+                'label' => 'Compliance Notices',
+                'path' => '/admin/compliance-notices',
+                'status' => $status,
+                'message' => 'Record the outcome in Compliance / Records.',
             ],
             default => [
                 'step' => self::STEP_EVALUATION,

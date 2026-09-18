@@ -32,4 +32,5 @@ Route::prefix('admin')->group(function (): void {
     Route::view('/archives', 'admin.archives')->name('admin.archives');
     Route::view('/notifications', 'admin.notifications')->name('admin.notifications');
     Route::view('/audit', 'admin.audit')->name('admin.audit');
+    Route::view('/project-plan', 'admin.project-plan')->name('admin.project-plan');
 });

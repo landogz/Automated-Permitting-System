@@ -15,6 +15,7 @@ use App\Http\Controllers\API\Admin\UserController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\GeoController;
 use App\Http\Controllers\API\PermitApplicationController;
+use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\Staff\PhaseFiveController;
 use App\Http\Controllers\API\Staff\PhaseSixController;
 use App\Http\Controllers\API\Staff\WorkflowController;
@@ -28,6 +29,10 @@ Route::prefix('v1')->group(function (): void {
         Route::middleware('auth:sanctum')->group(function (): void {
             Route::post('logout', [AuthController::class, 'logout']);
             Route::get('me', [AuthController::class, 'me']);
+            Route::put('profile', [ProfileController::class, 'update'])
+                ->middleware('throttle:30,1');
+            Route::put('password', [ProfileController::class, 'changePassword'])
+                ->middleware('throttle:10,1');
         });
     });
 

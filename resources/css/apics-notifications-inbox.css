@@ -1,0 +1,72 @@
+/* Full-page notification inbox (Velzon mailbox layout) */
+.apics-notif-inbox .email-wrapper {
+    min-height: calc(100dvh - 11rem);
+}
+
+.apics-notif-inbox__list-scroll,
+.apics-notif-inbox__detail-scroll {
+    max-height: calc(100dvh - 16rem);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.apics-notif-inbox .message-list li {
+    cursor: pointer;
+}
+
+.apics-notif-inbox .message-list li.is-active {
+    background: rgba(64, 81, 137, 0.08);
+}
+
+.apics-notif-inbox .message-list .col-mail-1 .title {
+    pointer-events: none;
+}
+
+.apics-notif-inbox .message-list .col-mail-2 .subject {
+    pointer-events: none;
+}
+
+.apics-notif-inbox .apics-notif-inbox__avatar {
+    width: 2rem;
+    height: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.apics-notif-inbox .apics-notif-inbox__detail-card {
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.6;
+    padding: 1rem 1.1rem;
+    border-radius: 0.5rem;
+    background: var(--vz-light, #f3f6f9);
+    border: 1px solid var(--vz-border-color, #e9ebec);
+}
+
+[data-bs-theme='dark'] .apics-notif-inbox .message-list li.is-active {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+[data-bs-theme='dark'] .apics-notif-inbox .apics-notif-inbox__detail-card {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+@media (max-width: 991.98px) {
+    .apics-notif-inbox .email-wrapper {
+        min-height: calc(100dvh - 9rem);
+    }
+
+    .apics-notif-inbox__list-scroll,
+    .apics-notif-inbox__detail-scroll {
+        max-height: calc(100dvh - 14rem);
+    }
+}
+
+@media (max-width: 575.98px) {
+    .apics-notif-inbox .page-title-box {
+        margin-bottom: 0.5rem;
+    }
+}

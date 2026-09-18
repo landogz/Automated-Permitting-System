@@ -257,6 +257,7 @@ async function geocodeAddress(address: string): Promise<{ lat: number; lng: numb
     try {
         const { data } = await window.axios.get('/api/v1/geo/search', {
             params: { q: address, limit: 1 },
+            skipLoading: true,
         });
         const hit = data?.data?.items?.[0] ?? data?.data?.[0];
         if (!hit) return null;

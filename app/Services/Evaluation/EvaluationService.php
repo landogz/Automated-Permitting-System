@@ -30,7 +30,7 @@ final class EvaluationService
     public function listForStaff(string $search = '', int $perPage = 15, string $bucket = 'active'): LengthAwarePaginator
     {
         $statuses = $bucket === 'completed'
-            ? ['for_inspection', 'for_payment', 'for_compliance', 'released', 'disapproved']
+            ? ['for_inspection', 'for_payment', 'for_releasing', 'for_compliance', 'released', 'disapproved']
             : ['submitted', 'under_evaluation'];
 
         return PermitApplication::query()

@@ -480,6 +480,22 @@ Create [`.cursor/rules/update-project-plan-on-done.mdc`](.cursor/rules/update-pr
 | 2026-09-17 | **Notification bell details UX:** clickable items open full body detail pane (Back / Open related page / Mark read); removed SimpleBar click trap + truncate-only list | Remaining: staging → KT → production |
 | 2026-09-17 | **Applicant edit after submit:** `/applications` can edit + upload/replace docs while status is draft/submitted/under_evaluation/for_compliance; locked after inspection/payment/release/disapproval | Remaining: staging → KT → production |
 | 2026-09-17 | **App form/detail tabs:** removed overflow scrollbar on tab strips; tabs wrap instead of scrolling | Remaining: staging → KT → production |
+| 2026-09-17 | **Topbar account polish:** initials avatar chip + caret; dropdown profile head (name/email/role badge); icon tiles; Sign out emphasis | Remaining: staging → KT → production |
+| 2026-09-17 | **My Applications = applicant-only:** sidebar/topbar/landing hide for office & non-applicant; `/applications` redirects staff to admin; landing CTAs point staff to Evaluation queue | Remaining: staging → KT → production |
+| 2026-09-17 | **Project Plan page:** removed from Admin Dashboard; dedicated `/admin/project-plan` (Axios + sidebar Governance) with same phases accordion | Remaining: staging → KT → production |
+| 2026-09-17 | **Account menu hide fix:** `.apics-account-menu__item { display:flex !important }` no longer overrides `d-none` — My Applications stays hidden for office roles | Remaining: staging → KT → production |
+| 2026-09-17 | **Edit Profile + Change Password:** account menu modals (Velzon); `PUT /api/v1/auth/profile` + `/password`; ProfileService + audit; toast SPA | Remaining: staging → KT → production |
+| 2026-09-17 | **Account modal design polish:** identity preview + icon inputs; password strength meter + rule checklist; refined header/footer CTAs | Remaining: staging → KT → production |
+| 2026-09-17 | **Application timeline end-to-end:** Drafted→Released/Disapproved with pending steps; eval/inspect/OoP/compliance dates from API | Remaining: staging → KT → production |
+| 2026-09-17 | **Official CSFP seal branding:** City of San Fernando seal (`csfp-seal.png`) on sidebar/topbar/auth/landing/hero, favicon + apple-touch, government print letterhead | Remaining: staging → KT → production |
+| 2026-09-17 | **Global loading indicator:** Axios interceptor shows top progress bar on all API calls + blocking overlay for save/update/delete; `skipLoading` for bell/geo/typeahead; `withLoading` / `withButtonLoading` helpers | Remaining: staging → KT → production |
+| 2026-09-17 | **MAIL_ENABLED switch:** `.env` `MAIL_ENABLED=true|false` gates all outbound mail via `MailSender`; in-app notifications still work when email is off | Remaining: staging → KT → production |
+| 2026-09-17 | **Post-payment → Releasing:** mark-paid toast/confirm + next_step message guide staff to Releasing area (G-01 Logbooks); applicant/staff notifications updated | Remaining: staging → KT → production |
+| 2026-09-17 | **Demo APICS-2026-000002 on payment:** Warehouse Expansion reset to `for_payment` + issued OoP; seeders keep it on the payment step | Remaining: staging → KT → production |
+| 2026-09-17 | **For Releasing gate:** mark-paid → `for_releasing` (not Released); G-01 logbook only sets `released`; badges/timeline/lookup/logbook picker updated | Remaining: staging → KT → production |
+| 2026-09-17 | **Admin dashboard redesign:** OCBO operations console with hero, attention KPIs, pipeline bars, needs-attention queues, recent filings, audit activity, quick access; richer dashboard-stats API | Remaining: staging → KT → production |
+| 2026-09-17 | **Audit trail admin-only:** `audit.view` synced to Spatie `admin` only; API `hasRole('admin')`; sidebar/dashboard/shell `requireRoles`; staff denied `/api/v1/admin/audit-logs` in PrivilegeMatrixTest | Remaining: staging → KT → production |
+| 2026-09-18 | **Notifications inbox:** `/admin/notifications` redesigned as Velzon mailbox-style full-page inbox (All/Unread/Read, search, detail pane, mark all); API `status`/`search`/`counts`; bell “View all”; Compose removed | Remaining: staging → KT → production |
 | — | Next | Staging, training/KT, production go-live + warranty |
 
 Also mirror this requirement in [`CLAUDE.md`](CLAUDE.md) under engineering standards.

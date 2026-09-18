@@ -29,6 +29,7 @@ class PermitApplicationResource extends JsonResource
             'payload' => $this->payload,
             'submitted_at' => $this->submitted_at?->toIso8601String(),
             'created_at' => $this->created_at?->toIso8601String(),
+            'updated_at' => $this->updated_at?->toIso8601String(),
             'applicant' => $this->whenLoaded('user', fn () => [
                 'uuid' => $this->user?->uuid,
                 'name' => $this->user?->name,
@@ -44,7 +45,12 @@ class PermitApplicationResource extends JsonResource
             ]),
             'documents' => $this->whenLoaded('documents', fn () => ApplicationDocumentResource::collection($this->documents)),
             'routing_slips' => $this->whenLoaded('routingSlips', fn () => RoutingSlipResource::collection($this->routingSlips)),
+            'evaluations' => $this->whenLoaded('evaluations', fn () => EvaluationResource::collection($this->evaluations)),
             'inspections' => $this->whenLoaded('inspections', fn () => InspectionResource::collection($this->inspections)),
+            'orders_of_payment' => $this->whenLoaded(
+                'ordersOfPayment',
+                fn () => OrderOfPaymentResource::collection($this->ordersOfPayment),
+            ),
             'compliance_notices' => $this->whenLoaded(
                 'complianceNotices',
                 fn () => ComplianceNoticeResource::collection($this->complianceNotices),

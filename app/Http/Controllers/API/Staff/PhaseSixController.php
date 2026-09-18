@@ -49,7 +49,7 @@ class PhaseSixController extends Controller
             403
         );
 
-        return ApiResponse::success('Dashboard stats retrieved', $this->dashboard->operationalStats());
+        return ApiResponse::success('Dashboard stats retrieved', $this->dashboard->operationalStats($user));
     }
 
     /**
@@ -123,24 +123,39 @@ class PhaseSixController extends Controller
     }
 
     /**
-     * List notifications for the authenticated user.
+     * List notifications for the authenticated user (bell dropdown + full inbox).
      */
     public function myNotifications(Request $request): JsonResponse
     {
+        $status = $request->string('status')->toString();
+        if ($status === '' && $request->boolean('unread_only')) {
+            $status = 'unread';
+        }
+        if ($status === '') {
+            $status = 'all';
+        }
+
         $paginator = $this->notifications->listForUser(
             $request->user(),
-            $request->boolean('unread_only'),
+            false,
             (int) $request->integer('per_page', 25),
+            $request->string('search')->toString(),
+            $status,
         );
+
+        $counts = $this->notifications->countsForUser($request->user());
 
         return ApiResponse::success('Notifications retrieved', [
             'items' => UserNotificationResource::collection($paginator->items()),
-            'unread_count' => $this->notifications->unreadCount($request->user()),
+            'unread_count' => $counts['unread'],
+            'counts' => $counts,
             'meta' => [
                 'current_page' => $paginator->currentPage(),
                 'last_page' => $paginator->lastPage(),
                 'per_page' => $paginator->perPage(),
                 'total' => $paginator->total(),
+                'status' => $status,
+                'search' => $request->string('search')->toString(),
             ],
         ]);
     }

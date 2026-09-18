@@ -42,14 +42,14 @@
         }
         .gov-letterhead {
             display: grid;
-            grid-template-columns: 56px 1fr;
+            grid-template-columns: 64px 1fr;
             gap: 12px;
             align-items: center;
             border-bottom: 2px solid var(--ink);
             padding-bottom: 12px;
             margin-bottom: 14px;
         }
-        .gov-letterhead img { width: 56px; height: 56px; object-fit: contain; }
+        .gov-letterhead img { width: 64px; height: 64px; object-fit: contain; }
         .gov-letterhead__org {
             font-size: 11px;
             letter-spacing: 0.04em;

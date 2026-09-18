@@ -6,8 +6,11 @@ import '../css/apics-ops.css';
 import '../css/apics-modal.css';
 import '../css/apics-document-viewer.css';
 import '../css/apics-location-picker.css';
+import '../css/apics-dashboard.css';
+import '../css/apics-notifications-inbox.css';
 import '../css/landing-motion.css';
 import { toastSuccess, toastError } from './utils/toast';
+import { showLoading, hideLoading, withLoading, withButtonLoading } from './utils/loading';
 import { initAppShell } from './modules/layout/shell';
 
 declare global {
@@ -15,11 +18,19 @@ declare global {
         axios: typeof axios;
         toastSuccess: typeof toastSuccess;
         toastError: typeof toastError;
+        showLoading: typeof showLoading;
+        hideLoading: typeof hideLoading;
+        withLoading: typeof withLoading;
+        withButtonLoading: typeof withButtonLoading;
     }
 }
 
 window.toastSuccess = toastSuccess;
 window.toastError = toastError;
+window.showLoading = showLoading;
+window.hideLoading = hideLoading;
+window.withLoading = withLoading;
+window.withButtonLoading = withButtonLoading;
 
 document.addEventListener('DOMContentLoaded', () => {
     initAppShell();
@@ -178,17 +189,31 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        if (document.getElementById('notifications-table') || document.getElementById('notif-templates-table')) {
+        if (document.getElementById('apics-notif-inbox')) {
             await boot('notifications', async () => {
                 const { initNotificationsPage } = await import('./modules/admin/notifications');
                 initNotificationsPage();
             });
         }
 
-        if (document.getElementById('ops-stats')) {
+        if (document.getElementById('apics-admin-dashboard') || document.getElementById('ops-stats')) {
             await boot('dashboard stats', async () => {
-                const { initDashboardStats } = await import('./modules/admin/dashboard-stats');
+                const { initDashboardStats } = await import('./modules/admin/dashboard');
                 initDashboardStats();
+            });
+        }
+
+        if (document.getElementById('project-plan-root')) {
+            await boot('project plan', async () => {
+                const { initProjectPlanPage } = await import('./modules/project-plan/project-plan');
+                initProjectPlanPage();
+            });
+        }
+
+        if (document.getElementById('modal-edit-profile')) {
+            await boot('account profile', async () => {
+                const { initAccountProfile } = await import('./modules/account-profile/account-profile');
+                initAccountProfile();
             });
         }
     })();

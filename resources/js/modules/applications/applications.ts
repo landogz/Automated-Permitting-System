@@ -103,6 +103,7 @@ const IN_PROGRESS_STATUSES = new Set([
     'for_inspection',
     'for_compliance',
     'for_payment',
+    'for_releasing',
     'disapproved',
 ]);
 
@@ -568,6 +569,7 @@ export function initApplicationsPage(): void {
                             { value: 'under_evaluation', label: 'Under evaluation' },
                             { value: 'for_inspection', label: 'For inspection' },
                             { value: 'for_payment', label: 'For payment' },
+                            { value: 'for_releasing', label: 'For releasing' },
                             { value: 'for_compliance', label: 'For compliance' },
                             { value: 'released', label: 'Released' },
                             { value: 'disapproved', label: 'Disapproved' },

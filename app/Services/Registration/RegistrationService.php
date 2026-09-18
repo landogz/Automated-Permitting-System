@@ -12,10 +12,10 @@ use App\Mail\Registration\RegistrationReceivedMail;
 use App\Models\User;
 use App\Repositories\Registration\RegistrationRepository;
 use App\Services\Audit\AuditLogger;
+use App\Services\Mail\MailSender;
 use App\Services\Notification\WorkflowNotifier;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Models\Role;
 
@@ -25,6 +25,7 @@ final class RegistrationService
         private readonly RegistrationRepository $repository,
         private readonly AuditLogger $audit,
         private readonly WorkflowNotifier $notifier,
+        private readonly MailSender $mail,
     ) {
     }
 
@@ -50,10 +51,10 @@ final class RegistrationService
             return $user;
         });
 
-        Mail::to($user->email)->send(new RegistrationReceivedMail($user));
+        $this->mail->send($user->email, new RegistrationReceivedMail($user));
 
         foreach ($this->repository->adminRecipients() as $admin) {
-            Mail::to($admin->email)->send(new RegistrationPendingAdminMail($user));
+            $this->mail->send($admin->email, new RegistrationPendingAdminMail($user));
         }
 
         $this->notifier->registrationSubmitted($user);
@@ -88,7 +89,7 @@ final class RegistrationService
         ]);
         $applicant->save();
 
-        Mail::to($applicant->email)->send(new RegistrationApprovedMail($applicant));
+        $this->mail->send($applicant->email, new RegistrationApprovedMail($applicant));
 
         $this->notifier->registrationApproved($applicant);
 
@@ -115,7 +116,7 @@ final class RegistrationService
         ]);
         $applicant->save();
 
-        Mail::to($applicant->email)->send(new RegistrationDeclinedMail($applicant, $reason));
+        $this->mail->send($applicant->email, new RegistrationDeclinedMail($applicant, $reason));
 
         $this->notifier->registrationDeclined($applicant, $reason);
 

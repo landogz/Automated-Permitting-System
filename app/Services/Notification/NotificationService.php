@@ -11,15 +11,17 @@ use App\Models\NotificationTemplate;
 use App\Models\User;
 use App\Models\UserNotification;
 use App\Services\Audit\AuditLogger;
+use App\Services\Mail\MailSender;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 final class NotificationService
 {
-    public function __construct(private readonly AuditLogger $audit)
-    {
+    public function __construct(
+        private readonly AuditLogger $audit,
+        private readonly MailSender $mail,
+    ) {
     }
 
     public function listTemplates(string $search = '', int $perPage = 25): LengthAwarePaginator
@@ -62,21 +64,60 @@ final class NotificationService
         ]);
     }
 
-    public function listForUser(User $user, bool $unreadOnly = false, int $perPage = 25): LengthAwarePaginator
-    {
+    /**
+     * Paginate in-app notifications for a user (bell + full inbox).
+     *
+     * @param  'all'|'unread'|'read'  $status
+     */
+    public function listForUser(
+        User $user,
+        bool $unreadOnly = false,
+        int $perPage = 25,
+        string $search = '',
+        string $status = 'all',
+    ): LengthAwarePaginator {
+        $resolvedStatus = $unreadOnly ? 'unread' : $status;
+        if (! in_array($resolvedStatus, ['all', 'unread', 'read'], true)) {
+            $resolvedStatus = 'all';
+        }
+
+        $search = trim($search);
+
         return UserNotification::query()
             ->where('user_id', $user->id)
-            ->when($unreadOnly, fn ($q) => $q->whereNull('read_at'))
+            ->when($resolvedStatus === 'unread', fn ($q) => $q->whereNull('read_at'))
+            ->when($resolvedStatus === 'read', fn ($q) => $q->whereNotNull('read_at'))
+            ->when($search !== '', function ($q) use ($search): void {
+                $like = '%'.$search.'%';
+                $q->where(function ($inner) use ($like): void {
+                    $inner->where('title', 'like', $like)
+                        ->orWhere('body', 'like', $like)
+                        ->orWhere('template_code', 'like', $like);
+                });
+            })
             ->latest('id')
             ->paginate(min(max($perPage, 1), 100));
     }
 
+    /**
+     * @return array{total: int, unread: int, read: int}
+     */
+    public function countsForUser(User $user): array
+    {
+        $base = UserNotification::query()->where('user_id', $user->id);
+        $total = (clone $base)->count();
+        $unread = (clone $base)->whereNull('read_at')->count();
+
+        return [
+            'total' => $total,
+            'unread' => $unread,
+            'read' => max(0, $total - $unread),
+        ];
+    }
+
     public function unreadCount(User $user): int
     {
-        return UserNotification::query()
-            ->where('user_id', $user->id)
-            ->whereNull('read_at')
-            ->count();
+        return $this->countsForUser($user)['unread'];
     }
 
     /**
@@ -106,7 +147,7 @@ final class NotificationService
 
         $title = $this->render($template->subject ?: $template->name, $vars);
         $body = $this->render($template->body_template, $vars);
-        $shouldEmail = $sendEmail && filled($user->email);
+        $shouldEmail = $sendEmail && $this->mail->enabled() && filled($user->email);
 
         // Bell listing uses in_app; email is additive (channelOverride kept for API compatibility).
         $channel = NotificationChannel::InApp;
@@ -120,15 +161,17 @@ final class NotificationService
             'channel' => $channel->value,
             'title' => $title,
             'body' => $body,
-            'data' => array_merge($data, ['email_requested' => $shouldEmail]),
+            'data' => array_merge($data, [
+                'email_requested' => $sendEmail && filled($user->email),
+                'mail_enabled' => $this->mail->enabled(),
+            ]),
             'status' => NotificationDeliveryStatus::Queued->value,
         ]);
 
         $emailSent = false;
         try {
             if ($shouldEmail) {
-                Mail::to($user->email)->send(new StatusUpdateMail($notification));
-                $emailSent = true;
+                $emailSent = $this->mail->send($user->email, new StatusUpdateMail($notification));
             }
 
             $notification->fill([

@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{{ __('Automated Permitting, Inspection, and Compliance System for the Office of the City Building Official, City of San Fernando, Pampanga.') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="shortcut icon" href="{{ asset('images/branding/apics-logo.png') }}">
+    <link rel="shortcut icon" href="{{ asset('images/branding/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/branding/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/branding/csfp-seal.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -24,7 +26,7 @@
     <nav class="navbar navbar-expand-lg navbar-landing fixed-top" id="navbar">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('home') }}">
-                <x-branding.logo :height="28" class="rounded-circle" />
+                <x-branding.logo :height="36" class="rounded-circle" />
                 <span class="fw-semibold text-body">APICS</span>
             </a>
 
@@ -73,7 +75,7 @@
             <div class="row">
                 <div class="col-lg-5 mb-4 mb-lg-0">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <x-branding.logo :height="32" class="rounded-circle" />
+                        <x-branding.logo :height="40" class="rounded-circle" />
                         <div>
                             <h5 class="text-white mb-0">APICS</h5>
                             <p class="text-white-50 mb-0 fs-12">{{ __('Automated Permitting, Inspection, and Compliance System') }}</p>
@@ -87,10 +89,10 @@
                         <li><a href="{{ route('home') }}">{{ __('Home') }}</a></li>
                         <li><a href="{{ route('home') }}#services">{{ __('Platform overview') }}</a></li>
                         <li><a href="{{ route('home') }}#trust">{{ __('Mandate') }}</a></li>
-                        <li><a href="{{ route('applications.index') }}">{{ __('Applications') }}</a></li>
+                        <li data-auth-visible="guest"><a href="{{ route('applications.index') }}">{{ __('Apply') }}</a></li>
                         <li data-auth-visible="guest"><a href="{{ route('login') }}">{{ __('Sign in') }}</a></li>
                         <li data-auth-visible="guest"><a href="{{ route('register') }}">{{ __('Register') }}</a></li>
-                        <li class="d-none" data-auth-visible="applicant,admin"><a href="{{ route('applications.index') }}">{{ __('My applications') }}</a></li>
+                        <li class="d-none" data-auth-visible="applicant"><a href="{{ route('applications.index') }}">{{ __('My applications') }}</a></li>
                         <li class="d-none" data-auth-visible="admin"><a href="{{ route('admin.dashboard') }}">{{ __('Admin console') }}</a></li>
                     </ul>
                 </div>

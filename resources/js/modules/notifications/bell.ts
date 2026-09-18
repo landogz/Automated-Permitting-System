@@ -1,78 +1,14 @@
 import { isAuthenticated, hasPermission } from '../../utils/auth';
 import { toastError, toastSuccess } from '../../utils/toast';
+import {
+    escapeHtml,
+    iconFor,
+    resolveNotificationItems,
+    timeAgo,
+    type InboxNotification,
+} from './shared';
 
-type BellNotification = {
-    uuid: string;
-    title: string;
-    body: string;
-    data?: { url?: string; event?: string } | null;
-    created_at?: string | null;
-    is_read?: boolean;
-    read_at?: string | null;
-};
-
-function timeAgo(iso?: string | null): string {
-    if (!iso) return '';
-    const then = new Date(iso).getTime();
-    if (Number.isNaN(then)) return '';
-    const seconds = Math.max(0, Math.floor((Date.now() - then) / 1000));
-    if (seconds < 60) return 'Just now';
-    if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)} hr ago`;
-    return `${Math.floor(seconds / 86400)} d ago`;
-}
-
-function iconFor(event?: string): { bg: string; text: string; icon: string } {
-    const key = (event || '').toLowerCase();
-    if (key.includes('fail') || key.includes('declined') || key.includes('compliance')) {
-        return { bg: 'bg-danger-subtle', text: 'text-danger', icon: 'bx bx-error-circle' };
-    }
-    if (key.includes('payment') || key.includes('order')) {
-        return { bg: 'bg-success-subtle', text: 'text-success', icon: 'bx bx-wallet' };
-    }
-    if (key.includes('inspection')) {
-        return { bg: 'bg-warning-subtle', text: 'text-warning', icon: 'bx bx-hard-hat' };
-    }
-    if (key.includes('document') || key.includes('correction')) {
-        return { bg: 'bg-info-subtle', text: 'text-info', icon: 'bx bx-file' };
-    }
-    if (key.includes('release') || key.includes('approved') || key.includes('passed')) {
-        return { bg: 'bg-success-subtle', text: 'text-success', icon: 'bx bx-badge-check' };
-    }
-    return { bg: 'bg-primary-subtle', text: 'text-primary', icon: 'bx bx-bell' };
-}
-
-function escapeHtml(value: string): string {
-    return value
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
-
-function resolveItems(payload: unknown): BellNotification[] {
-    if (!payload || typeof payload !== 'object') {
-        return [];
-    }
-
-    const root = payload as Record<string, unknown>;
-    const data = (root.data && typeof root.data === 'object' ? root.data : root) as Record<string, unknown>;
-    const raw = data.items ?? data.data ?? [];
-
-    if (!Array.isArray(raw)) {
-        return [];
-    }
-
-    return raw.map((row) => {
-        const item = (row && typeof row === 'object' && 'data' in row && typeof (row as { data: unknown }).data === 'object'
-            && !('uuid' in row)
-            ? (row as { data: BellNotification }).data
-            : row) as BellNotification;
-
-        return item;
-    }).filter((item) => Boolean(item?.uuid));
-}
+type BellNotification = InboxNotification;
 
 export function initNotificationBell(): void {
     const root = document.querySelector<HTMLElement>('[data-apics-notif-bell]');
@@ -221,11 +157,13 @@ export function initNotificationBell(): void {
         try {
             const { data } = await window.axios.get('/api/v1/notifications', {
                 params: { per_page: 12 },
+                skipLoading: true,
             });
             if (!data?.status) return;
-            const items = resolveItems(data);
+            const items = resolveNotificationItems(data);
             const unread = Number(
                 data.data?.unread_count
+                ?? data.data?.counts?.unread
                 ?? items.filter((n) => !n.is_read).length,
             );
             render(items, unread);
@@ -234,7 +172,6 @@ export function initNotificationBell(): void {
         }
     };
 
-    // Delegate from the dropdown menu so SimpleBar / re-renders cannot detach handlers.
     menu.addEventListener('click', (event) => {
         const target = event.target as HTMLElement;
 

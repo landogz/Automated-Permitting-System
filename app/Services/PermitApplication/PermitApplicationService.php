@@ -358,6 +358,11 @@ final class PermitApplicationService
             'formDefinition',
             'documents',
             'user:id,uuid,name,email,phone',
+            'evaluations',
+            'inspections',
+            'ordersOfPayment',
+            'complianceNotices.inspection',
+            'complianceNotices.appeals',
             'routingSlips.steps.department',
             'routingSlips.template:id,uuid,code,name,classification',
         ]);

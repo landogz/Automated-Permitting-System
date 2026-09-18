@@ -98,27 +98,120 @@ export function buildTimelineEvents(app: {
     created_at?: string | null;
     submitted_at?: string | null;
     classified_at?: string | null;
+    updated_at?: string | null;
     status?: string;
+    evaluations?: Array<{ decided_at?: string | null; status?: string | null; result?: string | null }>;
+    inspections?: Array<{
+        scheduled_at?: string | null;
+        completed_at?: string | null;
+        status?: string | null;
+        result?: string | null;
+    }>;
+    orders_of_payment?: Array<{
+        issued_at?: string | null;
+        paid_at?: string | null;
+        status?: string | null;
+    }>;
+    compliance_notices?: Array<{ issued_at?: string | null; status?: string | null; type?: string | null }>;
 }): TimelineEvent[] {
-    const events: TimelineEvent[] = [];
+    const status = (app.status || 'draft').toLowerCase();
+    const onComplianceBranch =
+        status === 'for_compliance' ||
+        status === 'disapproved' ||
+        (Array.isArray(app.compliance_notices) &&
+            app.compliance_notices.length > 0 &&
+            !['for_payment', 'for_releasing', 'released'].includes(status));
+
     const createdMs = app.created_at ? new Date(app.created_at).getTime() : NaN;
     const submittedMs = app.submitted_at ? new Date(app.submitted_at).getTime() : NaN;
-
-    if (app.created_at) {
-        // Demo/seed rows sometimes stamp created_at after submitted_at — keep Drafted earlier for UX.
-        if (Number.isFinite(createdMs) && Number.isFinite(submittedMs) && createdMs > submittedMs) {
-            events.push({
-                label: 'Drafted',
-                at: new Date(submittedMs - 3600000).toISOString(),
-            });
-        } else {
-            events.push({ label: 'Drafted', at: app.created_at });
-        }
+    let draftedAt = app.created_at || null;
+    if (Number.isFinite(createdMs) && Number.isFinite(submittedMs) && createdMs > submittedMs) {
+        draftedAt = new Date(submittedMs - 3600000).toISOString();
     }
-    if (app.submitted_at) events.push({ label: 'Submitted', at: app.submitted_at });
-    if (app.classified_at) events.push({ label: 'Classified', at: app.classified_at });
 
-    return events.sort((a, b) => new Date(a.at).getTime() - new Date(b.at).getTime());
+    const decidedEval = (app.evaluations || []).find((row) => row.decided_at) || (app.evaluations || [])[0];
+    const latestInspection =
+        (app.inspections || []).find((row) => row.completed_at) || (app.inspections || [])[0];
+    const latestOop = (app.orders_of_payment || [])[0];
+    const latestNotice = (app.compliance_notices || [])[0];
+
+    const evaluatedAt = decidedEval?.decided_at || null;
+    const inspectedAt = latestInspection?.completed_at || latestInspection?.scheduled_at || null;
+    const paymentAt = onComplianceBranch
+        ? latestNotice?.issued_at || null
+        : latestOop?.paid_at || latestOop?.issued_at || null;
+    const releasingAt =
+        status === 'for_releasing' || status === 'released'
+            ? latestOop?.paid_at || app.updated_at || null
+            : null;
+    const releasedAt =
+        status === 'released'
+            ? app.updated_at || latestOop?.paid_at || inspectedAt || evaluatedAt
+            : status === 'disapproved'
+              ? latestNotice?.issued_at || app.updated_at || null
+              : null;
+
+    const midLabel = onComplianceBranch ? 'Compliance' : 'Payment';
+    const endLabel = status === 'disapproved' ? 'Disapproved' : 'Released';
+
+    const steps: Array<{ key: string; label: string; at: string | null }> = [
+        { key: 'drafted', label: 'Drafted', at: draftedAt },
+        { key: 'submitted', label: 'Submitted', at: app.submitted_at || null },
+        { key: 'classified', label: 'Classified', at: app.classified_at || null },
+        { key: 'evaluation', label: 'Evaluation', at: evaluatedAt },
+        { key: 'inspection', label: 'Inspection', at: inspectedAt },
+        { key: 'payment', label: midLabel, at: paymentAt },
+        { key: 'releasing', label: 'For Releasing', at: releasingAt },
+        { key: 'released', label: endLabel, at: releasedAt },
+    ];
+
+    const currentIndex = (() => {
+        switch (status) {
+            case 'draft':
+                return 0;
+            case 'submitted':
+                return 2;
+            case 'under_evaluation':
+                return 3;
+            case 'for_inspection':
+                return 4;
+            case 'for_payment':
+            case 'for_compliance':
+                return 5;
+            case 'for_releasing':
+                return 6;
+            case 'released':
+            case 'disapproved':
+                return 7;
+            default:
+                return 0;
+        }
+    })();
+
+    const terminal = status === 'released' || status === 'disapproved';
+
+    return steps.map((step, index) => {
+        let state: TimelineEvent['state'] = 'pending';
+        if (terminal) {
+            state = index <= currentIndex ? 'done' : 'pending';
+        } else if (index < currentIndex) {
+            state = 'done';
+        } else if (index === currentIndex) {
+            state = 'current';
+        }
+
+        // Status can advance ahead of timestamps (e.g. under_evaluation without classified_at stamp).
+        if (state !== 'pending' && !step.at && index < currentIndex) {
+            // keep done without date
+        }
+
+        return {
+            key: step.key,
+            label: step.label,
+            at: step.at,
+            state,
+        };
+    });
 }
 
 export function timelineStepperHtml(events: TimelineEvent[]): string {
@@ -128,13 +221,21 @@ export function timelineStepperHtml(events: TimelineEvent[]): string {
 
     return `<ol class="apics-timeline-stepper list-unstyled mb-0" aria-label="Application timeline">
         ${events
-            .map(
-                (event, index) => `<li class="apics-timeline-stepper__item${index === events.length - 1 ? ' is-current' : ''}">
+            .map((event) => {
+                const dateText =
+                    event.at && event.state !== 'pending'
+                        ? formatDateShort(event.at)
+                        : event.state === 'pending'
+                          ? 'Pending'
+                          : event.state === 'current'
+                            ? 'In progress'
+                            : '—';
+                return `<li class="apics-timeline-stepper__item is-${event.state}">
                     <span class="apics-timeline-stepper__dot" aria-hidden="true"></span>
                     <span class="apics-timeline-stepper__label">${escapeHtml(event.label)}</span>
-                    <span class="apics-timeline-stepper__date">${escapeHtml(formatDateShort(event.at))}</span>
-                </li>`,
-            )
+                    <span class="apics-timeline-stepper__date">${escapeHtml(dateText)}</span>
+                </li>`;
+            })
             .join('')}
     </ol>`;
 }

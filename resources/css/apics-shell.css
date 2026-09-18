@@ -562,3 +562,458 @@ html[data-sidebar-size='sm-hover']:not(:hover) .apics-nav-badge {
 [data-bs-theme='dark'] .apics-notif-detail__body {
     background: rgba(255, 255, 255, 0.04);
 }
+
+/* Topbar account chip + dropdown */
+.apics-topbar-user {
+    margin-left: 0.35rem !important;
+}
+
+.apics-topbar-user__trigger {
+    padding: 0.35rem 0.55rem !important;
+    border-radius: 999px !important;
+    border: 1px solid transparent;
+    background: transparent !important;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.apics-topbar-user__trigger:hover,
+.apics-topbar-user__trigger:focus-visible,
+.apics-topbar-user.show .apics-topbar-user__trigger {
+    background: rgba(64, 81, 137, 0.06) !important;
+    border-color: rgba(64, 81, 137, 0.12);
+    box-shadow: none;
+}
+
+.apics-topbar-user__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #fff;
+    background: linear-gradient(145deg, #405189 0%, #5b6aa8 55%, #0ab39c 130%);
+    box-shadow: 0 0 0 2px #fff, 0 0 0 3px rgba(64, 81, 137, 0.18);
+    flex-shrink: 0;
+}
+
+.apics-topbar-user__avatar--lg {
+    width: 2.65rem;
+    height: 2.65rem;
+    font-size: 0.85rem;
+}
+
+.apics-topbar-user__name {
+    max-width: 10.5rem;
+    line-height: 1.2;
+    color: var(--vz-body-color, #212529);
+    font-size: 0.8125rem;
+}
+
+.apics-topbar-user__role {
+    max-width: 10.5rem;
+    line-height: 1.2;
+    text-transform: none;
+    letter-spacing: 0.01em;
+}
+
+.apics-topbar-user__caret {
+    font-size: 1.05rem;
+    line-height: 1;
+    transition: transform 0.15s ease;
+}
+
+.apics-topbar-user.show .apics-topbar-user__caret {
+    transform: rotate(180deg);
+}
+
+.apics-account-menu {
+    min-width: 17.5rem;
+    max-width: min(20rem, calc(100vw - 1.25rem));
+    border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    border-radius: 0.85rem !important;
+    box-shadow: 0 0.75rem 1.75rem rgba(15, 23, 42, 0.12) !important;
+    overflow: hidden;
+    margin-top: 0.45rem !important;
+}
+
+.apics-account-menu__head {
+    padding: 1rem 1rem 0.9rem;
+    background:
+        linear-gradient(180deg, rgba(64, 81, 137, 0.08), rgba(64, 81, 137, 0.02) 70%, transparent),
+        var(--vz-secondary-bg, #f8f9fa);
+    border-bottom: 1px solid var(--vz-border-color, #e9ebec);
+}
+
+.apics-account-menu__role-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.6875rem !important;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #405189 !important;
+    background: rgba(64, 81, 137, 0.1);
+    border: 1px solid rgba(64, 81, 137, 0.12);
+    text-transform: none;
+}
+
+.apics-account-menu__item {
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.65rem 1rem !important;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--vz-body-color, #212529);
+}
+
+.apics-account-menu__item:not(.d-none) {
+    display: flex !important;
+}
+
+.apics-account-menu__item.d-none {
+    display: none !important;
+}
+
+.apics-account-menu__item:hover,
+.apics-account-menu__item:focus {
+    background: rgba(64, 81, 137, 0.06) !important;
+    color: var(--vz-primary, #405189);
+}
+
+.apics-account-menu__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.85rem;
+    height: 1.85rem;
+    border-radius: 0.5rem;
+    background: rgba(64, 81, 137, 0.08);
+    color: var(--vz-primary, #405189);
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.apics-account-menu__item--danger {
+    color: #b42318 !important;
+}
+
+.apics-account-menu__item--danger .apics-account-menu__icon {
+    background: rgba(240, 101, 72, 0.12);
+    color: #f06548;
+}
+
+.apics-account-menu__item--danger:hover,
+.apics-account-menu__item--danger:focus {
+    background: rgba(240, 101, 72, 0.08) !important;
+    color: #b42318 !important;
+}
+
+[data-bs-theme='dark'] .apics-topbar-user__trigger:hover,
+[data-bs-theme='dark'] .apics-topbar-user__trigger:focus-visible,
+[data-bs-theme='dark'] .apics-topbar-user.show .apics-topbar-user__trigger {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme='dark'] .apics-topbar-user__avatar {
+    box-shadow: 0 0 0 2px #1a1d21, 0 0 0 3px rgba(99, 102, 241, 0.35);
+}
+
+[data-bs-theme='dark'] .apics-account-menu {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 0.85rem 2rem rgba(0, 0, 0, 0.45) !important;
+}
+
+[data-bs-theme='dark'] .apics-account-menu__head {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent);
+}
+
+@media (max-width: 1199.98px) {
+    .apics-topbar-user__trigger {
+        padding: 0.25rem !important;
+    }
+}
+
+/* —— Account profile / password modals —— */
+.apics-account-modal .modal-content {
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow:
+        0 1rem 2.5rem rgba(15, 23, 42, 0.14),
+        0 0 0 1px rgba(15, 23, 42, 0.04);
+}
+
+.apics-account-modal__header {
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1.25rem 1.25rem 1rem;
+    border-bottom: 0 !important;
+    background:
+        linear-gradient(180deg, rgba(64, 81, 137, 0.07), rgba(64, 81, 137, 0.015) 72%, transparent);
+}
+
+.apics-account-modal__intro {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    min-width: 0;
+    padding-right: 0.35rem;
+}
+
+.apics-account-modal__mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.85rem;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+}
+
+.apics-account-modal__mark--primary {
+    color: #405189;
+    background: rgba(64, 81, 137, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(64, 81, 137, 0.08);
+}
+
+.apics-account-modal__mark--security {
+    color: #b54708;
+    background: rgba(247, 184, 75, 0.18);
+    box-shadow: inset 0 0 0 1px rgba(181, 71, 8, 0.1);
+}
+
+.apics-account-modal__lede {
+    color: var(--vz-secondary-color, #878a99);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+}
+
+.apics-account-modal__body {
+    padding: 0.35rem 1.25rem 1.15rem;
+}
+
+.apics-account-modal__identity {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.15rem;
+    border-radius: 0.85rem;
+    background: var(--vz-secondary-bg, #f3f6f9);
+    border: 1px solid var(--vz-border-color, #e9ebec);
+}
+
+.apics-account-modal__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.85rem;
+    height: 2.85rem;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #fff;
+    background: linear-gradient(145deg, #405189, #3577f1);
+    box-shadow: 0 0 0 3px rgba(64, 81, 137, 0.12);
+    flex-shrink: 0;
+}
+
+.apics-account-modal__identity-name {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--vz-body-color, #212529);
+}
+
+.apics-account-modal__identity-meta {
+    font-size: 0.75rem;
+    color: var(--vz-secondary-color, #878a99);
+}
+
+.apics-account-modal__tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    padding: 0.7rem 0.85rem;
+    margin-bottom: 1.1rem;
+    border-radius: 0.7rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: #364574;
+    background: rgba(53, 119, 241, 0.08);
+    border: 1px solid rgba(53, 119, 241, 0.12);
+}
+
+.apics-account-modal__tip i {
+    font-size: 1.05rem;
+    margin-top: 0.05rem;
+    color: #3577f1;
+    flex-shrink: 0;
+}
+
+.apics-account-modal .form-label {
+    font-weight: 600;
+    font-size: 0.8125rem;
+    margin-bottom: 0.4rem;
+}
+
+.apics-account-modal .form-icon {
+    position: relative;
+}
+
+.apics-account-modal .form-icon > i {
+    position: absolute;
+    left: 0.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #878a99;
+    font-size: 1rem;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.apics-account-modal .form-control-icon {
+    padding-left: 2.45rem;
+    min-height: 2.65rem;
+    border-radius: 0.55rem;
+}
+
+.apics-account-modal .form-control:focus {
+    border-color: rgba(64, 81, 137, 0.45);
+    box-shadow: 0 0 0 0.2rem rgba(64, 81, 137, 0.12);
+}
+
+.apics-pass-field__toggle {
+    position: absolute;
+    right: 0.15rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    color: #878a99 !important;
+    padding: 0.45rem 0.65rem;
+    line-height: 1;
+}
+
+.apics-pass-field__toggle:hover,
+.apics-pass-field__toggle:focus {
+    color: #405189 !important;
+}
+
+.apics-pass-meter__track {
+    height: 0.35rem;
+    border-radius: 999px;
+    background: #e9ebec;
+    overflow: hidden;
+}
+
+.apics-pass-meter__bar {
+    display: block;
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    background: #adb5bd;
+    transition: width 0.25s ease, background-color 0.25s ease;
+}
+
+.apics-pass-meter__bar.is-weak {
+    width: 33%;
+    background: #f06548;
+}
+
+.apics-pass-meter__bar.is-fair {
+    width: 66%;
+    background: #f7b84b;
+}
+
+.apics-pass-meter__bar.is-strong {
+    width: 100%;
+    background: #0ab39c;
+}
+
+.apics-pass-meter__label {
+    margin-top: 0.35rem;
+    font-size: 0.75rem;
+    color: #878a99;
+}
+
+.apics-pass-rules {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+    color: #878a99;
+}
+
+.apics-pass-rules li {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.apics-pass-rules li i {
+    font-size: 0.9rem;
+}
+
+.apics-pass-rules li.is-met {
+    color: #0ab39c;
+    font-weight: 500;
+}
+
+.apics-pass-rules li.is-met i::before {
+    content: '\eb7b'; /* ri-checkbox-circle-fill */
+}
+
+.apics-account-modal__footer {
+    gap: 0.5rem;
+    padding: 0.9rem 1.25rem 1.15rem;
+    border-top: 1px solid var(--vz-border-color, #e9ebec) !important;
+    background: rgba(248, 249, 250, 0.85);
+}
+
+.apics-account-modal__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.5rem;
+    padding-inline: 1.05rem;
+    font-weight: 600;
+    border-radius: 0.55rem;
+}
+
+@media (max-width: 575.98px) {
+    .apics-pass-rules {
+        grid-template-columns: 1fr;
+    }
+
+    .apics-account-modal__footer {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .apics-account-modal__footer .btn {
+        width: 100%;
+    }
+}
+
+[data-bs-theme='dark'] .apics-account-modal__header {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent);
+}
+
+[data-bs-theme='dark'] .apics-account-modal__identity {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+[data-bs-theme='dark'] .apics-account-modal__footer {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+[data-bs-theme='dark'] .apics-account-modal__tip {
+    color: #c5c8ce;
+    background: rgba(53, 119, 241, 0.12);
+}

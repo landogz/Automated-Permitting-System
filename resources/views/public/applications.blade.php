@@ -183,6 +183,7 @@
                                 <x-status.badge status="under_evaluation" />
                                 <x-status.badge status="for_inspection" />
                                 <x-status.badge status="for_payment" />
+                                <x-status.badge status="for_releasing" />
                                 <x-status.badge status="released" />
                             </div>
                         </div>

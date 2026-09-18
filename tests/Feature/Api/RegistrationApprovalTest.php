@@ -27,6 +27,7 @@ class RegistrationApprovalTest extends TestCase
 
     public function test_applicant_can_self_register_and_cannot_login_until_approved(): void
     {
+        config(['mail.enabled' => true]);
         Mail::fake();
 
         $register = $this->postJson('/api/v1/auth/register', [
@@ -79,6 +80,7 @@ class RegistrationApprovalTest extends TestCase
 
     public function test_admin_can_decline_registration_and_login_stays_blocked(): void
     {
+        config(['mail.enabled' => true]);
         Mail::fake();
 
         $uuid = $this->postJson('/api/v1/auth/register', [
@@ -121,5 +123,20 @@ class RegistrationApprovalTest extends TestCase
         $this->withToken($token)
             ->getJson('/api/v1/admin/registrations')
             ->assertForbidden();
+    }
+
+    public function test_mail_disabled_skips_registration_emails(): void
+    {
+        config(['mail.enabled' => false]);
+        Mail::fake();
+
+        $this->postJson('/api/v1/auth/register', [
+            'name' => 'No Mail Applicant',
+            'email' => 'nomail@example.com',
+            'password' => 'Secure@123',
+            'password_confirmation' => 'Secure@123',
+        ])->assertCreated();
+
+        Mail::assertNothingSent();
     }
 }

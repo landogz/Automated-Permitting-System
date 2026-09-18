@@ -106,7 +106,16 @@ final class RecordsService
             ]);
 
             if ($application && $bookType === LogbookBookType::G01Releasing) {
-                $application->update(['status' => 'released']);
+                $status = (string) $application->status;
+                if ($status === 'for_releasing') {
+                    $application->update(['status' => 'released']);
+                } elseif ($status !== 'released') {
+                    throw ValidationException::withMessages([
+                        'application_uuid' => [
+                            'G-01 releasing requires status For Releasing (after payment). Current status: '.$status.'.',
+                        ],
+                    ]);
+                }
             }
 
             $this->audit->log('logbook_entry.created', [

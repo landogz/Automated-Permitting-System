@@ -17,7 +17,7 @@ class ProjectPlanController extends Controller
     }
 
     /**
-     * Return APICS Phase I project plan progress for the admin dashboard.
+     * Return APICS Phase I project plan progress for the dedicated admin page.
      */
     public function show(Request $request): JsonResponse
     {

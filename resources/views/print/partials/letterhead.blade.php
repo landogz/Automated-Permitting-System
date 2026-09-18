@@ -6,7 +6,7 @@
     $subtitle = $subtitle ?? null;
 @endphp
 <header class="gov-letterhead">
-    <img src="{{ asset('images/branding/apics-logo.png') }}" alt="APICS" width="56" height="56" onerror="this.style.display='none'">
+    <img src="{{ asset('images/branding/csfp-seal.png') }}" alt="City of San Fernando, Pampanga" width="64" height="64" onerror="this.style.display='none'">
     <div>
         <p class="gov-letterhead__org">Republic of the Philippines · City of San Fernando, Pampanga</p>
         <p class="gov-letterhead__office">Office of the City Building Official (OCBO)</p>

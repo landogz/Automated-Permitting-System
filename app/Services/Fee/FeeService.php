@@ -314,8 +314,8 @@ final class FeeService
         $order->save();
 
         $application = $order->application;
-        if ($application && ! in_array((string) $application->status, ['disapproved', 'released'], true)) {
-            $application->update(['status' => 'released']);
+        if ($application && ! in_array((string) $application->status, ['disapproved', 'released', 'for_releasing'], true)) {
+            $application->update(['status' => 'for_releasing']);
         }
 
         $this->audit->log('order_of_payment.paid_stub', [

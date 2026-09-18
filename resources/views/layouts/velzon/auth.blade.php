@@ -5,7 +5,9 @@
     <title>@yield('title', 'Sign In') | APICS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="shortcut icon" href="{{ asset('images/branding/apics-logo.png') }}">
+    <link rel="shortcut icon" href="{{ asset('images/branding/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/branding/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/branding/csfp-seal.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -33,7 +35,7 @@
                     <div class="text-center mt-sm-5 mb-4 text-white-50">
                         <div>
                             <a href="{{ route('home') }}" class="d-inline-flex flex-column align-items-center gap-2 auth-logo text-decoration-none">
-                                <x-branding.logo :height="56" class="rounded-circle shadow" />
+                                <x-branding.logo :height="72" class="rounded-circle shadow" />
                                 <span class="fs-18 fw-semibold text-white">APICS</span>
                             </a>
                         </div>

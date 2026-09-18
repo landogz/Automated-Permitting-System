@@ -1,0 +1,177 @@
+/**
+ * Admin Operations Console (/admin) — Velzon-aligned dashboard chrome
+ */
+
+.apics-dashboard__hero {
+    background:
+        radial-gradient(120% 80% at 100% 0%, rgb(64 81 137 / 0.12), transparent 55%),
+        radial-gradient(90% 70% at 0% 100%, rgb(10 179 156 / 0.1), transparent 50%),
+        var(--vz-secondary-bg, #f3f6f9);
+    border: 1px solid var(--vz-border-color, #e9ebec) !important;
+}
+
+.apics-dashboard__hero .letter-spacing-wide {
+    letter-spacing: 0.08em;
+}
+
+.apics-dashboard__kpi-link {
+    color: inherit;
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.apics-dashboard__kpi-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1.25rem rgb(15 23 42 / 0.08);
+    color: inherit;
+}
+
+.apics-dashboard__pipe-row + .apics-dashboard__pipe-row {
+    margin-top: 0.85rem;
+}
+
+.apics-dashboard__pipe-meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.35rem;
+}
+
+.apics-dashboard__pipe-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--vz-body-color, #212529);
+}
+
+.apics-dashboard__pipe-count {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--vz-secondary-color, #878a99);
+}
+
+.apics-dashboard__pipe-bar {
+    height: 0.55rem;
+    border-radius: 999px;
+    background: var(--vz-tertiary-bg, #e9ebec);
+    overflow: hidden;
+}
+
+.apics-dashboard__pipe-bar .progress-bar {
+    border-radius: 999px;
+}
+
+.apics-dashboard__attention-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1.15rem;
+}
+
+.apics-dashboard__attention-item.is-hot {
+    background: linear-gradient(90deg, rgb(240 101 72 / 0.06), transparent 55%);
+}
+
+.apics-dashboard__attention-body {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.apics-dashboard__table th {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    color: var(--vz-secondary-color, #878a99);
+    white-space: nowrap;
+}
+
+.apics-dashboard__table td {
+    font-size: 0.875rem;
+    vertical-align: middle;
+}
+
+.apics-dashboard__activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--vz-border-color, #e9ebec);
+}
+
+.apics-dashboard__activity-item:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.apics-dashboard__activity-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-top: 0.4rem;
+    border-radius: 999px;
+    background: var(--vz-primary, #405189);
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgb(64 81 137 / 0.15);
+}
+
+.apics-dashboard__quick-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 4.25rem;
+    padding: 0.85rem 0.95rem;
+    border: 1px solid var(--vz-border-color, #e9ebec);
+    border-radius: 0.75rem;
+    background: #fff;
+    text-decoration: none;
+    color: inherit;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.15s ease;
+}
+
+.apics-dashboard__quick-card:hover {
+    border-color: rgb(64 81 137 / 0.35);
+    box-shadow: 0 0.35rem 1rem rgb(15 23 42 / 0.07);
+    transform: translateY(-1px);
+    color: inherit;
+}
+
+html[data-bs-theme='dark'] .apics-dashboard__quick-card,
+[data-layout-mode='dark'] .apics-dashboard__quick-card {
+    background: var(--vz-card-bg-custom, #212529);
+}
+
+.apics-dashboard.is-loading .apics-dashboard__pipeline,
+.apics-dashboard.is-loading [data-dash-attention],
+.apics-dashboard.is-loading [data-dash-recent-apps],
+.apics-dashboard.is-loading [data-dash-activity] {
+    opacity: 0.65;
+    pointer-events: none;
+}
+
+@media (max-width: 575.98px) {
+    .apics-dashboard__hero .card-body {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .apics-dashboard__quick-card {
+        min-height: 3.75rem;
+        padding: 0.7rem 0.8rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .apics-dashboard__kpi-link,
+    .apics-dashboard__quick-card {
+        transition: none;
+    }
+
+    .apics-dashboard__kpi-link:hover,
+    .apics-dashboard__quick-card:hover {
+        transform: none;
+    }
+}

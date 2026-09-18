@@ -115,4 +115,17 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Outbound mail switch
+    |--------------------------------------------------------------------------
+    |
+    | Set MAIL_ENABLED=false in .env to disable all application emails
+    | (registration, workflow notices, etc.). In-app notifications still work.
+    | Accepts: true/false, 1/0, yes/no, on/off.
+    |
+    */
+
+    'enabled' => filter_var(env('MAIL_ENABLED', true), FILTER_VALIDATE_BOOLEAN),
+
 ];

@@ -93,5 +93,5 @@ export function isCompletedNoticeStatus(status: string): boolean {
 }
 
 export function isCompletedEvaluationStatus(status: string): boolean {
-    return ['for_inspection', 'for_payment', 'for_compliance', 'released', 'disapproved'].includes(status);
+    return ['for_inspection', 'for_payment', 'for_releasing', 'for_compliance', 'released', 'disapproved'].includes(status);
 }

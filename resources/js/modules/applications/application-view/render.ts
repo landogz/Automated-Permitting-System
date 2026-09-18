@@ -51,8 +51,10 @@ export type ApplicantViewApp = {
     longitude?: number | null;
     status: string;
     classification?: string | null;
+    classified_at?: string | null;
     submitted_at?: string | null;
     created_at?: string | null;
+    updated_at?: string | null;
     form?: {
         uuid?: string;
         code?: string;
@@ -62,6 +64,18 @@ export type ApplicantViewApp = {
     } | null;
     payload?: Record<string, unknown> | null;
     documents?: ApplicationDocument[];
+    evaluations?: Array<{ decided_at?: string | null; status?: string | null; result?: string | null }>;
+    inspections?: Array<{
+        scheduled_at?: string | null;
+        completed_at?: string | null;
+        status?: string | null;
+        result?: string | null;
+    }>;
+    orders_of_payment?: Array<{
+        issued_at?: string | null;
+        paid_at?: string | null;
+        status?: string | null;
+    }>;
     compliance_notices?: ApplicantViewNotice[];
 };
 

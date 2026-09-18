@@ -4,20 +4,20 @@
             <div class="d-flex">
                 <div class="navbar-brand-box horizontal-logo">
                     <a href="{{ route('home') }}" class="logo logo-dark">
-                        <span class="logo-sm"><x-branding.logo :height="28" class="rounded-circle" /></span>
+                        <span class="logo-sm"><x-branding.logo :height="30" class="rounded-circle" /></span>
                         {{-- No Bootstrap display utilities on logo-lg/sm — Velzon toggles them on sidebar collapse --}}
                         <span class="logo-lg">
                             <span class="logo-text d-inline-flex align-items-center gap-2">
-                                <x-branding.logo :height="28" class="rounded-circle" />
+                                <x-branding.logo :height="30" class="rounded-circle" />
                                 <span class="fs-16 fw-semibold">APICS</span>
                             </span>
                         </span>
                     </a>
                     <a href="{{ route('home') }}" class="logo logo-light">
-                        <span class="logo-sm"><x-branding.logo :height="28" class="rounded-circle" /></span>
+                        <span class="logo-sm"><x-branding.logo :height="30" class="rounded-circle" /></span>
                         <span class="logo-lg">
                             <span class="logo-text d-inline-flex align-items-center gap-2">
-                                <x-branding.logo :height="28" class="rounded-circle" />
+                                <x-branding.logo :height="30" class="rounded-circle" />
                                 <span class="fs-16 fw-semibold text-white">APICS</span>
                             </span>
                         </span>
@@ -74,29 +74,69 @@
                                 Mark all read
                             </button>
                             <a class="btn btn-sm btn-soft-secondary flex-grow-1 d-none" data-notif-view-all href="{{ route('admin.notifications') }}">
-                                Manage
+                                View all
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <div class="dropdown ms-sm-3 header-item topbar-user">
-                    <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="d-flex align-items-center">
-                            <img class="rounded-circle header-profile-user" src="{{ asset('images/branding/apics-logo.png') }}" alt="APICS user">
-                            <span class="text-start ms-xl-2">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Guest</span>
-                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Not signed in</span>
+                <div class="dropdown ms-sm-3 header-item topbar-user apics-topbar-user">
+                    <button type="button"
+                        class="btn material-shadow-none apics-topbar-user__trigger"
+                        id="page-header-user-dropdown"
+                        data-bs-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        aria-label="Account menu">
+                        <span class="d-flex align-items-center gap-2">
+                            <span class="apics-topbar-user__avatar" data-user-avatar aria-hidden="true">AD</span>
+                            <span class="text-start d-none d-xl-block min-w-0">
+                                <span class="d-block fw-semibold user-name-text text-truncate apics-topbar-user__name">Guest</span>
+                                <span class="d-block fs-11 text-muted user-name-sub-text text-truncate apics-topbar-user__role">Not signed in</span>
                             </span>
+                            <i class="ri-arrow-down-s-line apics-topbar-user__caret d-none d-xl-inline-block text-muted" aria-hidden="true"></i>
                         </span>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <h6 class="dropdown-header">Account</h6>
-                        <a class="dropdown-item d-none" data-nav-roles="applicant" href="{{ route('applications.index') }}"><i class="mdi mdi-file-document-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">My Applications</span></a>
-                        <a class="dropdown-item d-none" data-nav-roles="admin" data-nav-permissions="applications.manage,audit.view,departments.manage,forms.manage,users.manage,workflow.manage" href="{{ route('admin.dashboard') }}"><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Admin Dashboard</span></a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" id="btn-signin-link" href="{{ route('login') }}"><i class="mdi mdi-login text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Sign in</span></a>
-                        <a class="dropdown-item d-none" href="#" id="btn-logout"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Sign out</span></a>
+                    <div class="dropdown-menu dropdown-menu-end apics-account-menu p-0">
+                        <div class="apics-account-menu__head">
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="apics-topbar-user__avatar apics-topbar-user__avatar--lg" data-user-avatar-menu aria-hidden="true">AD</span>
+                                <div class="min-w-0">
+                                    <p class="mb-0 fw-semibold text-truncate user-name-text">Guest</p>
+                                    <p class="mb-1 fs-12 text-muted text-truncate" data-user-email>Sign in to continue</p>
+                                    <span class="badge apics-account-menu__role-badge user-name-sub-text">Guest</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="apics-account-menu__body py-2 d-none" data-account-menu-body>
+                            <a class="dropdown-item d-none apics-account-menu__item" data-nav-roles="applicant" href="{{ route('applications.index') }}">
+                                <span class="apics-account-menu__icon"><i class="ri-file-list-3-line"></i></span>
+                                <span>My Applications</span>
+                            </a>
+                            <a class="dropdown-item d-none apics-account-menu__item" data-nav-roles="admin" data-nav-permissions="applications.manage,audit.view,departments.manage,forms.manage,users.manage,workflow.manage" href="{{ route('admin.dashboard') }}">
+                                <span class="apics-account-menu__icon"><i class="ri-dashboard-2-line"></i></span>
+                                <span>Admin Dashboard</span>
+                            </a>
+                            <div class="dropdown-divider my-1 d-none" data-nav-roles="applicant,admin"></div>
+                            <a class="dropdown-item d-none apics-account-menu__item" href="#" data-nav-roles="applicant,admin" data-action="edit-profile">
+                                <span class="apics-account-menu__icon"><i class="ri-user-settings-line"></i></span>
+                                <span>Edit Profile</span>
+                            </a>
+                            <a class="dropdown-item d-none apics-account-menu__item" href="#" data-nav-roles="applicant,admin" data-action="change-password">
+                                <span class="apics-account-menu__icon"><i class="ri-lock-password-line"></i></span>
+                                <span>Change Password</span>
+                            </a>
+                        </div>
+                        <div class="apics-account-menu__footer border-top py-2">
+                            <a class="dropdown-item d-none apics-account-menu__item" id="btn-signin-link" data-nav-roles="guest" href="{{ route('login') }}">
+                                <span class="apics-account-menu__icon"><i class="ri-login-circle-line"></i></span>
+                                <span>Sign in</span>
+                            </a>
+                            <a class="dropdown-item d-none apics-account-menu__item apics-account-menu__item--danger" href="#" id="btn-logout">
+                                <span class="apics-account-menu__icon"><i class="ri-logout-box-r-line"></i></span>
+                                <span>Sign out</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

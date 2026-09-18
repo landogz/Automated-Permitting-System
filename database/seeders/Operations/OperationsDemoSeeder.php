@@ -37,6 +37,7 @@ class OperationsDemoSeeder extends Seeder
             return;
         }
 
+        $this->seedEvaluation($evaluator, 'Warehouse Expansion', EvaluationResult::Compliant);
         $this->seedEvaluation($evaluator, 'Neighborhood Clinic Fit-Out', EvaluationResult::Compliant);
         $this->seedEvaluation($evaluator, 'School Covered Court', EvaluationResult::Compliant);
         $this->seedEvaluation($evaluator, 'Office Fit-Out Plaza Miranda', EvaluationResult::Compliant);
@@ -46,6 +47,11 @@ class OperationsDemoSeeder extends Seeder
 
         $this->seedScheduledInspection($inspector, 'School Covered Court');
 
+        $passedWarehouse = $this->seedCompletedInspection(
+            $inspector,
+            'Warehouse Expansion',
+            InspectionResult::Passed,
+        );
         $passedOffice = $this->seedCompletedInspection(
             $inspector,
             'Office Fit-Out Plaza Miranda',
@@ -67,6 +73,7 @@ class OperationsDemoSeeder extends Seeder
             InspectionResult::Passed,
         );
 
+        $this->seedIssuedOrder($assessor, 'Warehouse Expansion');
         $this->seedIssuedOrder($assessor, 'Retail Strip Mall Annex');
         $this->seedPaidOrder($assessor, 'Barangay Hall Extension');
 
@@ -76,7 +83,7 @@ class OperationsDemoSeeder extends Seeder
 
         $this->dedupeOpenInspections();
 
-        unset($passedOffice, $passedRetail, $passedHall);
+        unset($passedWarehouse, $passedOffice, $passedRetail, $passedHall);
     }
 
     /**
@@ -269,7 +276,7 @@ class OperationsDemoSeeder extends Seeder
     private function seedPaidOrder(User $assessor, string $projectTitle): void
     {
         $application = $this->findApplication($projectTitle);
-        if (! $application || $application->status !== 'released') {
+        if (! $application || $application->status !== 'for_releasing') {
             return;
         }
 

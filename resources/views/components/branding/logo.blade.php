@@ -1,10 +1,10 @@
 @props([
     'height' => 40,
-    'alt' => 'APICS — City of San Fernando, Pampanga · Office of the City Building Official',
+    'alt' => 'City of San Fernando, Pampanga — Official Seal',
 ])
 
 <img
-    src="{{ asset('images/branding/apics-logo.png') }}"
+    src="{{ asset('images/branding/csfp-seal.png') }}"
     alt="{{ $alt }}"
     height="{{ $height }}"
     width="{{ $height }}"

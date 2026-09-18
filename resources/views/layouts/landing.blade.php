@@ -16,7 +16,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="{{ __('Automated Permitting, Inspection, and Compliance System for the Office of the City Building Official, City of San Fernando, Pampanga.') }}" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="shortcut icon" href="{{ asset('images/branding/apics-logo.png') }}">
+    <link rel="shortcut icon" href="{{ asset('images/branding/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/branding/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/branding/csfp-seal.png') }}">
 
     <script src="{{ asset('master/assets/js/layout.js') }}"></script>
     <link href="{{ asset('master/assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />

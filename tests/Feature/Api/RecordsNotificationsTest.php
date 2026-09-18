@@ -55,11 +55,30 @@ class RecordsNotificationsTest extends TestCase
         $this->assertNotEmpty($logbook->json('data.entry_no'));
         $this->assertNotEmpty($logbook->json('data.print_url'));
 
+        $forReleasing = \App\Models\PermitApplication::query()
+            ->where('status', 'for_releasing')
+            ->first();
+        $this->assertNotNull($forReleasing, 'Demo data should include a for_releasing application');
+
+        $this->actingAsApiToken($recordsToken)
+            ->postJson('/api/v1/staff/logbook-entries', [
+                'book_type' => 'g01_releasing',
+                'application_uuid' => $forReleasing->uuid,
+                'subject' => 'Release paid permit at window',
+                'recipient_name' => 'Demo Applicant',
+            ])
+            ->assertCreated();
+
+        $this->assertDatabaseHas('permit_applications', [
+            'uuid' => $forReleasing->uuid,
+            'status' => 'released',
+        ]);
+
         $this->actingAsApiToken($recordsToken)
             ->getJson('/api/v1/staff/logbook-entries?book_type=g01_releasing')
             ->assertOk()
             ->assertJsonPath('status', true)
-            ->assertJsonPath('data.summary.g01_releasing', 1);
+            ->assertJsonPath('data.summary.g01_releasing', 2);
 
         $archive = $this->actingAsApiToken($recordsToken)
             ->postJson('/api/v1/staff/archive-records', [
@@ -99,12 +118,35 @@ class RecordsNotificationsTest extends TestCase
         $this->actingAsApiToken($applicantToken)
             ->getJson('/api/v1/notifications')
             ->assertOk()
+            ->assertJsonFragment(['uuid' => $notifUuid])
+            ->assertJsonStructure([
+                'data' => [
+                    'items',
+                    'unread_count',
+                    'counts' => ['total', 'unread', 'read'],
+                    'meta',
+                ],
+            ]);
+
+        $this->actingAsApiToken($applicantToken)
+            ->getJson('/api/v1/notifications?status=unread')
+            ->assertOk()
             ->assertJsonFragment(['uuid' => $notifUuid]);
 
         $this->actingAsApiToken($applicantToken)
             ->postJson("/api/v1/notifications/{$notifUuid}/read")
             ->assertOk()
             ->assertJsonPath('data.is_read', true);
+
+        $this->actingAsApiToken($applicantToken)
+            ->getJson('/api/v1/notifications?status=unread')
+            ->assertOk()
+            ->assertJsonMissing(['uuid' => $notifUuid]);
+
+        $this->actingAsApiToken($applicantToken)
+            ->getJson('/api/v1/notifications?status=read&search=records')
+            ->assertOk()
+            ->assertJsonFragment(['uuid' => $notifUuid]);
 
         $this->actingAsApiToken($recordsToken)
             ->getJson('/api/v1/staff/dashboard-stats')
@@ -119,6 +161,11 @@ class RecordsNotificationsTest extends TestCase
                     'notifications',
                     'pending_registrations',
                     'compliance' => ['open_notices'],
+                    'pipeline',
+                    'attention',
+                    'recent_applications',
+                    'recent_activity',
+                    'meta',
                 ],
             ]);
 
@@ -166,6 +213,7 @@ class RecordsNotificationsTest extends TestCase
 
     public function test_application_submit_creates_in_app_and_email_notifications(): void
     {
+        config(['mail.enabled' => true]);
         \Illuminate\Support\Facades\Mail::fake();
 
         $applicantToken = $this->postJson('/api/v1/auth/login', [

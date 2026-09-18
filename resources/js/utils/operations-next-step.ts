@@ -6,6 +6,7 @@ export type OperationsNextStep = {
     label: string;
     path: string;
     status: string;
+    message?: string;
 };
 
 const PATH_PERMISSIONS: Record<string, string> = {
@@ -27,21 +28,26 @@ export function toastSuccessAndGoNext(
 ): void {
     const path = nextStep?.path?.trim() || '';
     const label = nextStep?.label?.trim() || '';
+    const guidance = nextStep?.message?.trim() || '';
     const samePage = !path || path === window.location.pathname;
     const required = PATH_PERMISSIONS[path];
     const canOpen = !required || hasPermission(required);
 
     if (samePage || !label) {
-        toastSuccess(message);
+        toastSuccess(guidance ? `${message}. ${guidance}` : message);
         return;
     }
 
     if (!canOpen) {
-        toastSuccess(`${message} → handoff to ${label}`);
+        toastSuccess(
+            guidance
+                ? `${message}. ${guidance}`
+                : `${message} → handoff to ${label}`,
+        );
         return;
     }
 
-    toastSuccess(`${message} → ${label}`);
+    toastSuccess(guidance ? `${message}. ${guidance}` : `${message} → ${label}`);
     window.setTimeout(() => {
         window.location.assign(path);
     }, delayMs);

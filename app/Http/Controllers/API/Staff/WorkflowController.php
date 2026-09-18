@@ -82,6 +82,7 @@ class WorkflowController extends Controller
                 OperationsWorkflow::STEP_INSPECTION,
                 OperationsWorkflow::STEP_PAYMENT,
                 OperationsWorkflow::STEP_COMPLIANCE,
+                OperationsWorkflow::STEP_RELEASING,
             ])],
         ]);
 

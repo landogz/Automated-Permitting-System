@@ -26,7 +26,7 @@
             'key' => 'payment',
             'label' => 'Orders of Payment',
             'hint' => 'G-02 assessment',
-            'detail' => 'Generate G-02 Orders of Payment from fee rules (CTO / BFP / DPWH stubs), review line items, and mark paid when the cashier stub clears.',
+            'detail' => 'Generate G-02 Orders of Payment from fee rules (CTO / BFP / DPWH stubs), review line items, and mark paid when the cashier stub clears. After payment, proceed to the Releasing area (G-01 Logbooks).',
             'route' => 'admin.orders-of-payment',
             'icon' => 'ri-bill-line',
             'permission' => 'fees.manage',

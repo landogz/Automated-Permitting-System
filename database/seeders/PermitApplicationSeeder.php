@@ -57,7 +57,7 @@ class PermitApplicationSeeder extends Seeder
             ],
             [
                 'user' => $applicant,
-                'status' => 'submitted',
+                'status' => 'for_payment',
                 'classification' => 'simple',
                 'project_title' => 'Warehouse Expansion',
                 'project_location' => 'Brgy. Sindalan, City of San Fernando, Pampanga',
@@ -246,7 +246,7 @@ class PermitApplicationSeeder extends Seeder
             ],
             [
                 'user' => $applicant2,
-                'status' => 'released',
+                'status' => 'for_releasing',
                 'classification' => 'simple',
                 'project_title' => 'Barangay Hall Extension',
                 'project_location' => 'Brgy. Calulut, City of San Fernando, Pampanga',

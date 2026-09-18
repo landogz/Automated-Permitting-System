@@ -4,6 +4,7 @@ export type ApicsUser = {
     uuid?: string;
     name?: string;
     email?: string;
+    phone?: string | null;
     roles?: string[];
     permissions?: string[];
     approval_status?: string;

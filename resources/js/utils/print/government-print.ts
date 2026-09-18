@@ -44,7 +44,7 @@ export type GovernmentPrintOptions = {
     windowTitle?: string;
 };
 
-const LOGO_URL = '/images/branding/apics-logo.png';
+const LOGO_URL = '/images/branding/csfp-seal.png';
 
 function printStyles(): string {
     return `
@@ -86,7 +86,7 @@ function printStyles(): string {
     }
     .letterhead {
       display: grid;
-      grid-template-columns: 56px 1fr;
+      grid-template-columns: 64px 1fr;
       gap: 12px;
       align-items: center;
       border-bottom: 2px solid var(--ink);
@@ -94,8 +94,8 @@ function printStyles(): string {
       margin-bottom: 14px;
     }
     .letterhead img {
-      width: 56px;
-      height: 56px;
+      width: 64px;
+      height: 64px;
       object-fit: contain;
     }
     .letterhead__org {
@@ -333,7 +333,7 @@ export function buildGovernmentPrintHtml(options: GovernmentPrintOptions): strin
   </div>
   <article class="sheet">
     <header class="letterhead">
-      <img src="${escapeHtml(LOGO_URL)}" alt="APICS" width="56" height="56" onerror="this.style.display='none'">
+      <img src="${escapeHtml(LOGO_URL)}" alt="City of San Fernando, Pampanga" width="64" height="64" onerror="this.style.display='none'">
       <div>
         <p class="letterhead__org">Republic of the Philippines · City of San Fernando, Pampanga</p>
         <p class="letterhead__office">Office of the City Building Official (OCBO)</p>

@@ -132,6 +132,7 @@ export function mountApplicationSelect(
                     per_page: perPage,
                     for_step: forStep || undefined,
                 },
+                skipLoading: true,
             });
             if (seq !== requestSeq) return;
             const items = (data.data?.items || []) as ApplicationLookupItem[];

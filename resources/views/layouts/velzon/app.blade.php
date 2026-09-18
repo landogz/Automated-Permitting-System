@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta content="Automated Permitting, Inspection, and Compliance System" name="description" />
-    <link rel="shortcut icon" href="{{ asset('images/branding/apics-logo.png') }}">
+    <link rel="shortcut icon" href="{{ asset('images/branding/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/branding/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/branding/csfp-seal.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -64,6 +66,8 @@
 </div>
 
 <div class="vertical-overlay"></div>
+
+@include('components.account.profile-modals')
 
 <script src="{{ asset('master/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('master/assets/libs/simplebar/simplebar.min.js') }}"></script>

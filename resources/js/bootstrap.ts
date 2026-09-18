@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { installAxiosLoading } from './utils/loading';
 
 declare global {
     interface Window {
@@ -19,6 +20,8 @@ const apiToken = localStorage.getItem('apics_token');
 if (apiToken) {
     window.axios.defaults.headers.common['Authorization'] = `Bearer ${apiToken}`;
 }
+
+installAxiosLoading(window.axios);
 
 export function setApiToken(value: string | null): void {
     if (value) {

@@ -23,7 +23,7 @@ class AuditLogController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        abort_unless($request->user()?->can('audit.view'), 403);
+        abort_unless($request->user()?->hasRole('admin'), 403);
 
         $paginator = $this->repository->paginate(
             $request->string('search')->toString(),
@@ -46,7 +46,7 @@ class AuditLogController extends Controller
      */
     public function show(Request $request, AuditLog $auditLog): JsonResponse
     {
-        abort_unless($request->user()?->can('audit.view'), 403);
+        abort_unless($request->user()?->hasRole('admin'), 403);
 
         return ApiResponse::success('Audit log retrieved', new AuditLogResource($auditLog->load('user')));
     }

@@ -55,6 +55,7 @@ class PrivilegeMatrixTest extends TestCase
                 'permissions' => [
                     'departments.manage',
                     'forms.manage',
+                    'audit.view',
                     'users.manage',
                     'workflow.manage',
                     'evaluations.manage',
@@ -72,13 +73,14 @@ class PrivilegeMatrixTest extends TestCase
                     '/api/v1/admin/users',
                     '/api/v1/admin/departments',
                     '/api/v1/admin/fee-rules',
+                    '/api/v1/admin/audit-logs',
                 ],
                 'deny' => [],
             ],
             'evaluator@csfp.local' => [
                 'password' => 'Evaluate@123',
                 'redirect' => '/admin/evaluation-queue',
-                'permissions' => ['evaluations.manage', 'applications.manage', 'audit.view'],
+                'permissions' => ['evaluations.manage', 'applications.manage'],
                 'allow' => ['/api/v1/staff/queue', '/api/v1/staff/applications/lookup'],
                 'deny' => [
                     '/api/v1/staff/inspections',
@@ -86,12 +88,13 @@ class PrivilegeMatrixTest extends TestCase
                     '/api/v1/staff/compliance-notices',
                     '/api/v1/staff/logbook-entries',
                     '/api/v1/admin/users',
+                    '/api/v1/admin/audit-logs',
                 ],
             ],
             'inspector@csfp.local' => [
                 'password' => 'Inspect@123',
                 'redirect' => '/admin/inspections',
-                'permissions' => ['inspections.manage', 'applications.manage', 'audit.view'],
+                'permissions' => ['inspections.manage', 'applications.manage'],
                 'allow' => ['/api/v1/staff/inspections', '/api/v1/staff/applications/lookup'],
                 'deny' => [
                     '/api/v1/staff/queue',
@@ -99,36 +102,39 @@ class PrivilegeMatrixTest extends TestCase
                     '/api/v1/staff/compliance-notices',
                     '/api/v1/staff/logbook-entries',
                     '/api/v1/admin/users',
+                    '/api/v1/admin/audit-logs',
                 ],
             ],
             'assessor@csfp.local' => [
                 'password' => 'Assess@1234',
                 'redirect' => '/admin/orders-of-payment',
-                'permissions' => ['fees.manage', 'applications.manage', 'audit.view'],
+                'permissions' => ['fees.manage', 'applications.manage'],
                 'allow' => ['/api/v1/staff/orders-of-payment', '/api/v1/staff/applications/lookup'],
                 'deny' => [
                     '/api/v1/staff/queue',
                     '/api/v1/staff/inspections',
                     '/api/v1/staff/compliance-notices',
                     '/api/v1/staff/logbook-entries',
+                    '/api/v1/admin/audit-logs',
                 ],
             ],
             'compliance@csfp.local' => [
                 'password' => 'Comply@1234',
                 'redirect' => '/admin/compliance-notices',
-                'permissions' => ['compliance.manage', 'applications.manage', 'audit.view'],
+                'permissions' => ['compliance.manage', 'applications.manage'],
                 'allow' => ['/api/v1/staff/compliance-notices', '/api/v1/staff/applications/lookup'],
                 'deny' => [
                     '/api/v1/staff/queue',
                     '/api/v1/staff/inspections',
                     '/api/v1/staff/orders-of-payment',
                     '/api/v1/staff/logbook-entries',
+                    '/api/v1/admin/audit-logs',
                 ],
             ],
             'records@csfp.local' => [
                 'password' => 'Records@123',
                 'redirect' => '/admin/logbooks',
-                'permissions' => ['records.manage', 'applications.manage', 'audit.view'],
+                'permissions' => ['records.manage', 'applications.manage'],
                 'allow' => ['/api/v1/staff/logbook-entries', '/api/v1/staff/archive-records', '/api/v1/staff/applications/lookup'],
                 'deny' => [
                     '/api/v1/staff/queue',
@@ -136,17 +142,19 @@ class PrivilegeMatrixTest extends TestCase
                     '/api/v1/staff/orders-of-payment',
                     '/api/v1/staff/compliance-notices',
                     '/api/v1/admin/users',
+                    '/api/v1/admin/audit-logs',
                 ],
             ],
             'receiving@csfp.local' => [
                 'password' => 'Receive@123',
                 'redirect' => '/admin/evaluation-queue',
-                'permissions' => ['evaluations.manage', 'applications.manage', 'audit.view'],
+                'permissions' => ['evaluations.manage', 'applications.manage'],
                 'allow' => ['/api/v1/staff/queue'],
                 'deny' => [
                     '/api/v1/staff/inspections',
                     '/api/v1/staff/logbook-entries',
                     '/api/v1/admin/users',
+                    '/api/v1/admin/audit-logs',
                 ],
             ],
             'official@csfp.local' => [
@@ -171,6 +179,7 @@ class PrivilegeMatrixTest extends TestCase
                 ],
                 'deny' => [
                     '/api/v1/admin/departments',
+                    '/api/v1/admin/audit-logs',
                 ],
             ],
             'applicant@csfp.local' => [
@@ -183,6 +192,7 @@ class PrivilegeMatrixTest extends TestCase
                     '/api/v1/staff/inspections',
                     '/api/v1/staff/applications/lookup',
                     '/api/v1/admin/users',
+                    '/api/v1/admin/audit-logs',
                 ],
             ],
         ];
@@ -204,6 +214,14 @@ class PrivilegeMatrixTest extends TestCase
                     $permission,
                     $session['permissions'],
                     "Missing permission {$permission} for {$email}",
+                );
+            }
+
+            if ($email !== 'admin@csfp.local') {
+                $this->assertNotContains(
+                    'audit.view',
+                    $session['permissions'],
+                    "audit.view must be admin-only; unexpected for {$email}",
                 );
             }
 

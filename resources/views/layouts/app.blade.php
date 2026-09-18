@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'APICS') — CSFP OCBO</title>
-    <link rel="icon" href="{{ asset('images/branding/apics-logo.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('images/branding/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/branding/apple-touch-icon.png') }}">
+    <link rel="icon" href="{{ asset('images/branding/csfp-seal.png') }}" type="image/png">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=dm-sans:400,500,600,700|fraunces:600,700" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.ts'])
