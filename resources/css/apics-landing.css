@@ -49,12 +49,60 @@
 
 .layout-wrapper.landing .btn-outline-primary {
     --vz-btn-color: #0f172a;
+    --vz-btn-bg: transparent;
     --vz-btn-border-color: #0f172a;
     --vz-btn-hover-bg: #0f172a;
     --vz-btn-hover-border-color: #0f172a;
     --vz-btn-hover-color: #fff;
-    color: #0f172a;
-    border-color: #0f172a;
+    --vz-btn-active-bg: #020617;
+    --vz-btn-active-border-color: #020617;
+    --vz-btn-active-color: #fff;
+    --bs-btn-color: #0f172a;
+    --bs-btn-bg: transparent;
+    --bs-btn-border-color: #0f172a;
+    --bs-btn-hover-bg: #0f172a;
+    --bs-btn-hover-border-color: #0f172a;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-bg: #020617;
+    --bs-btn-active-border-color: #020617;
+    --bs-btn-active-color: #fff;
+    color: #0f172a !important;
+    background-color: transparent !important;
+    border-color: #0f172a !important;
+}
+
+.layout-wrapper.landing .btn-outline-primary:hover,
+.layout-wrapper.landing .btn-outline-primary:focus-visible,
+.layout-wrapper.landing .btn-outline-primary:active,
+.layout-wrapper.landing .btn-outline-primary.active,
+.layout-wrapper.landing .btn-check:checked + .btn-outline-primary {
+    color: #fff !important;
+    background-color: #0f172a !important;
+    border-color: #0f172a !important;
+}
+
+.layout-wrapper.landing .btn-outline-secondary {
+    --vz-btn-color: #334155;
+    --vz-btn-border-color: #94a3b8;
+    --vz-btn-hover-bg: #334155;
+    --vz-btn-hover-border-color: #334155;
+    --vz-btn-hover-color: #fff;
+    --bs-btn-color: #334155;
+    --bs-btn-border-color: #94a3b8;
+    --bs-btn-hover-bg: #334155;
+    --bs-btn-hover-border-color: #334155;
+    --bs-btn-hover-color: #fff;
+    color: #334155 !important;
+    background-color: transparent !important;
+    border-color: #94a3b8 !important;
+}
+
+.layout-wrapper.landing .btn-outline-secondary:hover,
+.layout-wrapper.landing .btn-outline-secondary:focus-visible,
+.layout-wrapper.landing .btn-outline-secondary:active {
+    color: #fff !important;
+    background-color: #334155 !important;
+    border-color: #334155 !important;
 }
 
 .layout-wrapper.landing .btn-soft-primary {
