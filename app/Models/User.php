@@ -104,6 +104,8 @@ class User extends Authenticatable
             return null;
         }
 
-        return \Illuminate\Support\Facades\Storage::disk('public')->url($this->avatar_path);
+        // Relative /storage/... URL — avoids broken images when APP_URL
+        // does not match the live host (common on shared hosting).
+        return asset('storage/'.ltrim((string) $this->avatar_path, '/'));
     }
 }

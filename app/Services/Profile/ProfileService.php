@@ -99,7 +99,7 @@ final class ProfileService
             return null;
         }
 
-        return Storage::disk(self::AVATAR_DISK)->url($user->avatar_path);
+        return asset('storage/'.ltrim((string) $user->avatar_path, '/'));
     }
 
     /**
