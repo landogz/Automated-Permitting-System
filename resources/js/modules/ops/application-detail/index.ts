@@ -21,6 +21,14 @@ import {
 } from './tabs';
 import type { StaffApplicationDetail } from './types';
 
+function openSignedPrint(url: string): void {
+    if (!url) {
+        toastError('Print link unavailable. Reload details and try again.');
+        return;
+    }
+    window.open(url, '_blank', 'noopener,noreferrer');
+}
+
 let activeSiteMap: SiteMapViewerApi | null = null;
 let expandSiteMap: SiteMapViewerApi | null = null;
 let currentApp: StaffApplicationDetail | null = null;
@@ -218,6 +226,14 @@ function bindDetailInteractions(app: StaffApplicationDetail): void {
     });
 
     bindDocumentViewerClicks(modal, app.uuid);
+
+    modal.querySelectorAll<HTMLElement>('[data-ops-insp-print]').forEach((btn) => {
+        btn.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            openSignedPrint(btn.dataset.opsInspPrint || '');
+        });
+    });
 }
 
 function paintAndBind(app: StaffApplicationDetail): void {
@@ -242,7 +258,10 @@ export function renderStaffApplicationDetailHtml(app: StaffApplicationDetail): s
 /**
  * Open the shared Operations application detail modal (tabbed QMS review layout).
  */
-export async function openOpsApplicationDetail(applicationUuid: string): Promise<void> {
+export async function openOpsApplicationDetail(
+    applicationUuid: string,
+    options?: { tab?: string },
+): Promise<void> {
     const body = document.getElementById('ops-application-detail-body');
     const title = document.getElementById('modal-ops-application-detail-label');
     const meta = document.getElementById('ops-application-detail-header-meta');
@@ -259,7 +278,11 @@ export async function openOpsApplicationDetail(applicationUuid: string): Promise
     expandSiteMap = null;
     revokeInlinePreview();
     currentApp = null;
-    activeTab = 'overview';
+    const preferred = options?.tab;
+    activeTab =
+        preferred && ['overview', 'technical', 'documents', 'routing', 'inspection'].includes(preferred)
+            ? preferred
+            : 'overview';
 
     if (meta) meta.innerHTML = '';
     if (actions) actions.innerHTML = '';
@@ -276,6 +299,9 @@ export async function openOpsApplicationDetail(applicationUuid: string): Promise
         const app = data.data as StaffApplicationDetail;
         currentApp = app;
         paintAndBind(app);
+        if (preferred === 'inspection') {
+            switchTab('inspection');
+        }
     } catch (error: any) {
         body.innerHTML = `<p class="text-danger mb-0">${escapeHtml(error?.response?.data?.message || 'Unable to load application details')}</p>`;
         toastError(error?.response?.data?.message || 'Unable to load application details');

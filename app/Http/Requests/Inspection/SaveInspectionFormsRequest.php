@@ -8,7 +8,7 @@ use App\Enums\InspectionResult;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CompleteInspectionRequest extends FormRequest
+class SaveInspectionFormsRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -20,16 +20,9 @@ class CompleteInspectionRequest extends FormRequest
      */
     public function rules(): array
     {
-        $isFailed = $this->input('result') === InspectionResult::Failed->value;
-
         return [
-            'result' => ['required', Rule::enum(InspectionResult::class)],
-            'notes' => array_values(array_filter([
-                $isFailed ? 'required' : 'nullable',
-                'string',
-                $isFailed ? 'min:10' : null,
-                'max:5000',
-            ])),
+            'result' => ['nullable', Rule::enum(InspectionResult::class)],
+            'notes' => ['nullable', 'string', 'max:5000'],
             'inspector_notes' => ['nullable', 'array'],
             'inspector_notes.weather' => ['nullable', 'string', 'max:255'],
             'inspector_notes.site_conditions' => ['nullable', 'string', 'max:2000'],
@@ -56,17 +49,6 @@ class CompleteInspectionRequest extends FormRequest
             'team_inspectors.*.name' => ['required_with:team_inspectors', 'string', 'max:120'],
             'team_inspectors.*.role' => ['nullable', 'string', 'max:80'],
             'team_inspectors.*.discipline' => ['nullable', 'string', 'max:40'],
-        ];
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    public function messages(): array
-    {
-        return [
-            'notes.required' => 'Please describe what failed during the inspection so Compliance and the applicant know the problem.',
-            'notes.min' => 'Please provide a clearer failure reason (at least 10 characters).',
         ];
     }
 }

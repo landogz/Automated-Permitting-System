@@ -359,7 +359,7 @@ final class PermitApplicationService
             'documents',
             'user:id,uuid,name,email,phone',
             'evaluations',
-            'inspections',
+            'inspections.inspector:id,uuid,name,email',
             'ordersOfPayment',
             'complianceNotices.inspection',
             'complianceNotices.appeals',

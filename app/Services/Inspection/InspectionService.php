@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Services\Audit\AuditLogger;
 use App\Services\Notification\WorkflowNotifier;
 use App\Services\Operations\OperationsWorkflow;
+use App\Support\Inspection\InspectionFormCatalog;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -90,6 +91,9 @@ final class InspectionService
                 }
             }
 
+            $team = InspectionFormCatalog::normalizeTeamInspectors($data['team_inspectors'] ?? []);
+            $scheduleSheet = $this->buildScheduleSheet($data, $application);
+
             $inspection = Inspection::query()->create([
                 'permit_application_id' => $application->id,
                 'inspection_no' => $this->nextNumber('inspection', 'IN-'.date('Y').'-'),
@@ -97,13 +101,20 @@ final class InspectionService
                 'status' => InspectionStatus::Scheduled->value,
                 'scheduled_at' => $data['scheduled_at'] ?? now()->addDay(),
                 'inspector_id' => $inspector?->id ?? $actor->id,
+                'team_inspectors' => $team,
                 'scheduled_by' => $actor->id,
                 'location' => $data['location'] ?? $application->project_location,
                 'latitude' => $data['latitude'] ?? $application->latitude,
                 'longitude' => $data['longitude'] ?? $application->longitude,
                 'notes' => $data['notes'] ?? null,
-                'compliance_sheet' => $data['compliance_sheet'] ?? [],
-                'electrical_form' => $data['electrical_form'] ?? [],
+                'schedule_sheet' => $scheduleSheet,
+                'inspector_notes' => InspectionFormCatalog::blankInspectorNotes(),
+                'compliance_sheet' => InspectionFormCatalog::normalizeComplianceSheet(
+                    $data['compliance_sheet'] ?? ['items' => InspectionFormCatalog::qms65DefaultItems()],
+                ),
+                'electrical_form' => InspectionFormCatalog::normalizeElectricalForm(
+                    $data['electrical_form'] ?? InspectionFormCatalog::blankElectricalForm(),
+                ),
             ]);
 
             $application->update(['status' => 'for_inspection']);
@@ -112,6 +123,9 @@ final class InspectionService
                 'inspection_id' => $inspection->uuid,
                 'application_id' => $application->uuid,
                 'inspection_no' => $inspection->inspection_no,
+                'type' => $inspection->type,
+                'team_count' => count($team),
+                'has_schedule_sheet' => filled($scheduleSheet['purpose'] ?? null),
             ]);
 
             return $inspection->load(['application.user', 'inspector', 'scheduledByUser']);
@@ -145,6 +159,69 @@ final class InspectionService
     }
 
     /**
+     * Save O-03 / QMS-65 / DPWH sheets without completing the inspection.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public function saveForms(Inspection $inspection, User $actor, array $data): Inspection
+    {
+        if (in_array($inspection->status, [InspectionStatus::Completed, InspectionStatus::Cancelled], true)) {
+            throw ValidationException::withMessages([
+                'inspection' => ['Completed or cancelled inspections cannot be edited.'],
+            ]);
+        }
+
+        return DB::transaction(function () use ($inspection, $actor, $data): Inspection {
+            $inspectorNotes = array_key_exists('inspector_notes', $data)
+                ? InspectionFormCatalog::normalizeInspectorNotes($data['inspector_notes'])
+                : InspectionFormCatalog::normalizeInspectorNotes($inspection->inspector_notes);
+
+            if (
+                ($inspectorNotes['findings'] ?? '') === ''
+                && filled($data['notes'] ?? null)
+            ) {
+                $inspectorNotes['findings'] = (string) $data['notes'];
+            }
+
+            $compliance = array_key_exists('compliance_sheet', $data)
+                ? InspectionFormCatalog::normalizeComplianceSheet($data['compliance_sheet'])
+                : InspectionFormCatalog::normalizeComplianceSheet($inspection->compliance_sheet);
+
+            $electrical = array_key_exists('electrical_form', $data)
+                ? InspectionFormCatalog::normalizeElectricalForm($data['electrical_form'])
+                : InspectionFormCatalog::normalizeElectricalForm($inspection->electrical_form);
+
+            $team = array_key_exists('team_inspectors', $data)
+                ? InspectionFormCatalog::normalizeTeamInspectors($data['team_inspectors'])
+                : InspectionFormCatalog::normalizeTeamInspectors($inspection->team_inspectors);
+
+            $fill = [
+                'status' => InspectionStatus::InProgress->value,
+                'notes' => array_key_exists('notes', $data) ? ($data['notes'] ?: $inspection->notes) : $inspection->notes,
+                'inspector_notes' => $inspectorNotes,
+                'compliance_sheet' => $compliance,
+                'electrical_form' => $electrical,
+                'team_inspectors' => $team,
+                'inspector_id' => $inspection->inspector_id ?: $actor->id,
+            ];
+
+            $inspection->fill($fill);
+            $inspection->save();
+
+            $this->audit->log('inspection.forms_saved', [
+                'inspection_id' => $inspection->uuid,
+                'application_id' => $inspection->application?->uuid,
+                'status' => InspectionStatus::InProgress->value,
+                'qms65_item_count' => count($compliance['items'] ?? []),
+                'has_o03' => filled($inspectorNotes['findings'] ?? null),
+                'has_electrical_form' => ($electrical['result'] ?? 'na') !== 'na',
+            ]);
+
+            return $inspection->fresh(['application.user', 'inspector', 'scheduledByUser']) ?? $inspection;
+        });
+    }
+
+    /**
      * @param  array<string, mixed>  $data
      */
     public function complete(Inspection $inspection, User $actor, array $data): Inspection
@@ -158,13 +235,38 @@ final class InspectionService
         $completed = DB::transaction(function () use ($inspection, $actor, $data): Inspection {
             $result = InspectionResult::from((string) $data['result']);
 
+            $inspectorNotes = array_key_exists('inspector_notes', $data)
+                ? InspectionFormCatalog::normalizeInspectorNotes($data['inspector_notes'])
+                : InspectionFormCatalog::normalizeInspectorNotes($inspection->inspector_notes);
+
+            if (
+                ($inspectorNotes['findings'] ?? '') === ''
+                && filled($data['notes'] ?? null)
+            ) {
+                $inspectorNotes['findings'] = (string) $data['notes'];
+            }
+
+            $compliance = array_key_exists('compliance_sheet', $data)
+                ? InspectionFormCatalog::normalizeComplianceSheet($data['compliance_sheet'])
+                : InspectionFormCatalog::normalizeComplianceSheet($inspection->compliance_sheet);
+
+            $electrical = array_key_exists('electrical_form', $data)
+                ? InspectionFormCatalog::normalizeElectricalForm($data['electrical_form'])
+                : InspectionFormCatalog::normalizeElectricalForm($inspection->electrical_form);
+
+            $team = array_key_exists('team_inspectors', $data)
+                ? InspectionFormCatalog::normalizeTeamInspectors($data['team_inspectors'])
+                : InspectionFormCatalog::normalizeTeamInspectors($inspection->team_inspectors);
+
             $inspection->fill([
                 'status' => InspectionStatus::Completed->value,
                 'result' => $result->value,
                 'completed_at' => now(),
                 'notes' => $data['notes'] ?? $inspection->notes,
-                'compliance_sheet' => $data['compliance_sheet'] ?? $inspection->compliance_sheet,
-                'electrical_form' => $data['electrical_form'] ?? $inspection->electrical_form,
+                'inspector_notes' => $inspectorNotes,
+                'compliance_sheet' => $compliance,
+                'electrical_form' => $electrical,
+                'team_inspectors' => $team,
                 'inspector_id' => $inspection->inspector_id ?: $actor->id,
             ]);
             $inspection->save();
@@ -185,6 +287,9 @@ final class InspectionService
                 'application_id' => $application?->uuid,
                 'next_status' => $application?->status,
                 'has_failure_notes' => $result === InspectionResult::Failed && filled($data['notes'] ?? null),
+                'qms65_item_count' => count($compliance['items'] ?? []),
+                'has_o03' => filled($inspectorNotes['findings'] ?? null),
+                'has_electrical_form' => ($electrical['result'] ?? 'na') !== 'na',
             ]);
 
             return $inspection->fresh(['application.user', 'inspector', 'scheduledByUser']) ?? $inspection;
@@ -193,6 +298,41 @@ final class InspectionService
         $this->notifier->inspectionCompleted($completed);
 
         return $completed;
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function buildScheduleSheet(array $data, PermitApplication $application): array
+    {
+        $incoming = is_array($data['schedule_sheet'] ?? null) ? $data['schedule_sheet'] : [];
+        $disciplines = $incoming['disciplines'] ?? [];
+        if (! is_array($disciplines) || $disciplines === []) {
+            $type = strtolower((string) ($data['type'] ?? 'joint_structural'));
+            $disciplines = match (true) {
+                str_contains($type, 'architectural') => ['architectural'],
+                str_contains($type, 'electrical') => ['electrical'],
+                str_contains($type, 'sanitary') => ['sanitary'],
+                str_contains($type, 'mechanical') => ['mechanical'],
+                str_contains($type, 'fire') => ['fire_safety'],
+                $type === 'electrical' => ['electrical'],
+                $type === 'final' => ['structural', 'architectural', 'electrical', 'sanitary', 'mechanical', 'fire_safety'],
+                default => ['structural'],
+            };
+        }
+
+        return [
+            'form_code' => 'QMS-38',
+            'purpose' => (string) ($incoming['purpose'] ?? 'Joint site inspection'),
+            'meeting_point' => (string) ($incoming['meeting_point'] ?? ($data['location'] ?? $application->project_location ?? '')),
+            'disciplines' => array_values(array_filter(array_map(
+                static fn ($d): string => trim((string) $d),
+                $disciplines,
+            ))),
+            'remarks' => (string) ($incoming['remarks'] ?? ''),
+            'coordination_notes' => (string) ($incoming['coordination_notes'] ?? ''),
+        ];
     }
 
     private function nextNumber(string $key, string $prefix): string

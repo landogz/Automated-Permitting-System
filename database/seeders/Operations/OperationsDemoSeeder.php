@@ -194,8 +194,31 @@ class OperationsDemoSeeder extends Seeder
             'scheduled_by' => $inspector->id,
             'location' => $application->project_location,
             'notes' => 'Seed scheduled joint inspection',
-            'compliance_sheet' => [],
-            'electrical_form' => [],
+            'team_inspectors' => [
+                ['name' => $inspector->name, 'role' => 'Lead', 'discipline' => 'structural'],
+            ],
+            'schedule_sheet' => [
+                'form_code' => 'QMS-38',
+                'purpose' => 'Joint structural site inspection',
+                'meeting_point' => $application->project_location,
+                'disciplines' => ['structural'],
+                'remarks' => '',
+                'coordination_notes' => '',
+            ],
+            'inspector_notes' => [
+                'form_code' => 'O-03',
+                'weather' => '',
+                'site_conditions' => '',
+                'findings' => '',
+                'observed_defects' => '',
+                'recommendations' => '',
+            ],
+            'compliance_sheet' => [
+                'form_code' => 'QMS-65',
+                'items' => \App\Support\Inspection\InspectionFormCatalog::qms65DefaultItems(),
+                'overall_remarks' => '',
+            ],
+            'electrical_form' => \App\Support\Inspection\InspectionFormCatalog::blankElectricalForm(),
         ]);
     }
 
@@ -218,6 +241,8 @@ class OperationsDemoSeeder extends Seeder
             return $existing;
         }
 
+        $status = $result === InspectionResult::Failed ? 'fail' : 'ok';
+
         return Inspection::query()->create([
             'permit_application_id' => $application->id,
             'inspection_no' => $this->nextNumber('inspection', 'IN-'.date('Y').'-'),
@@ -230,10 +255,41 @@ class OperationsDemoSeeder extends Seeder
             'scheduled_by' => $inspector->id,
             'location' => $application->project_location,
             'notes' => 'Seed completed inspection — '.$result->value,
-            'compliance_sheet' => [
-                ['item' => 'Site conditions', 'status' => $result === InspectionResult::Failed ? 'fail' : 'ok'],
+            'team_inspectors' => [
+                ['name' => $inspector->name, 'role' => 'Lead', 'discipline' => 'structural'],
             ],
-            'electrical_form' => ['form' => '77-006-E', 'status' => $result === InspectionResult::Failed ? 'fail' : 'ok'],
+            'schedule_sheet' => [
+                'form_code' => 'QMS-38',
+                'purpose' => 'Joint structural site inspection',
+                'meeting_point' => $application->project_location,
+                'disciplines' => ['structural'],
+                'remarks' => '',
+                'coordination_notes' => '',
+            ],
+            'inspector_notes' => [
+                'form_code' => 'O-03',
+                'weather' => 'Fair',
+                'site_conditions' => 'Accessible',
+                'findings' => 'Seed completed inspection — '.$result->value,
+                'observed_defects' => $result === InspectionResult::Failed ? 'Non-conformance noted' : '',
+                'recommendations' => $result === InspectionResult::Failed ? 'Correct and request re-inspection' : 'Proceed to payment',
+            ],
+            'compliance_sheet' => [
+                'form_code' => 'QMS-65',
+                'items' => array_map(
+                    static function (array $item) use ($status): array {
+                        $item['status'] = $status === 'fail' && $item['code'] === 'SETBACK' ? 'fail' : ($status === 'fail' ? 'na' : 'ok');
+
+                        return $item;
+                    },
+                    \App\Support\Inspection\InspectionFormCatalog::qms65DefaultItems(),
+                ),
+                'overall_remarks' => 'Seed QMS-65 sheet',
+            ],
+            'electrical_form' => array_merge(
+                \App\Support\Inspection\InspectionFormCatalog::blankElectricalForm(),
+                ['result' => $result === InspectionResult::Failed ? 'failed' : 'passed'],
+            ),
         ]);
     }
 

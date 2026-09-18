@@ -10,6 +10,7 @@ use App\Http\Requests\Compliance\IssueComplianceNoticeRequest;
 use App\Http\Requests\Compliance\ResolveAppealRequest;
 use App\Http\Requests\Fee\GenerateOrderOfPaymentRequest;
 use App\Http\Requests\Inspection\CompleteInspectionRequest;
+use App\Http\Requests\Inspection\SaveInspectionFormsRequest;
 use App\Http\Requests\Inspection\ScheduleInspectionRequest;
 use App\Http\Resources\ComplianceNoticeResource;
 use App\Http\Resources\InspectionResource;
@@ -24,6 +25,7 @@ use App\Services\Compliance\ComplianceService;
 use App\Services\Fee\FeeService;
 use App\Services\Inspection\InspectionService;
 use App\Services\Operations\OperationsWorkflow;
+use App\Support\Inspection\InspectionFormCatalog;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -35,6 +37,21 @@ class PhaseFiveController extends Controller
         private readonly ComplianceService $compliance,
         private readonly OperationsWorkflow $operations,
     ) {
+    }
+
+    /**
+     * Blank inspection form templates (QMS-38/39, O-03, QMS-65, DPWH 77-006-E).
+     */
+    public function inspectionFormTemplates(Request $request): JsonResponse
+    {
+        abort_unless($request->user()?->can('inspections.manage'), 403);
+
+        return ApiResponse::success('Inspection form templates retrieved', [
+            'items' => InspectionFormCatalog::templates(),
+            'qms65_default_items' => InspectionFormCatalog::qms65DefaultItems(),
+            'electrical_blank' => InspectionFormCatalog::blankElectricalForm(),
+            'inspector_notes_blank' => InspectionFormCatalog::blankInspectorNotes(),
+        ]);
     }
 
     /**
@@ -77,6 +94,20 @@ class PhaseFiveController extends Controller
                 $application,
             ),
             201,
+        );
+    }
+
+    /**
+     * Save inspection form sheets without completing (draft / in progress).
+     */
+    public function saveInspectionForms(SaveInspectionFormsRequest $request, Inspection $inspection): JsonResponse
+    {
+        $model = $this->inspections->saveForms($inspection, $request->user(), $request->validated());
+        $model->loadMissing('application');
+
+        return ApiResponse::success(
+            'Inspection forms saved',
+            new InspectionResource($model),
         );
     }
 

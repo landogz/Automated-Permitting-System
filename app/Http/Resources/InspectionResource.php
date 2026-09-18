@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use App\Support\Inspection\InspectionFormCatalog;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\URL;
 
 /** @mixin \App\Models\Inspection */
 class InspectionResource extends JsonResource
@@ -15,6 +17,18 @@ class InspectionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $printUrls = null;
+        if ($request->user()?->can('inspections.manage')) {
+            $printUrls = [];
+            foreach (InspectionFormCatalog::documentCodes() as $doc) {
+                $printUrls[$doc] = URL::temporarySignedRoute(
+                    'admin.inspections.print',
+                    now()->addMinutes(15),
+                    ['inspection' => $this->uuid, 'doc' => $doc],
+                );
+            }
+        }
+
         return [
             'uuid' => $this->uuid,
             'inspection_no' => $this->inspection_no,
@@ -27,8 +41,15 @@ class InspectionResource extends JsonResource
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'notes' => $this->notes,
-            'compliance_sheet' => $this->compliance_sheet,
-            'electrical_form' => $this->electrical_form,
+            'team_inspectors' => InspectionFormCatalog::normalizeTeamInspectors($this->team_inspectors),
+            'schedule_sheet' => is_array($this->schedule_sheet) ? $this->schedule_sheet : [],
+            'inspector_notes' => InspectionFormCatalog::normalizeInspectorNotes($this->inspector_notes),
+            'compliance_sheet' => InspectionFormCatalog::normalizeComplianceSheet($this->compliance_sheet),
+            'electrical_form' => InspectionFormCatalog::normalizeElectricalForm($this->electrical_form),
+            'requires_electrical_form' => InspectionFormCatalog::requiresElectricalForm(
+                is_string($this->type) ? $this->type : null,
+            ),
+            'print_urls' => $printUrls,
             'application' => $this->whenLoaded('application', fn () => [
                 'uuid' => $this->application?->uuid,
                 'application_no' => $this->application?->application_no,

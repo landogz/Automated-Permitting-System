@@ -55,10 +55,43 @@ export type StaffApplicationDetail = {
     }>;
     evaluations?: Array<{ decided_at?: string | null; status?: string | null; result?: string | null }>;
     inspections?: Array<{
+        uuid?: string;
+        inspection_no?: string;
+        type?: string | null;
         scheduled_at?: string | null;
         completed_at?: string | null;
         status?: string | null;
         result?: string | null;
+        location?: string | null;
+        notes?: string | null;
+        team_inspectors?: Array<{ name?: string; role?: string; discipline?: string }>;
+        schedule_sheet?: {
+            form_code?: string;
+            purpose?: string;
+            meeting_point?: string;
+            disciplines?: string[];
+            remarks?: string;
+            coordination_notes?: string;
+        };
+        inspector_notes?: {
+            form_code?: string;
+            weather?: string;
+            site_conditions?: string;
+            findings?: string;
+            observed_defects?: string;
+            recommendations?: string;
+        };
+        compliance_sheet?: {
+            form_code?: string;
+            items?: Array<{ code?: string; label?: string; status?: string; remarks?: string }>;
+            overall_remarks?: string;
+        };
+        electrical_form?: Record<string, string | undefined>;
+        requires_electrical_form?: boolean;
+        print_urls?: Partial<
+            Record<'qms-38' | 'qms-39' | 'o-03' | 'qms-65' | 'dpwh-77-006-e', string>
+        > | null;
+        inspector?: { uuid?: string; name?: string };
     }>;
     orders_of_payment?: Array<{
         issued_at?: string | null;

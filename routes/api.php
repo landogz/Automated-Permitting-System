@@ -79,8 +79,12 @@ Route::prefix('v1')->group(function (): void {
             Route::post('timer/stop', [WorkflowController::class, 'stopTimer']);
 
             Route::get('inspections', [PhaseFiveController::class, 'listInspections']);
+            Route::get('inspection-form-templates', [PhaseFiveController::class, 'inspectionFormTemplates'])
+                ->middleware('throttle:60,1');
             Route::post('applications/{application}/inspections', [PhaseFiveController::class, 'scheduleInspection'])
                 ->middleware('throttle:30,1');
+            Route::post('inspections/{inspection}/forms', [PhaseFiveController::class, 'saveInspectionForms'])
+                ->middleware('throttle:60,1');
             Route::post('inspections/{inspection}/complete', [PhaseFiveController::class, 'completeInspection'])
                 ->middleware('throttle:30,1');
 

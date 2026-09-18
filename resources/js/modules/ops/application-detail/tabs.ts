@@ -93,6 +93,7 @@ export function tabNavHtml(active = 'overview'): string {
         { id: 'technical', label: 'Technical (QMS-36)', icon: 'ri-building-2-line' },
         { id: 'documents', label: 'Document Vault', icon: 'ri-folder-2-line' },
         { id: 'routing', label: 'Routing & Reviews', icon: 'ri-organization-chart' },
+        { id: 'inspection', label: 'Inspection forms', icon: 'ri-clipboard-line' },
     ];
 
     return `<ul class="nav nav-tabs nav-tabs-custom nav-success mb-0 flex-wrap" role="tablist">
@@ -485,6 +486,239 @@ function routingTabHtml(app: StaffApplicationDetail): string {
         .join('');
 }
 
+function inspectionTypeLabel(type: string | null | undefined): string {
+    const key = String(type || '').toLowerCase();
+    const map: Record<string, string> = {
+        joint: 'Joint',
+        joint_structural: 'Joint · Structural',
+        joint_architectural: 'Joint · Architectural',
+        joint_electrical: 'Joint · Electrical',
+        joint_sanitary: 'Joint · Sanitary',
+        joint_mechanical: 'Joint · Mechanical',
+        joint_fire_safety: 'Joint · Fire Safety',
+        electrical: 'Electrical (DPWH 77-006-E)',
+        final: 'Final',
+    };
+    return map[key] || humanizeKey(type || 'Inspection');
+}
+
+function formatWhen(iso: string | null | undefined): string {
+    if (!iso) return '—';
+    try {
+        return new Date(iso).toLocaleString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+        });
+    } catch {
+        return iso;
+    }
+}
+
+function inspectionPrintButtonsHtml(
+    urls: NonNullable<StaffApplicationDetail['inspections']>[number]['print_urls'],
+    requiresElectrical: boolean,
+): string {
+    if (!urls) return '';
+    const docs: Array<{ key: keyof NonNullable<typeof urls>; label: string; show: boolean }> = [
+        { key: 'qms-38', label: 'QMS-38', show: Boolean(urls['qms-38']) },
+        { key: 'qms-39', label: 'QMS-39', show: Boolean(urls['qms-39']) },
+        { key: 'o-03', label: 'O-03', show: Boolean(urls['o-03']) },
+        { key: 'qms-65', label: 'QMS-65', show: Boolean(urls['qms-65']) },
+        {
+            key: 'dpwh-77-006-e',
+            label: '77-006-E',
+            show: Boolean(urls['dpwh-77-006-e']) && requiresElectrical,
+        },
+    ];
+    return docs
+        .filter((d) => d.show)
+        .map(
+            (d) => `<button type="button" class="btn btn-sm btn-soft-secondary"
+                data-ops-insp-print="${escapeHtml(String(urls[d.key] || ''))}">
+                <i class="ri-printer-line align-bottom me-1"></i>${escapeHtml(d.label)}
+            </button>`,
+        )
+        .join('');
+}
+
+function complianceItemsSummaryHtml(
+    items: Array<{ code?: string; label?: string; status?: string; remarks?: string }> | undefined,
+): string {
+    if (!items?.length) {
+        return `<p class="text-muted small mb-0">No QMS-65 checklist items recorded.</p>`;
+    }
+    const rows = items
+        .map((item) => {
+            const status = String(item.status || 'na').toLowerCase();
+            const badge =
+                status === 'ok'
+                    ? 'bg-success-subtle text-success'
+                    : status === 'fail'
+                      ? 'bg-danger-subtle text-danger'
+                      : 'bg-secondary-subtle text-secondary';
+            return `<tr>
+                <td class="small font-monospace">${escapeHtml(item.code || '—')}</td>
+                <td class="small">${escapeHtml(item.label || '—')}</td>
+                <td><span class="badge ${badge}">${escapeHtml(status.toUpperCase())}</span></td>
+                <td class="small text-muted">${escapeHtml(item.remarks || '')}</td>
+            </tr>`;
+        })
+        .join('');
+    return `<div class="table-responsive border rounded">
+        <table class="table table-sm align-middle mb-0">
+            <thead class="table-light">
+                <tr><th>Code</th><th>Item</th><th>Status</th><th>Remarks</th></tr>
+            </thead>
+            <tbody>${rows}</tbody>
+        </table>
+    </div>`;
+}
+
+function inspectionTabHtml(app: StaffApplicationDetail): string {
+    const inspections = app.inspections || [];
+    const canInspect = hasPermission('inspections.manage');
+
+    if (!inspections.length) {
+        return `
+            <div class="text-center border border-2 border-dashed rounded-3 p-4 p-md-5 bg-light-subtle">
+                <p class="fw-medium mb-1">No inspections scheduled for this filing.</p>
+                <p class="text-muted small mb-3">QMS-38/39 schedule, O-03 notes, QMS-65 compliance sheet, and DPWH 77-006-E appear here after scheduling.</p>
+                ${
+                    canInspect
+                        ? `<a class="btn btn-sm btn-primary" href="/admin/inspections">
+                            <i class="ri-calendar-check-line align-bottom me-1"></i> Open Inspections
+                           </a>`
+                        : ''
+                }
+            </div>
+        `;
+    }
+
+    return inspections
+        .map((insp) => {
+            const sheet = insp.schedule_sheet || {};
+            const notes = insp.inspector_notes || {};
+            const team = insp.team_inspectors || [];
+            const elec = insp.electrical_form || {};
+            const requiresElec = Boolean(
+                insp.requires_electrical_form ||
+                    (elec.result && elec.result !== 'na') ||
+                    String(insp.type || '').toLowerCase().includes('electrical'),
+            );
+            const disciplines = Array.isArray(sheet.disciplines) ? sheet.disciplines.join(', ') : '—';
+            const teamHtml = team.length
+                ? `<ul class="list-unstyled mb-0 small">${team
+                      .map(
+                          (m) =>
+                              `<li><span class="fw-medium">${escapeHtml(m.name || '—')}</span>
+                                <span class="text-muted"> · ${escapeHtml(m.role || 'Member')}${
+                                    m.discipline ? ` · ${escapeHtml(m.discipline)}` : ''
+                                }</span></li>`,
+                      )
+                      .join('')}</ul>`
+                : `<p class="small text-muted mb-0">${escapeHtml(insp.inspector?.name || 'No team recorded')}</p>`;
+
+            const elecBlock = requiresElec
+                ? `<div class="border rounded p-3 mb-0">
+                    <p class="text-muted text-uppercase fw-medium fs-11 mb-2">DPWH 77-006-E</p>
+                    <div class="row g-2 small">
+                        ${[
+                            ['Service entrance', elec.service_entrance],
+                            ['Grounding', elec.grounding],
+                            ['Panel boards', elec.panel_boards],
+                            ['Wiring methods', elec.wiring_methods],
+                            ['Fixtures / devices', elec.fixtures_devices],
+                            ['Load schedule', elec.load_schedule],
+                            ['Result', elec.result || elec.status],
+                        ]
+                            .map(
+                                ([label, value]) => `<div class="col-sm-6 col-md-4">
+                                    <span class="text-muted">${escapeHtml(String(label))}</span>
+                                    <div class="fw-medium">${escapeHtml(String(value || 'na').toUpperCase())}</div>
+                                </div>`,
+                            )
+                            .join('')}
+                    </div>
+                    ${
+                        elec.remarks
+                            ? `<p class="small mt-2 mb-0"><span class="text-muted">Remarks:</span> ${escapeHtml(String(elec.remarks))}</p>`
+                            : ''
+                    }
+                   </div>`
+                : '';
+
+            return `<div class="border rounded p-3 mb-3">
+                <div class="d-flex flex-wrap justify-content-between gap-2 mb-3">
+                    <div>
+                        <p class="fw-semibold mb-1 font-monospace">${escapeHtml(insp.inspection_no || 'Inspection')}
+                            ${statusBadgeHtml(String(insp.status || ''), { pulse: insp.status === 'scheduled' || insp.status === 'in_progress' })}
+                            ${insp.result ? statusBadgeHtml(String(insp.result)) : ''}
+                        </p>
+                        <p class="text-muted small mb-0">${escapeHtml(inspectionTypeLabel(insp.type))}
+                            · Scheduled ${escapeHtml(formatWhen(insp.scheduled_at))}
+                            ${insp.completed_at ? ` · Completed ${escapeHtml(formatWhen(insp.completed_at))}` : ''}
+                        </p>
+                    </div>
+                    <div class="d-flex flex-wrap gap-1 align-items-start">
+                        ${inspectionPrintButtonsHtml(insp.print_urls, requiresElec)}
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <div class="border rounded p-3 h-100 bg-light-subtle">
+                            <p class="text-muted text-uppercase fw-medium fs-11 mb-2">QMS-38 · Schedule</p>
+                            <p class="small mb-1"><span class="text-muted">Purpose:</span> ${escapeHtml(sheet.purpose || '—')}</p>
+                            <p class="small mb-1"><span class="text-muted">Meeting point:</span> ${escapeHtml(sheet.meeting_point || insp.location || '—')}</p>
+                            <p class="small mb-0"><span class="text-muted">Disciplines:</span> ${escapeHtml(disciplines)}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="border rounded p-3 h-100 bg-light-subtle">
+                            <p class="text-muted text-uppercase fw-medium fs-11 mb-2">QMS-39 · Team</p>
+                            ${teamHtml}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border rounded p-3 mb-3">
+                    <p class="text-muted text-uppercase fw-medium fs-11 mb-2">O-03 · Inspector notes</p>
+                    <div class="row g-2 small mb-2">
+                        <div class="col-md-6"><span class="text-muted">Weather / access:</span> ${escapeHtml(notes.weather || '—')}</div>
+                        <div class="col-md-6"><span class="text-muted">Site conditions:</span> ${escapeHtml(notes.site_conditions || '—')}</div>
+                    </div>
+                    <p class="small mb-1"><span class="text-muted">Findings:</span> ${escapeHtml(notes.findings || insp.notes || '—')}</p>
+                    ${
+                        notes.observed_defects
+                            ? `<p class="small mb-1"><span class="text-muted">Defects:</span> ${escapeHtml(notes.observed_defects)}</p>`
+                            : ''
+                    }
+                    ${
+                        notes.recommendations
+                            ? `<p class="small mb-0"><span class="text-muted">Recommendations:</span> ${escapeHtml(notes.recommendations)}</p>`
+                            : ''
+                    }
+                </div>
+
+                <div class="mb-3">
+                    <p class="text-muted text-uppercase fw-medium fs-11 mb-2">QMS-65 · Compliance sheet</p>
+                    ${complianceItemsSummaryHtml(insp.compliance_sheet?.items)}
+                    ${
+                        insp.compliance_sheet?.overall_remarks
+                            ? `<p class="small mt-2 mb-0"><span class="text-muted">Overall:</span> ${escapeHtml(insp.compliance_sheet.overall_remarks)}</p>`
+                            : ''
+                    }
+                </div>
+
+                ${elecBlock}
+            </div>`;
+        })
+        .join('');
+}
+
 export function detailPanelsHtml(app: StaffApplicationDetail, activeTab = 'overview'): string {
     return `
         <div class="tab-content apics-app-detail__panels">
@@ -499,6 +733,9 @@ export function detailPanelsHtml(app: StaffApplicationDetail, activeTab = 'overv
             </div>
             <div class="tab-pane fade${activeTab === 'routing' ? ' show active' : ''}" data-ops-detail-panel="routing" role="tabpanel">
                 ${routingTabHtml(app)}
+            </div>
+            <div class="tab-pane fade${activeTab === 'inspection' ? ' show active' : ''}" data-ops-detail-panel="inspection" role="tabpanel">
+                ${inspectionTabHtml(app)}
             </div>
         </div>
     `;

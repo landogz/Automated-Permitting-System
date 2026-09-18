@@ -497,6 +497,9 @@ Create [`.cursor/rules/update-project-plan-on-done.mdc`](.cursor/rules/update-pr
 | 2026-09-17 | **Audit trail admin-only:** `audit.view` synced to Spatie `admin` only; API `hasRole('admin')`; sidebar/dashboard/shell `requireRoles`; staff denied `/api/v1/admin/audit-logs` in PrivilegeMatrixTest | Remaining: staging → KT → production |
 | 2026-09-18 | **Notifications inbox:** `/admin/notifications` redesigned as Velzon mailbox-style full-page inbox (All/Unread/Read, search, detail pane, mark all); API `status`/`search`/`counts`; bell “View all”; Compose removed | Remaining: staging → KT → production |
 | 2026-09-18 | **Audit trail compliance console:** actor fixed on `auth.login` + failed attempts; resource/diff inspect drawer; KPI strip; category/actor/severity/date filters; humanized timestamps & event badges | Remaining: staging → KT → production |
+| 2026-09-18 | **Inspection form products:** QMS-38/39 schedule+team, O-03 notes, QMS-65 checklist, DPWH 77-006-E capture; FormDefinition seeds; signed government print; Complete-with-forms UI; `InspectionFormsTest` | Remaining: staging → KT → production |
+| 2026-09-18 | **Application details · Inspection forms tab:** shows QMS-38/39/O-03/QMS-65/DPWH sheets + signed print buttons; Inspect from `/admin/inspections` opens that tab | Remaining: staging → KT → production |
+| 2026-09-18 | **Inspection Save only:** `POST …/inspections/{id}/forms` drafts O-03/QMS-65/DPWH without completing; modal has Save only + Save & complete; status → in_progress | Remaining: staging → KT → production |
 | — | Next | Staging, training/KT, production go-live + warranty |
 
 Also mirror this requirement in [`CLAUDE.md`](CLAUDE.md) under engineering standards.

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Models\FormDefinition;
+use App\Support\Inspection\InspectionFormCatalog;
 use App\Support\PermitApplication\FieldCatalog;
 use Illuminate\Database\Seeder;
 
@@ -53,12 +54,31 @@ class FormDefinitionSeeder extends Seeder
             [
                 'code' => 'QMS-38',
                 'title' => 'Joint Inspection Schedule (QMS-38)',
-                'schema' => [
-                    'fields' => [
-                        ['name' => 'inspection_date', 'label' => 'Inspection Date', 'type' => 'date', 'required' => true],
-                        ['name' => 'inspectors', 'label' => 'Inspectors', 'type' => 'text', 'required' => true],
-                    ],
-                ],
+                'schema' => InspectionFormCatalog::qms38Schema(),
+                'required_attachments' => [],
+            ],
+            [
+                'code' => 'QMS-39',
+                'title' => 'Joint Inspection Team Assignment (QMS-39)',
+                'schema' => InspectionFormCatalog::qms39Schema(),
+                'required_attachments' => [],
+            ],
+            [
+                'code' => 'O-03',
+                'title' => 'Individual Inspector Notes (O-03)',
+                'schema' => InspectionFormCatalog::o03Schema(),
+                'required_attachments' => [],
+            ],
+            [
+                'code' => 'QMS-65',
+                'title' => 'Inspection Compliance Sheet (QMS-65)',
+                'schema' => InspectionFormCatalog::qms65Schema(),
+                'required_attachments' => [],
+            ],
+            [
+                'code' => '77-006-E',
+                'title' => 'Final Electrical Inspection (DPWH 77-006-E)',
+                'schema' => InspectionFormCatalog::dpwh77006eSchema(),
                 'required_attachments' => [],
             ],
         ];

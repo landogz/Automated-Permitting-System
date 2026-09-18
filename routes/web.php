@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\InspectionPrintController;
 use App\Http\Controllers\Admin\LogbookPrintController;
 use App\Http\Controllers\Auth\LoginPageController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,9 @@ Route::prefix('admin')->group(function (): void {
     Route::view('/evaluation-queue', 'admin.evaluation-queue')->name('admin.evaluation-queue');
     Route::view('/fee-rules', 'admin.fee-rules')->name('admin.fee-rules');
     Route::view('/inspections', 'admin.inspections')->name('admin.inspections');
+    Route::get('/inspections/{inspection}/print', InspectionPrintController::class)
+        ->middleware('signed')
+        ->name('admin.inspections.print');
     Route::view('/orders-of-payment', 'admin.orders-of-payment')->name('admin.orders-of-payment');
     Route::view('/compliance-notices', 'admin.compliance-notices')->name('admin.compliance-notices');
     Route::view('/logbooks', 'admin.logbooks')->name('admin.logbooks');
