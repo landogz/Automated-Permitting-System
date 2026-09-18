@@ -126,9 +126,13 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="btn-save-archive">
-                        <i class="ri-archive-line align-bottom me-1"></i> Save archive
+                    <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Cancel</span>
+                    </button>
+                    <button type="submit" class="btn apics-btn-cta" id="btn-save-archive">
+                        <i class="ri-archive-line" aria-hidden="true"></i>
+                        <span class="btn-label">Save archive</span>
                     </button>
                 </div>
             </form>
@@ -148,8 +152,14 @@
                 <div class="text-center text-muted py-4">Loading…</div>
             </div>
             <div class="modal-footer flex-wrap gap-2">
-                <button type="button" class="btn btn-soft-primary d-none" id="btn-arc-view-app">View application</button>
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn apics-btn-secondary d-none" id="btn-arc-view-app">
+                    <i class="ri-eye-line" aria-hidden="true"></i>
+                    <span class="btn-label">View application</span>
+                </button>
+                <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                        <span class="btn-label">Close</span>
+                    </button>
             </div>
         </div>
     </div>

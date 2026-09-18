@@ -180,8 +180,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Schedule</button>
+                    <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Cancel</span>
+                    </button>
+                    <button type="submit" class="btn apics-btn-cta">
+                        <i class="ri-calendar-check-line" aria-hidden="true"></i>
+                        <span class="btn-label">Schedule</span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -328,13 +334,18 @@
                     </section>
                 </div>
                 <div class="modal-footer flex-wrap">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <div class="ms-md-auto d-flex flex-wrap gap-2">
-                        <button type="button" class="btn btn-soft-primary" id="btn-insp-save-only">
-                            <i class="ri-save-line align-bottom me-1" aria-hidden="true"></i>Save only
+                    <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Cancel</span>
+                    </button>
+                    <div class="apics-modal-footer__actions">
+                        <button type="button" class="btn apics-btn-secondary" id="btn-insp-save-only">
+                            <i class="ri-save-line" aria-hidden="true"></i>
+                            <span class="btn-label">Save only</span>
                         </button>
-                        <button type="submit" class="btn btn-primary" id="btn-insp-save-complete">
-                            <i class="ri-checkbox-circle-line align-bottom me-1" aria-hidden="true"></i>Save &amp; complete
+                        <button type="submit" class="btn apics-btn-cta" id="btn-insp-save-complete">
+                            <i class="ri-checkbox-circle-line" aria-hidden="true"></i>
+                            <span class="btn-label">Save &amp; complete</span>
                         </button>
                     </div>
                 </div>

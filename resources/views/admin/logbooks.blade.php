@@ -141,9 +141,13 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="btn-save-logbook">
-                        <i class="ri-book-marked-line align-bottom me-1"></i> Save entry
+                    <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Cancel</span>
+                    </button>
+                    <button type="submit" class="btn apics-btn-cta" id="btn-save-logbook">
+                        <i class="ri-book-marked-line" aria-hidden="true"></i>
+                        <span class="btn-label">Save entry</span>
                     </button>
                 </div>
             </form>
@@ -163,11 +167,18 @@
                 <div class="text-center text-muted py-4">Loading…</div>
             </div>
             <div class="modal-footer flex-wrap gap-2">
-                <button type="button" class="btn btn-soft-primary d-none" id="btn-lb-view-app">View application</button>
-                <button type="button" class="btn btn-primary d-none" id="btn-lb-print">
-                    <i class="ri-printer-line align-bottom me-1"></i> Print / PDF
+                <button type="button" class="btn apics-btn-secondary d-none" id="btn-lb-view-app">
+                    <i class="ri-eye-line" aria-hidden="true"></i>
+                    <span class="btn-label">View application</span>
                 </button>
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn apics-btn-cta d-none" id="btn-lb-print">
+                    <i class="ri-printer-line" aria-hidden="true"></i>
+                    <span class="btn-label">Print / PDF</span>
+                </button>
+                <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                        <span class="btn-label">Close</span>
+                    </button>
             </div>
         </div>
     </div>

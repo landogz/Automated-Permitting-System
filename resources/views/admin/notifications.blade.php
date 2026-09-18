@@ -234,8 +234,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Cancel</span>
+                    </button>
+                    <button type="submit" class="btn apics-btn-cta">
+                        <i class="ri-save-line" aria-hidden="true"></i>
+                        <span class="btn-label">Save</span>
+                    </button>
                 </div>
             </form>
         </div>

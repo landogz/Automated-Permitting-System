@@ -45,8 +45,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger" id="btn-confirm-decline">Decline registration</button>
+                    <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Cancel</span>
+                    </button>
+                    <button type="submit" class="btn apics-btn-cta apics-btn-cta--danger" id="btn-confirm-decline">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Decline registration</span>
+                    </button>
                 </div>
             </form>
         </div>

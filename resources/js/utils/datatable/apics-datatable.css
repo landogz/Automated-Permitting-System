@@ -204,7 +204,7 @@
 }
 
 .apics-dt-clear-filters:hover {
-    color: var(--vz-primary, #405189) !important;
+    color: var(--vz-primary, #ff2222) !important;
 }
 
 .apics-dt-footer {
@@ -242,7 +242,7 @@
     font-weight: 700;
     letter-spacing: 0.02em;
     background: #eef0f5;
-    color: var(--vz-primary, #405189);
+    color: var(--vz-primary, #ff2222);
     flex-shrink: 0;
     overflow: hidden;
 }
@@ -274,7 +274,7 @@
     flex-shrink: 0;
     overflow: hidden;
     background: #eef0f5;
-    color: var(--vz-primary, #405189);
+    color: var(--vz-primary, #ff2222);
 }
 
 .apics-user-avatar--sm {
@@ -460,7 +460,7 @@ body > .dropdown-menu.apics-dt-action-menu,
     border-radius: 0.4rem;
     box-shadow: none;
     background-color: rgba(64, 81, 137, 0.12);
-    color: var(--vz-primary, #405189);
+    color: var(--vz-primary, #ff2222);
     font-weight: 700;
     line-height: 1.15rem;
     content: '+';
@@ -468,7 +468,7 @@ body > .dropdown-menu.apics-dt-action-menu,
 
 .apics-dt-shell table.apics-datatable.dtr-inline.collapsed > tbody > tr.parent > td.dtr-control::before,
 .apics-dt-shell table.apics-datatable.dtr-column.collapsed > tbody > tr.parent > td.dtr-control::before {
-    background-color: var(--vz-primary, #405189);
+    background-color: var(--vz-primary, #ff2222);
     color: #fff;
     content: '−';
 }

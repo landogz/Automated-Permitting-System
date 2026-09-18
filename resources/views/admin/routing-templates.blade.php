@@ -134,8 +134,14 @@
                     </button>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="btn-save-template">Save template</button>
+                    <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Cancel</span>
+                    </button>
+                    <button type="submit" class="btn apics-btn-cta" id="btn-save-template">
+                        <i class="ri-save-line" aria-hidden="true"></i>
+                        <span class="btn-label">Save template</span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -153,9 +159,18 @@
                 <div class="text-center text-muted py-4">Loading…</div>
             </div>
             <div class="modal-footer flex-wrap gap-2">
-                <button type="button" class="btn btn-primary" id="btn-tpl-edit">Edit</button>
-                <button type="button" class="btn btn-danger" id="btn-tpl-delete">Delete</button>
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn apics-btn-cta" id="btn-tpl-edit">
+                    <i class="ri-pencil-line" aria-hidden="true"></i>
+                    <span class="btn-label">Edit</span>
+                </button>
+                <button type="button" class="btn apics-btn-cta apics-btn-cta--danger" id="btn-tpl-delete">
+                    <i class="ri-delete-bin-line" aria-hidden="true"></i>
+                    <span class="btn-label">Delete</span>
+                </button>
+                <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                        <span class="btn-label">Close</span>
+                    </button>
             </div>
         </div>
     </div>

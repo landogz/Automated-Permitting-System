@@ -117,10 +117,9 @@ export function initUsersPage(): void {
             modalIcon.className = mode === 'create' ? 'ri-user-add-line' : 'ri-user-settings-line';
         }
         if (saveBtnLabel) {
-            saveBtnLabel.innerHTML =
-                mode === 'create'
-                    ? '<i class="ri-user-add-line align-middle me-1"></i>Create user'
-                    : '<i class="ri-save-line align-middle me-1"></i>Save changes';
+            const icon = mode === 'create' ? 'ri-user-add-line' : 'ri-save-line';
+            const label = mode === 'create' ? 'Create user' : 'Save changes';
+            saveBtnLabel.innerHTML = `<i class="${icon}" aria-hidden="true"></i><span class="btn-label">${label}</span>`;
         }
     };
 

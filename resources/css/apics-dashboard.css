@@ -110,7 +110,7 @@
     height: 0.5rem;
     margin-top: 0.4rem;
     border-radius: 999px;
-    background: var(--vz-primary, #405189);
+    background: var(--vz-primary, #ff2222);
     flex-shrink: 0;
     box-shadow: 0 0 0 3px rgb(64 81 137 / 0.15);
 }
@@ -128,7 +128,7 @@
     flex-shrink: 0;
     overflow: hidden;
     background: #eef0f5;
-    color: var(--vz-primary, #405189);
+    color: var(--vz-primary, #ff2222);
 }
 
 .apics-dashboard .apics-user-avatar--sm {

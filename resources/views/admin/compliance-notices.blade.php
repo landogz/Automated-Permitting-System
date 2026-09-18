@@ -139,9 +139,13 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="btn-issue-notice">
-                        <i class="ri-file-warning-line align-bottom me-1"></i> Issue notice
+                    <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Cancel</span>
+                    </button>
+                    <button type="submit" class="btn apics-btn-cta" id="btn-issue-notice">
+                        <i class="ri-file-warning-line" aria-hidden="true"></i>
+                        <span class="btn-label">Issue notice</span>
                     </button>
                 </div>
             </form>
@@ -161,10 +165,22 @@
                 <div class="text-center text-muted py-4">Loading…</div>
             </div>
             <div class="modal-footer flex-wrap gap-2">
-                <button type="button" class="btn btn-soft-primary d-none" id="btn-notice-view-app">View application</button>
-                <button type="button" class="btn btn-warning d-none" id="btn-notice-file-appeal">File appeal</button>
-                <button type="button" class="btn btn-success d-none" id="btn-notice-resolve-appeal">Resolve appeal</button>
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn apics-btn-secondary d-none" id="btn-notice-view-app">
+                    <i class="ri-eye-line" aria-hidden="true"></i>
+                    <span class="btn-label">View application</span>
+                </button>
+                <button type="button" class="btn apics-btn-secondary d-none" id="btn-notice-file-appeal">
+                    <i class="ri-scales-3-line" aria-hidden="true"></i>
+                    <span class="btn-label">File appeal</span>
+                </button>
+                <button type="button" class="btn apics-btn-cta apics-btn-cta--success d-none" id="btn-notice-resolve-appeal">
+                    <i class="ri-checkbox-circle-line" aria-hidden="true"></i>
+                    <span class="btn-label">Resolve appeal</span>
+                </button>
+                <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                        <span class="btn-label">Close</span>
+                    </button>
             </div>
         </div>
     </div>
@@ -194,8 +210,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save decision</button>
+                    <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Cancel</span>
+                    </button>
+                    <button type="submit" class="btn apics-btn-cta">
+                        <i class="ri-save-line" aria-hidden="true"></i>
+                        <span class="btn-label">Save decision</span>
+                    </button>
                 </div>
             </form>
         </div>

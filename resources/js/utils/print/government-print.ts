@@ -77,7 +77,7 @@ function printStyles(): string {
       appearance: none;
       border: 0;
       border-radius: 6px;
-      background: #405189;
+      background: #ff2222;
       color: #fff;
       font-weight: 600;
       font-size: 13px;

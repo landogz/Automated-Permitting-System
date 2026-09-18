@@ -510,6 +510,12 @@ Create [`.cursor/rules/update-project-plan-on-done.mdc`](.cursor/rules/update-pr
 | 2026-09-18 | **Profile photos across admin lists:** audit Actor column + drawer, Users, Registrations, Inspections lead, dashboard activity use `avatar_url` / `actor_avatar_url`; shared `userAvatarHtml` | Remaining: staging → KT → production |
 | 2026-09-18 | **Users & Roles console redesign:** KPI strip (total/staff/applicants/pending), polished directory card + avatar/role/access cells, sectioned create/edit modal; API `summary` on users list | Remaining: staging → KT → production |
 | 2026-09-18 | **Location search fix:** results no longer clipped in application modal; CSFP barangay catalog fallback when Nominatim fails; clearer empty/error UX | Remaining: staging → KT → production |
+| 2026-09-18 | **Brand palette #FF2222:** Velzon primary / soft-primary / links / focus rings / map pins use APICS red via `apics-brand.css` | Remaining: staging → KT → production |
+| 2026-09-18 | **Sidebar civic redesign:** dark slate navy rail (`#0F172A`); red accent strip + alert badges only; stacked brand lockup; fixed Project Plan icon; unified nav badges | Remaining: staging → KT → production |
+| 2026-09-18 | **Sidebar polish:** uniform slate queue badges; active left border flush in pill; brighter section titles + more section gap; 24px bottom safe area | Remaining: staging → KT → production |
+| 2026-09-18 | **Sidebar production pass:** civic-blue active strip/icon (`#38BDF8`); flush edge tab; elevated badge contrast; fixed 20px icon boxes | Remaining: staging → KT → production |
+| 2026-09-18 | **Uniform modal footers:** shared `apics-btn-cancel` / `apics-btn-cta` craft (icon chip + red shadow) across account + admin + applicant modals | Remaining: staging → KT → production |
+| 2026-09-19 | **Modal footer flat CTAs:** solid `#FF2222` primary (View-details style); inline icons on Cancel/Close/secondary/CTA; removed chip/shadow craft | Remaining: staging → KT → production |
 | — | Next | Staging, training/KT, production go-live + warranty |
 
 Also mirror this requirement in [`CLAUDE.md`](CLAUDE.md) under engineering standards.

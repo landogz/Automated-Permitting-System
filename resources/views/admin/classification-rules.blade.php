@@ -157,8 +157,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="btn-save-rule">Save rule</button>
+                    <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Cancel</span>
+                    </button>
+                    <button type="submit" class="btn apics-btn-cta" id="btn-save-rule">
+                        <i class="ri-save-line" aria-hidden="true"></i>
+                        <span class="btn-label">Save rule</span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -176,10 +182,22 @@
                 <div class="text-center text-muted py-4">Loading…</div>
             </div>
             <div class="modal-footer flex-wrap gap-2">
-                <button type="button" class="btn btn-primary" id="btn-rule-edit">Edit</button>
-                <button type="button" class="btn btn-soft-warning" id="btn-rule-toggle">Toggle active</button>
-                <button type="button" class="btn btn-danger" id="btn-rule-delete">Delete</button>
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn apics-btn-cta" id="btn-rule-edit">
+                    <i class="ri-pencil-line" aria-hidden="true"></i>
+                    <span class="btn-label">Edit</span>
+                </button>
+                <button type="button" class="btn apics-btn-secondary" id="btn-rule-toggle">
+                    <i class="ri-toggle-line" aria-hidden="true"></i>
+                    <span class="btn-label">Toggle active</span>
+                </button>
+                <button type="button" class="btn apics-btn-cta apics-btn-cta--danger" id="btn-rule-delete">
+                    <i class="ri-delete-bin-line" aria-hidden="true"></i>
+                    <span class="btn-label">Delete</span>
+                </button>
+                <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                        <span class="btn-label">Close</span>
+                    </button>
             </div>
         </div>
     </div>

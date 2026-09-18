@@ -87,7 +87,7 @@
     right: 0.75rem;
     bottom: 0.35rem;
     height: 2px;
-    background: var(--vz-primary, #405189);
+    background: var(--vz-primary, #ff2222);
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform 0.2s ease-out;
@@ -204,7 +204,7 @@
 }
 
 .landing-live-stat strong {
-    color: var(--vz-primary, #405189);
+    color: var(--vz-primary, #ff2222);
     font-variant-numeric: tabular-nums;
     min-width: 1ch;
 }

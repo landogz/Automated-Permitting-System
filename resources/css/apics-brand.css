@@ -1,0 +1,134 @@
+/**
+ * APICS brand palette — primary #FF2222
+ * Overrides Velzon / Bootstrap CSS variables so btn-primary, badges,
+ * links, and soft-primary surfaces follow the municipal brand red.
+ */
+
+:root,
+[data-bs-theme='light'] {
+    --apics-brand: #ff2222;
+    --apics-brand-rgb: 255, 34, 34;
+    --apics-brand-hover: #e01e1e;
+    --apics-brand-dark: #c41b1b;
+    --apics-brand-soft: #ffe5e5;
+    --apics-brand-soft-border: #ffb8b8;
+    --apics-brand-on: #ffffff;
+
+    --vz-primary: #ff2222;
+    --vz-primary-rgb: 255, 34, 34;
+    --vz-primary-text-emphasis: #c41b1b;
+    --vz-primary-bg-subtle: #ffe5e5;
+    --vz-primary-border-subtle: #ffb8b8;
+
+    --vz-link-color: #ff2222;
+    --vz-link-hover-color: #e01e1e;
+
+    --bs-primary: #ff2222;
+    --bs-primary-rgb: 255, 34, 34;
+    --bs-primary-text-emphasis: #c41b1b;
+    --bs-primary-bg-subtle: #ffe5e5;
+    --bs-primary-border-subtle: #ffb8b8;
+    --bs-link-color: #ff2222;
+    --bs-link-hover-color: #e01e1e;
+
+    /* Keep primary red off the sidebar canvas (Velzon dark theme uses primary as menu bg). */
+    --vz-vertical-menu-bg: #0f172a;
+    --vz-vertical-menu-border: #0f172a;
+}
+
+[data-bs-theme='dark'] {
+    --apics-brand: #ff4d4d;
+    --apics-brand-rgb: 255, 77, 77;
+    --apics-brand-hover: #ff6b6b;
+    --apics-brand-dark: #ff2222;
+    --apics-brand-soft: rgba(255, 34, 34, 0.18);
+    --apics-brand-soft-border: rgba(255, 34, 34, 0.35);
+    --apics-brand-on: #ffffff;
+
+    --vz-primary: #ff4d4d;
+    --vz-primary-rgb: 255, 77, 77;
+    --vz-primary-text-emphasis: #ff8a8a;
+    --vz-primary-bg-subtle: rgba(255, 34, 34, 0.18);
+    --vz-primary-border-subtle: rgba(255, 34, 34, 0.35);
+
+    --vz-link-color: #ff6b6b;
+    --vz-link-hover-color: #ff8a8a;
+
+    --bs-primary: #ff4d4d;
+    --bs-primary-rgb: 255, 77, 77;
+    --bs-primary-text-emphasis: #ff8a8a;
+    --bs-primary-bg-subtle: rgba(255, 34, 34, 0.18);
+    --bs-primary-border-subtle: rgba(255, 34, 34, 0.35);
+    --bs-link-color: #ff6b6b;
+    --bs-link-hover-color: #ff8a8a;
+
+    --vz-vertical-menu-bg: #0f172a;
+    --vz-vertical-menu-border: #0f172a;
+}
+
+/* Ensure solid primary buttons use brand on / off colors */
+.btn-primary {
+    --vz-btn-bg: var(--apics-brand);
+    --vz-btn-border-color: var(--apics-brand);
+    --vz-btn-hover-bg: var(--apics-brand-hover);
+    --vz-btn-hover-border-color: var(--apics-brand-hover);
+    --vz-btn-active-bg: var(--apics-brand-dark);
+    --vz-btn-active-border-color: var(--apics-brand-dark);
+    --vz-btn-disabled-bg: var(--apics-brand);
+    --vz-btn-disabled-border-color: var(--apics-brand);
+    color: var(--apics-brand-on);
+}
+
+.btn-soft-primary {
+    color: var(--apics-brand-dark) !important;
+    background-color: var(--apics-brand-soft) !important;
+    border-color: transparent !important;
+}
+
+.btn-soft-primary:hover,
+.btn-soft-primary:focus-visible {
+    color: var(--apics-brand-on) !important;
+    background-color: var(--apics-brand) !important;
+}
+
+.bg-primary {
+    background-color: var(--apics-brand) !important;
+}
+
+.bg-primary-subtle {
+    background-color: var(--apics-brand-soft) !important;
+}
+
+.text-primary {
+    color: var(--apics-brand) !important;
+}
+
+.border-primary {
+    border-color: var(--apics-brand) !important;
+}
+
+.form-check-input:checked {
+    background-color: var(--apics-brand);
+    border-color: var(--apics-brand);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: rgba(var(--apics-brand-rgb), 0.45);
+    box-shadow: 0 0 0 0.2rem rgba(var(--apics-brand-rgb), 0.18);
+}
+
+.page-link.active,
+.active > .page-link {
+    background-color: var(--apics-brand);
+    border-color: var(--apics-brand);
+}
+
+.nav-pills .nav-link.active,
+.nav-tabs .nav-link.active {
+    color: var(--apics-brand);
+}
+
+.progress-bar {
+    background-color: var(--apics-brand);
+}

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import './bootstrap';
+import '../css/apics-brand.css';
 import '../css/apics-shell.css';
 import '../css/apics-status.css';
 import '../css/apics-ops.css';

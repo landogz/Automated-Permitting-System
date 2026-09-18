@@ -134,7 +134,7 @@ export function createLocationPicker(options: Options): LocationPickerApi {
             return;
         }
         if (!marker) {
-            marker = new maplibregl.Marker({ draggable: true, color: '#0ab39c' })
+            marker = new maplibregl.Marker({ draggable: true, color: '#ff2222' })
                 .setLngLat([lng, lat])
                 .addTo(map);
             marker.on('dragend', () => {

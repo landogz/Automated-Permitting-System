@@ -363,7 +363,7 @@ export function mountSiteMapViewer(scope: HTMLElement): SiteMapViewerApi | null 
             attributionControl: { compact: true },
         });
         map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
-        marker = new maplibregl.Marker({ color: '#405189', draggable: false })
+        marker = new maplibregl.Marker({ color: '#ff2222', draggable: false })
             .setLngLat([lng, lat])
             .addTo(map);
 

@@ -87,3 +87,236 @@
         max-height: calc(100dvh - 1rem);
     }
 }
+
+/* ---------------------------------------------------------------------------
+ * Uniform modal footer actions — flat brand buttons + inline icons
+ * Primary matches solid #FF2222 CTA (e.g. “View details”).
+ * --------------------------------------------------------------------------- */
+.apics-modal-footer,
+.modal-dialog.apics-modal .modal-footer,
+.modal-dialog.modal-dialog-scrollable .modal-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 1rem 1.25rem 1.15rem;
+    background: #fff;
+    border-top: 1px solid #e9ebec;
+}
+
+.apics-modal-footer.justify-content-between,
+.modal-dialog.apics-modal .modal-footer.justify-content-between,
+.modal-dialog.modal-dialog-scrollable .modal-footer.justify-content-between {
+    justify-content: space-between;
+}
+
+.apics-modal-footer__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.65rem;
+    margin-left: auto;
+}
+
+.apics-btn-cancel,
+.apics-btn-secondary,
+.apics-btn-cta,
+.apics-account-modal__cancel,
+.apics-account-modal__cta {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    min-height: 2.5rem;
+    padding: 0.5rem 1.15rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.2;
+    border-radius: 0.5rem;
+    box-shadow: none !important;
+    transition:
+        color 0.15s ease,
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.15s ease;
+}
+
+.apics-btn-cancel > i,
+.apics-btn-secondary > i,
+.apics-btn-cta > i,
+.apics-account-modal__cancel > i,
+.apics-account-modal__cta > i,
+.apics-btn-cta__icon,
+.apics-account-modal__cta-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+    line-height: 1;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.apics-btn-cancel,
+.apics-account-modal__cancel {
+    min-width: 6.25rem;
+    color: #343a40 !important;
+    background: #fff !important;
+    border: 1px solid #e9ebec !important;
+}
+
+.apics-btn-cancel:hover,
+.apics-btn-cancel:focus-visible,
+.apics-account-modal__cancel:hover,
+.apics-account-modal__cancel:focus-visible {
+    color: #212529 !important;
+    background: #f8f9fa !important;
+    border-color: #ced4da !important;
+}
+
+.apics-btn-cancel:active,
+.apics-account-modal__cancel:active {
+    transform: translateY(1px);
+}
+
+.apics-btn-secondary {
+    min-width: 6.25rem;
+    color: #ff2222 !important;
+    background: #ffe5e5 !important;
+    border: 1px solid #ffb8b8 !important;
+}
+
+.apics-btn-secondary:hover,
+.apics-btn-secondary:focus-visible {
+    color: #e01e1e !important;
+    background: #ffd6d6 !important;
+}
+
+.apics-btn-secondary:active {
+    transform: translateY(1px);
+}
+
+.apics-btn-cta,
+.apics-account-modal__cta {
+    min-width: 8.5rem;
+    color: #fff !important;
+    background: #ff2222 !important;
+    border: 0 !important;
+}
+
+.apics-btn-cta:hover,
+.apics-btn-cta:focus-visible,
+.apics-account-modal__cta:hover,
+.apics-account-modal__cta:focus-visible {
+    color: #fff !important;
+    background: #e01e1e !important;
+}
+
+.apics-btn-cta:active,
+.apics-account-modal__cta:active {
+    transform: translateY(1px);
+    background: #c41b1b !important;
+}
+
+.apics-btn-cta:disabled,
+.apics-btn-cta.is-loading,
+.apics-account-modal__cta:disabled,
+.apics-account-modal__cta.is-loading {
+    opacity: 0.72;
+    pointer-events: none;
+}
+
+.apics-btn-cta .btn-label,
+.apics-account-modal__cta .btn-label,
+.apics-btn-cancel .btn-label,
+.apics-btn-secondary .btn-label {
+    position: static !important;
+    display: inline;
+    padding: 0 !important;
+    line-height: 1.2;
+    color: inherit;
+}
+
+.apics-btn-cta--danger {
+    background: #dc2626 !important;
+}
+
+.apics-btn-cta--danger:hover,
+.apics-btn-cta--danger:focus-visible {
+    background: #b91c1c !important;
+}
+
+.apics-btn-cta--success {
+    background: #10b981 !important;
+}
+
+.apics-btn-cta--success:hover,
+.apics-btn-cta--success:focus-visible {
+    background: #059669 !important;
+}
+
+@media (max-width: 575.98px) {
+    .apics-modal-footer,
+    .modal-dialog.apics-modal .modal-footer,
+    .modal-dialog.modal-dialog-scrollable .modal-footer,
+    .apics-account-modal__footer {
+        flex-direction: column-reverse;
+        align-items: stretch;
+        gap: 0.55rem;
+    }
+
+    .apics-modal-footer__actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .apics-modal-footer .btn,
+    .apics-modal-footer__actions .btn,
+    .apics-btn-cancel,
+    .apics-btn-secondary,
+    .apics-btn-cta,
+    .apics-account-modal__cancel,
+    .apics-account-modal__cta {
+        width: 100%;
+    }
+}
+
+[data-bs-theme='dark'] .apics-modal-footer,
+[data-bs-theme='dark'] .modal-dialog.apics-modal .modal-footer,
+[data-bs-theme='dark'] .modal-dialog.modal-dialog-scrollable .modal-footer {
+    background: var(--bs-modal-bg, #212529);
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme='dark'] .apics-btn-cancel,
+[data-bs-theme='dark'] .apics-account-modal__cancel {
+    color: #e9ebec !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+[data-bs-theme='dark'] .apics-btn-cancel:hover,
+[data-bs-theme='dark'] .apics-btn-cancel:focus-visible,
+[data-bs-theme='dark'] .apics-account-modal__cancel:hover,
+[data-bs-theme='dark'] .apics-account-modal__cancel:focus-visible {
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+[data-bs-theme='dark'] .apics-btn-secondary {
+    color: #ff8a8a !important;
+    background: rgba(255, 34, 34, 0.16) !important;
+    border-color: rgba(255, 34, 34, 0.35) !important;
+}

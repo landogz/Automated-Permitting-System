@@ -77,7 +77,7 @@
     flex-shrink: 0;
     overflow: hidden;
     background: #eef0f5;
-    color: var(--vz-primary, #405189);
+    color: var(--vz-primary, #ff2222);
 }
 
 .apics-audit-actor__avatar img {

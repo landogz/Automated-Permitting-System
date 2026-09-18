@@ -192,13 +192,18 @@
                     </section>
                 </div>
                 <div class="modal-footer flex-wrap">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <div class="ms-md-auto d-flex flex-wrap gap-2">
-                        <button type="button" class="btn btn-soft-primary" id="btn-eval-save-only">
-                            <i class="ri-save-line align-bottom me-1" aria-hidden="true"></i>Save only
+                    <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Cancel</span>
+                    </button>
+                    <div class="apics-modal-footer__actions">
+                        <button type="button" class="btn apics-btn-secondary" id="btn-eval-save-only">
+                            <i class="ri-save-line" aria-hidden="true"></i>
+                            <span class="btn-label">Save only</span>
                         </button>
-                        <button type="submit" class="btn btn-primary" id="btn-eval-save-decide">
-                            <i class="ri-checkbox-circle-line align-bottom me-1" aria-hidden="true"></i>Save &amp; decide
+                        <button type="submit" class="btn apics-btn-cta" id="btn-eval-save-decide">
+                            <i class="ri-checkbox-circle-line" aria-hidden="true"></i>
+                            <span class="btn-label">Save &amp; decide</span>
                         </button>
                     </div>
                 </div>

@@ -72,9 +72,12 @@
                 </div>
 
                 <div class="modal-footer apics-account-modal__footer">
-                    <button type="button" class="btn btn-ghost-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary apics-account-modal__cta" id="btn-save-profile">
-                        <i class="ri-check-line align-middle" aria-hidden="true"></i>
+                    <button type="button" class="btn apics-btn-cancel apics-account-modal__cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Cancel</span>
+                    </button>
+                    <button type="submit" class="btn apics-btn-cta apics-account-modal__cta" id="btn-save-profile">
+                        <i class="ri-check-line" aria-hidden="true"></i>
                         <span class="btn-label">Save changes</span>
                     </button>
                 </div>
@@ -164,9 +167,12 @@
                 </div>
 
                 <div class="modal-footer apics-account-modal__footer">
-                    <button type="button" class="btn btn-ghost-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary apics-account-modal__cta" id="btn-save-password">
-                        <i class="ri-shield-check-line align-middle" aria-hidden="true"></i>
+                    <button type="button" class="btn apics-btn-cancel apics-account-modal__cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Cancel</span>
+                    </button>
+                    <button type="submit" class="btn apics-btn-cta apics-account-modal__cta" id="btn-save-password">
+                        <i class="ri-shield-check-line" aria-hidden="true"></i>
                         <span class="btn-label">Update password</span>
                     </button>
                 </div>

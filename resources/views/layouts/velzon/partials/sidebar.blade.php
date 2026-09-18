@@ -7,21 +7,27 @@
 <div class="app-menu navbar-menu">
     <div class="navbar-brand-box">
         <a href="{{ route('home') }}" class="logo logo-dark">
-            <span class="logo-sm"><x-branding.logo :height="34" class="rounded-circle" /></span>
+            <span class="logo-sm"><x-branding.logo :height="36" class="rounded-circle" /></span>
             {{-- No Bootstrap display utilities on logo-lg/sm — Velzon toggles them on sidebar collapse --}}
             <span class="logo-lg">
                 <span class="logo-text apics-brand-lockup">
-                    <x-branding.logo :height="40" class="rounded-circle" />
-                    <span class="apics-brand-lockup__name">APICS</span>
+                    <x-branding.logo :height="40" class="rounded-circle apics-brand-lockup__seal" />
+                    <span class="apics-brand-lockup__text">
+                        <span class="apics-brand-lockup__name">APICS</span>
+                        <span class="apics-brand-lockup__sub">San Fernando, Pampanga</span>
+                    </span>
                 </span>
             </span>
         </a>
         <a href="{{ route('home') }}" class="logo logo-light">
-            <span class="logo-sm"><x-branding.logo :height="34" class="rounded-circle" /></span>
+            <span class="logo-sm"><x-branding.logo :height="36" class="rounded-circle" /></span>
             <span class="logo-lg">
                 <span class="logo-text apics-brand-lockup">
-                    <x-branding.logo :height="40" class="rounded-circle" />
-                    <span class="apics-brand-lockup__name apics-brand-lockup__name--light">APICS</span>
+                    <x-branding.logo :height="40" class="rounded-circle apics-brand-lockup__seal" />
+                    <span class="apics-brand-lockup__text">
+                        <span class="apics-brand-lockup__name apics-brand-lockup__name--light">APICS</span>
+                        <span class="apics-brand-lockup__sub">San Fernando, Pampanga</span>
+                    </span>
                 </span>
             </span>
         </a>
@@ -76,7 +82,7 @@
                 <li class="nav-item d-none" data-nav-roles="admin" data-nav-permissions="users.manage">
                     <a class="nav-link menu-link {{ request()->routeIs('admin.registrations') ? 'active' : '' }}" href="{{ route('admin.registrations') }}">
                         <i class="ri-user-follow-line"></i> <span>Registrations</span>
-                        <span class="apics-nav-badge apics-nav-badge--amber is-empty" data-nav-badge="pending_registrations" aria-label="Pending registrations"></span>
+                        <span class="apics-nav-badge is-empty" data-nav-badge="pending_registrations" aria-label="Pending registrations"></span>
                     </a>
                 </li>
                 <li class="nav-item d-none" data-nav-roles="admin" data-nav-permissions="users.manage">
@@ -124,7 +130,7 @@
                 <li class="nav-item d-none" data-nav-roles="admin" data-nav-permissions="applications.manage">
                     <a class="nav-link menu-link {{ request()->routeIs('admin.evaluation-queue') ? 'active' : '' }}" href="{{ route('admin.evaluation-queue') }}" data-ops-permission="evaluations.manage">
                         <i class="ri-clipboard-line"></i> <span>Evaluation Queue</span>
-                        <span class="apics-nav-badge apics-nav-badge--blue is-empty" data-nav-badge="evaluation_queue" aria-label="Applications in evaluation queue"></span>
+                        <span class="apics-nav-badge is-empty" data-nav-badge="evaluation_queue" aria-label="Applications in evaluation queue"></span>
                     </a>
                 </li>
                 <li class="nav-item d-none" data-nav-roles="admin" data-nav-permissions="applications.manage">
@@ -140,7 +146,7 @@
                 <li class="nav-item d-none" data-nav-roles="admin" data-nav-permissions="applications.manage">
                     <a class="nav-link menu-link {{ request()->routeIs('admin.compliance-notices') ? 'active' : '' }}" href="{{ route('admin.compliance-notices') }}" data-ops-permission="compliance.manage">
                         <i class="ri-notification-3-line"></i> <span>Compliance Notices</span>
-                        <span class="apics-nav-badge apics-nav-badge--rose is-empty" data-nav-badge="open_compliance" aria-label="Open compliance notices"></span>
+                        <span class="apics-nav-badge is-empty" data-nav-badge="open_compliance" aria-label="Open compliance notices"></span>
                     </a>
                 </li>
 
@@ -168,7 +174,7 @@
 
                 <li class="nav-item d-none" data-nav-roles="admin" data-nav-permissions="audit.view">
                     <a class="nav-link menu-link {{ request()->routeIs('admin.project-plan') ? 'active' : '' }}" href="{{ route('admin.project-plan') }}">
-                        <i class="ri-roadmap-line"></i> <span>Project Plan</span>
+                        <i class="ri-flag-2-line"></i> <span>Project Plan</span>
                     </a>
                 </li>
 

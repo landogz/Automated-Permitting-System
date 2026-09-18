@@ -130,14 +130,18 @@
             <div class="modal-footer flex-wrap gap-2">
                 <a
                     href="{{ route('admin.routing-templates') }}"
-                    class="btn btn-primary d-none"
+                    class="btn apics-btn-cta d-none"
                     id="btn-ops-manage-routing-templates"
                     data-nav-roles="admin"
                     data-nav-permissions="workflow.manage"
                 >
-                    <i class="ri-settings-3-line align-bottom me-1"></i> Manage in Workflow Config
+                    <i class="ri-settings-3-line" aria-hidden="true"></i>
+                    <span class="btn-label">Manage in Workflow Config</span>
                 </a>
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                        <span class="btn-label">Close</span>
+                    </button>
             </div>
         </div>
     </div>

@@ -50,7 +50,7 @@
 }
 
 .apics-app-select.is-open .apics-app-select-toggle {
-    border-color: var(--vz-primary, #405189);
+    border-color: var(--vz-primary, #ff2222);
     box-shadow: 0 0 0 0.15rem rgba(64, 81, 137, 0.15);
 }
 

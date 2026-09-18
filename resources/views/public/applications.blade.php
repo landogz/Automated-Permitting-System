@@ -324,16 +324,22 @@
                     <div id="application-dynamic-fields" class="d-none" aria-hidden="true"></div>
                 </div>
                 <div class="modal-footer flex-wrap gap-2 justify-content-between">
-                    <button type="button" class="btn btn-soft-secondary" id="btn-app-form-back" disabled>
-                        <i class="ri-arrow-left-line align-bottom me-1"></i> Back
+                    <button type="button" class="btn apics-btn-secondary" id="btn-app-form-back" disabled>
+                        <i class="ri-arrow-left-line" aria-hidden="true"></i>
+                        <span class="btn-label">Back</span>
                     </button>
-                    <div class="d-flex flex-wrap gap-2 ms-auto">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-soft-primary" id="btn-app-form-next">
-                            Next <i class="ri-arrow-right-line align-bottom ms-1"></i>
+                    <div class="apics-modal-footer__actions">
+                        <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Cancel</span>
+                    </button>
+                        <button type="button" class="btn apics-btn-secondary" id="btn-app-form-next">
+                            <span class="btn-label">Next</span>
+                            <i class="ri-arrow-right-line" aria-hidden="true"></i>
                         </button>
-                        <button type="submit" class="btn btn-primary" id="btn-save-application">
-                            <i class="ri-save-line align-bottom me-1"></i> Save draft
+                        <button type="submit" class="btn apics-btn-cta" id="btn-save-application">
+                            <i class="ri-save-line" aria-hidden="true"></i>
+                            <span class="btn-label">Save draft</span>
                         </button>
                     </div>
                 </div>
@@ -358,9 +364,18 @@
                 <div class="text-center text-muted py-4">Loading…</div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-soft-primary d-none" id="btn-view-edit">Edit draft</button>
-                <button type="button" class="btn btn-success d-none" id="btn-view-submit">Submit for intake</button>
+                <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                        <span class="btn-label">Close</span>
+                    </button>
+                <button type="button" class="btn apics-btn-secondary d-none" id="btn-view-edit">
+                    <i class="ri-pencil-line" aria-hidden="true"></i>
+                    <span class="btn-label">Edit draft</span>
+                </button>
+                <button type="button" class="btn apics-btn-cta apics-btn-cta--success d-none" id="btn-view-submit">
+                    <i class="ri-send-plane-line" aria-hidden="true"></i>
+                    <span class="btn-label">Submit for intake</span>
+                </button>
             </div>
         </div>
     </div>
@@ -378,7 +393,10 @@
                 <div class="text-muted text-center py-5">Loading map…</div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                        <span class="btn-label">Close</span>
+                    </button>
             </div>
         </div>
     </div>

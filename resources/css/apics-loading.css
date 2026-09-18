@@ -35,7 +35,7 @@
     position: absolute;
     inset: 0 auto 0 0;
     width: 40%;
-    background: linear-gradient(90deg, #405189, #0ab39c, #405189);
+    background: linear-gradient(90deg, #ff2222, #0ab39c, #ff2222);
     background-size: 200% 100%;
     border-radius: 0 2px 2px 0;
     animation: apics-loading-bar 0.9s ease-in-out infinite;
@@ -90,7 +90,7 @@ html[data-bs-theme='dark'] .apics-loading__card,
     width: 2rem;
     height: 2rem;
     border: 0.22rem solid rgba(64, 81, 137, 0.2);
-    border-top-color: #405189;
+    border-top-color: #ff2222;
     border-radius: 50%;
     animation: apics-loading-spin 0.7s linear infinite;
 }
@@ -100,7 +100,7 @@ html[data-bs-theme='dark'] .apics-loading__card,
     font-size: 0.875rem;
     font-weight: 600;
     line-height: 1.35;
-    color: #405189;
+    color: #ff2222;
 }
 
 html[data-bs-theme='dark'] .apics-loading__message,

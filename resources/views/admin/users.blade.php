@@ -197,10 +197,13 @@
                 </div>
 
                 <div class="modal-footer apics-account-modal__footer">
-                    <button type="button" class="btn btn-ghost-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary apics-account-modal__cta" id="btn-save-user">
-                        <i class="ri-save-line align-middle me-1"></i>
-                        Save user
+                    <button type="button" class="btn apics-btn-cancel" data-bs-dismiss="modal">
+                        <i class="ri-close-circle-line" aria-hidden="true"></i>
+                        <span class="btn-label">Cancel</span>
+                    </button>
+                    <button type="submit" class="btn apics-btn-cta" id="btn-save-user">
+                        <i class="ri-save-line" aria-hidden="true"></i>
+                        <span class="btn-label">Save user</span>
                     </button>
                 </div>
             </form>
