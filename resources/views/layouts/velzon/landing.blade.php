@@ -18,6 +18,44 @@
     <link href="{{ asset('master/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('master/assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('master/assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
+    {{-- App CSS (includes apics-landing) must load in <head> to avoid FOUC --}}
+    @vite(['resources/js/app.ts'])
+    <style>
+        /* Critical FOUC guard — hide skip links + structure top bar before Vite CSS applies */
+        .skip-links { position: absolute; z-index: 1080; }
+        .skip-link {
+            position: absolute;
+            inset-inline-start: 0.75rem;
+            inset-block-start: 0.75rem;
+            z-index: 1080;
+            padding: 0.75rem 1.25rem;
+            background: #fff;
+            color: #0f172a;
+            font-weight: 600;
+            border: 2px solid #2563eb;
+            border-radius: 0.375rem;
+            transform: translateY(-160%);
+        }
+        .skip-links .skip-link:nth-child(2) { inset-inline-start: 9.5rem; }
+        .skip-link:focus { transform: translateY(0); outline: 3px solid #2563eb; outline-offset: 2px; }
+        .gwt-topbar { background: #222; color: #fff; font-size: 0.75rem; }
+        .gwt-topbar__inner {
+            display: flex; align-items: center; flex-wrap: wrap; gap: 0.75rem 1rem;
+            min-height: 2.75rem; padding-block: 0.35rem;
+        }
+        .gwt-topbar__nav {
+            display: flex; flex-wrap: wrap; gap: 0.15rem 0.85rem;
+            list-style: none; margin: 0; padding: 0; flex: 1 1 auto;
+        }
+        .gwt-topbar__nav a { color: #fff; text-decoration: none; font-weight: 500; }
+        .gwt-topbar__republic { display: inline-flex; align-items: center; gap: 0.45rem; color: #fff; text-decoration: none; font-weight: 600; }
+        .gwt-phst { margin-left: auto; display: inline-flex; flex-direction: column; align-items: flex-end; color: #fff; }
+        .gwt-phst__label { color: #fcd116; font-weight: 700; font-size: 0.625rem; text-transform: uppercase; }
+        .gwt-search { display: inline-flex; }
+        .gwt-masthead { background: #fff; border-bottom: 1px solid #e2e8f0; }
+        .gwt-masthead__inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.85rem; }
+        .gwt-masthead__brand { display: flex; align-items: center; gap: 0.9rem; color: inherit; text-decoration: none; }
+    </style>
 </head>
 <body data-bs-spy="scroll" data-bs-target="#navbar-example" class="gwt-public">
 <div class="skip-links">
@@ -179,6 +217,5 @@
     setInterval(syncPhst, 15 * 60 * 1000);
 })();
 </script>
-@vite(['resources/js/app.ts'])
 </body>
 </html>
