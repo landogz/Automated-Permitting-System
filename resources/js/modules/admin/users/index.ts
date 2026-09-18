@@ -1,5 +1,6 @@
 import { hideModal, showModal } from '../../../utils/bootstrap-modal';
 import { createApicsDataTable, type ApicsDataTableApi } from '../../../utils/datatable';
+import { bindPasswordToggles } from '../../../utils/password-toggle';
 import { confirmAction, toastError, toastSuccess } from '../../../utils/toast';
 import {
     activeBadge,
@@ -43,6 +44,7 @@ function fillSelect(
 export function initUsersPage(): void {
     const tableEl = document.getElementById('users-table');
     const form = document.getElementById('form-user') as HTMLFormElement | null;
+    bindPasswordToggles(form ?? document);
     const addBtn = document.getElementById('btn-add-user');
 
     if (!tableEl || !form) {

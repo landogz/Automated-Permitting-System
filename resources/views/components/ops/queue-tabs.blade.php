@@ -16,7 +16,7 @@
             aria-selected="true"
         >
             {{ __($activeLabel) }}
-            <span class="badge bg-primary-subtle text-primary ms-1" data-ops-active-count="{{ $id }}">0</span>
+            <span class="badge apics-ops-queue__count ms-1" data-ops-active-count="{{ $id }}">0</span>
         </button>
         <button
             type="button"

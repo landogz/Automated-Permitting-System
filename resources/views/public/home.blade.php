@@ -16,13 +16,13 @@
                     <div class="d-flex align-items-center gap-3 mb-3 landing-hero-brand">
                         <x-branding.logo :height="80" class="rounded-circle border border-2 border-white shadow-sm" />
                         <div>
-                            <h1 class="display-5 fw-semibold mb-0 lh-base" id="hero-heading">APICS</h1>
+                            <p class="landing-hero-brand-name" id="hero-heading">APICS</p>
                             <p class="text-muted mb-0 fs-13">{{ __('City of San Fernando, Pampanga · OCBO') }}</p>
                         </div>
                     </div>
 
-                    <p class="fs-18 fw-medium text-body mb-3">{{ __('Paperless building permits for the City of San Fernando') }}</p>
-                    <p class="lead text-muted lh-base mb-4">{{ __('Automated Permitting, Inspection, and Compliance System — apply online, track status, and support transparent evaluation, inspection, and audit-ready compliance for the Office of the City Building Official.') }}</p>
+                    <h1 class="landing-hero-title">{{ __('Paperless building permits for the City of San Fernando') }}</h1>
+                    <p class="landing-hero-lede">{{ __('Automated Permitting, Inspection, and Compliance System — apply online, track status, and support transparent evaluation, inspection, and audit-ready compliance for the Office of the City Building Official.') }}</p>
 
                     <div class="d-flex flex-wrap gap-2" data-auth-visible="guest">
                         <a href="{{ route('register') }}" class="btn btn-primary btn-lg">{{ __('Register to apply') }} <i class="ri-arrow-right-line align-middle ms-1" aria-hidden="true"></i></a>
@@ -45,7 +45,7 @@
             <div class="col-lg-5">
                 <div class="card landing-product-chrome landing-hero-visual mb-0">
                     <div class="card-header align-items-center d-flex flex-wrap gap-2 py-3">
-                        <h5 class="card-title mb-0 flex-grow-1 fs-15">{{ __('Applications') }}</h5>
+                        <h2 class="card-title mb-0 flex-grow-1 fs-15">{{ __('Applications') }}</h2>
                         <div class="landing-live-stats" aria-label="{{ __('Sample live counts') }}">
                             <span class="landing-live-stat">
                                 <strong data-count-to="apps" data-count-target="3">3</strong>
@@ -100,15 +100,16 @@
 </section>
 
 {{-- Compliance / mandate --}}
-<section class="section landing-section-fade" id="trust">
+<section class="section landing-section-fade landing-surface-white" id="trust">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8 text-center mb-5 landing-reveal">
+                <span class="landing-eyebrow">{{ __('Statutory compliance') }}</span>
                 <h2 class="fw-semibold mb-3">{{ __('Built on LGU mandate') }}</h2>
                 <p class="text-muted mb-0">{{ __('APICS Phase I is delivered for the City Government of San Fernando, Pampanga (CGSFP), Office of the City Building Official. The capabilities below reflect the project charter and governing issuances.') }}</p>
             </div>
         </div>
-        <div class="row g-3">
+        <div class="row g-3 align-items-stretch">
             @foreach ([
                 ['P.D. 1096', __('National Building Code alignment for permitting practices.')],
                 ['RA 11032', __('Ease of Doing Business — transparent, time-tracked processing.')],
@@ -116,24 +117,47 @@
                 ['API-first', __('Sanctum /api/v1 for web SPA and future mobile clients.')],
             ] as [$title, $copy])
                 <div class="col-12 col-sm-6 col-lg-3 landing-reveal">
-                    <div class="card h-100 mb-0 landing-lift">
-                        <div class="card-body">
-                            <h3 class="fs-16 fw-semibold">{{ $title }}</h3>
-                            <p class="text-muted mb-0">{{ $copy }}</p>
-                        </div>
-                    </div>
+                    <article class="landing-mandate-card landing-lift">
+                        <h3 class="landing-mandate-card__title">{{ $title }}</h3>
+                        <p class="landing-mandate-card__copy">{{ $copy }}</p>
+                    </article>
                 </div>
             @endforeach
+        </div>
+
+        <div class="row justify-content-center mt-4 landing-reveal">
+            <div class="col-lg-10">
+                <aside class="gwt-transparency-band" aria-label="{{ __('Philippine Transparency Seal') }}">
+                    <a href="{{ route('transparency') }}" class="gwt-transparency-band__seal">
+                        <img
+                            src="{{ asset('images/branding/philippine-transparency-seal.svg') }}"
+                            alt="{{ __('Philippine Transparency Seal — view mandated disclosures') }}"
+                            width="100"
+                            height="100"
+                            decoding="async"
+                        >
+                    </a>
+                    <div>
+                        <h3 class="h6 fw-semibold mb-1">{{ __('Philippine Transparency Seal') }}</h3>
+                        <p class="text-muted fs-14 mb-2">{{ __('Mandated disclosures under the General Appropriations Act Transparency Seal provision — agency mandate, officials, budgets, programs, and procurement information.') }}</p>
+                        <div class="d-flex flex-wrap align-items-center gap-3">
+                            <a href="{{ route('transparency') }}" class="link-primary fw-semibold fs-13">{{ __('View Transparency page') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
+                            <a href="https://www.foi.gov.ph" class="gwt-foi-inline fw-semibold fs-13" rel="noopener noreferrer" target="_blank">{{ __('FOI Portal') }} <i class="ri-external-link-line align-bottom" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                </aside>
+            </div>
         </div>
     </div>
 </section>
 
 {{-- Capabilities --}}
-<section class="section bg-light landing-section-fade" id="services">
+<section class="section landing-section-fade landing-surface-soft bg-light" id="services">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="text-center mb-5 landing-reveal">
+                    <span class="landing-eyebrow">{{ __('End-to-end workflow') }}</span>
                     <h2 class="mb-3 fw-semibold">{{ __('Built for OCBO permitting workflows') }}</h2>
                     <p class="text-muted">{{ __('Phase I modules already in the product — not a marketing checklist. Each link opens a live area of APICS.') }}</p>
                 </div>
@@ -151,10 +175,8 @@
                 <div class="col-12 col-md-6 col-lg-4 landing-reveal">
                     <div class="card card-animate h-100 mb-0 landing-lift">
                         <div class="card-body p-4">
-                            <div class="avatar-sm mb-3">
-                                <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-20">
-                                    <i class="{{ $icon }}" aria-hidden="true"></i>
-                                </div>
+                            <div class="landing-feature-icon mb-3" aria-hidden="true">
+                                <i class="{{ $icon }}"></i>
                             </div>
                             <h3 class="fs-16">{{ __($title) }}</h3>
                             <p class="text-muted mb-3">{{ __($copy) }}</p>
@@ -168,23 +190,33 @@
 </section>
 
 {{-- Showcase --}}
-<section class="section landing-section-fade" id="showcase">
+<section class="section landing-section-fade landing-surface-white" id="showcase">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8 text-center mb-5 landing-reveal">
+                <span class="landing-eyebrow">{{ __('Workspace preview') }}</span>
                 <h2 class="fw-semibold mb-3">{{ __('What you work with after sign-in') }}</h2>
                 <p class="text-muted mb-0">{{ __('Applicant tracking and the OCBO admin console share the same API-first foundation — Axios-driven lists, no full-page reloads on day-to-day actions.') }}</p>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-lg-10 landing-reveal">
-                <div class="card landing-product-chrome mb-0">
-                    <div class="card-header align-items-center d-flex flex-wrap gap-2 py-3">
-                        <x-branding.logo :height="28" class="rounded-circle" />
-                        <h3 class="card-title mb-0 flex-grow-1 fs-15">APICS · {{ __('Admin console') }}</h3>
-                        <a href="{{ route('admin.dashboard') }}" class="btn btn-sm btn-primary">{{ __('Open console') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
+        <div class="landing-reveal landing-browser-wrap">
+                <div class="landing-browser">
+                    <div class="landing-browser__chrome">
+                        <div class="landing-browser__dots" aria-hidden="true">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="landing-browser__url" title="apics.cityofsanfernando.gov.ph/master-data">
+                            apics.cityofsanfernando.gov.ph/master-data
+                        </div>
+                        <div class="landing-browser__actions">
+                            <a href="{{ route('admin.dashboard') }}" class="btn btn-sm btn-primary">{{ __('Open console') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
+                        </div>
                     </div>
-                    <div class="card-body">
+                    <div class="landing-browser__body">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <x-branding.logo :height="28" class="rounded-circle" />
+                            <h3 class="mb-0 flex-grow-1 fs-15 fw-semibold">APICS · {{ __('Admin console') }}</h3>
+                        </div>
                         <div class="row g-4">
                             <div class="col-12 col-lg-4">
                                 <h4 class="text-muted text-uppercase fs-12">{{ __('Quick links') }}</h4>
@@ -236,16 +268,16 @@
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
     </div>
 </section>
 
-{{-- Workflow --}}
-<section class="section bg-light landing-section-fade" id="workflow">
+{{-- Workflow: intake → release --}}
+<section class="section landing-section-fade landing-surface-soft bg-light" id="workflow">
     <div class="container">
         <div class="row align-items-center g-4">
             <div class="col-lg-5 landing-reveal">
+                <span class="landing-eyebrow">{{ __('Process path') }}</span>
                 <h2 class="fw-semibold mb-3">{{ __('From online intake to release') }}</h2>
                 <p class="text-muted mb-4">{{ __('APICS follows the Phase I OCBO process: apply, complete intake, classify, evaluate and inspect, issue Order of Payment, then release or issue compliance notices — with a full audit trail throughout.') }}</p>
                 <a href="{{ route('applications.index') }}" class="btn btn-soft-primary">{{ __('Go to applications') }} <i class="ri-arrow-right-line align-middle" aria-hidden="true"></i></a>
@@ -272,116 +304,138 @@
                 </div>
             </div>
         </div>
+    </div>
+</section>
 
-        <div class="row mt-5 pt-4" id="how-it-works">
-            <div class="col-12 mb-4 landing-reveal">
-                <h3 class="fw-semibold">{{ __('Four steps to get started') }}</h3>
+{{-- Four steps: Register → Sign in → Track → Mandate --}}
+<section class="section landing-section-fade landing-surface-white" id="how-it-works">
+    <div class="container">
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-8 text-center landing-reveal">
+                <span class="landing-eyebrow">{{ __('Getting started') }}</span>
+                <h2 class="fw-semibold mb-2">{{ __('Four steps to get started') }}</h2>
+                <p class="text-muted mb-0">{{ __('The applicant journey: register, sign in after approval, track your permit pipeline, and rely on a statute-aligned platform.') }}</p>
             </div>
+        </div>
 
-            <div class="col-12 col-md-6 col-lg-3 mb-3 landing-reveal" data-auth-visible="guest">
-                <div class="text-center p-3 h-100 landing-lift rounded border bg-white">
-                    <div class="avatar-sm mx-auto mb-3">
-                        <span class="avatar-title bg-primary-subtle text-primary rounded-circle fw-semibold">01</span>
-                    </div>
-                    <h4 class="fs-16">{{ __('Sign in') }}</h4>
-                    <p class="text-muted fs-14">{{ __('Use your approved APICS account to reach applications or the OCBO admin console.') }}</p>
-                    <a href="{{ route('login') }}" class="fs-13 fw-medium">{{ __('Open sign-in') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
+        {{-- Guest: Register → Sign in → Track → Mandate --}}
+        <div class="landing-steps landing-reveal" data-auth-visible="guest">
+            <div class="landing-steps__item">
+                <div class="landing-steps__card landing-lift">
+                    <div class="landing-step-icon mx-auto mb-3" aria-hidden="true">01</div>
+                    <h3 class="fs-16">{{ __('Register') }}</h3>
+                    <p class="text-muted fs-14 mb-3">{{ __('New applicants self-register; OCBO admin approval is required before first sign-in.') }}</p>
+                    <a href="{{ route('register') }}" class="fs-13 fw-medium link-primary">{{ __('Start registration') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
                 </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-3 mb-3 landing-reveal d-none" data-auth-visible="applicant">
-                <div class="text-center p-3 h-100 landing-lift rounded border bg-white">
-                    <div class="avatar-sm mx-auto mb-3">
-                        <span class="avatar-title bg-primary-subtle text-primary rounded-circle fw-semibold">01</span>
-                    </div>
-                    <h4 class="fs-16">{{ __('Your workspace') }}</h4>
-                    <p class="text-muted fs-14">{{ __('Open Applications to draft, submit, and track building permit filings.') }}</p>
-                    <a href="{{ route('applications.index') }}" class="fs-13 fw-medium">{{ __('Open applications') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
+            <div class="landing-steps__item">
+                <div class="landing-steps__card landing-lift">
+                    <div class="landing-step-icon mx-auto mb-3" aria-hidden="true">02</div>
+                    <h3 class="fs-16">{{ __('Sign in') }}</h3>
+                    <p class="text-muted fs-14 mb-3">{{ __('After approval, sign in to reach applications or the OCBO admin console.') }}</p>
+                    <a href="{{ route('login') }}" class="fs-13 fw-medium link-primary">{{ __('Open sign-in') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
                 </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-3 mb-3 landing-reveal d-none" data-auth-visible="admin">
-                <div class="text-center p-3 h-100 landing-lift rounded border bg-white">
-                    <div class="avatar-sm mx-auto mb-3">
-                        <span class="avatar-title bg-primary-subtle text-primary rounded-circle fw-semibold">01</span>
-                    </div>
-                    <h4 class="fs-16">{{ __('Staff console') }}</h4>
-                    <p class="text-muted fs-14">{{ __('Open the OCBO admin console for registrations, master data, and audit.') }}</p>
-                    <a href="{{ route('admin.dashboard') }}" class="fs-13 fw-medium">{{ __('View console') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
+            <div class="landing-steps__item">
+                <div class="landing-steps__card landing-lift">
+                    <div class="landing-step-icon mx-auto mb-3" aria-hidden="true">03</div>
+                    <h3 class="fs-16">{{ __('Track the pipeline') }}</h3>
+                    <p class="text-muted fs-14 mb-3">{{ __('Follow Draft → Submitted → Evaluation → Inspection → Payment → Release with shared status labels.') }}</p>
+                    <a href="{{ route('applications.index') }}" class="fs-13 fw-medium link-primary">{{ __('View applications') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
                 </div>
             </div>
+            <div class="landing-steps__item">
+                <div class="landing-steps__card landing-lift">
+                    <div class="landing-step-icon mx-auto mb-3" aria-hidden="true">04</div>
+                    <h3 class="fs-16">{{ __('Review the mandate') }}</h3>
+                    <p class="text-muted fs-14 mb-3">{{ __('APICS is grounded in P.D. 1096, RA 11032, and LGU QMS — see the compliance foundation above.') }}</p>
+                    <a href="#trust" class="fs-13 fw-medium link-primary">{{ __('Read mandate') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
 
-            <div class="col-12 col-md-6 col-lg-3 mb-3 landing-reveal" data-auth-visible="guest">
-                <div class="text-center p-3 h-100 landing-lift rounded border bg-white">
-                    <div class="avatar-sm mx-auto mb-3">
-                        <span class="avatar-title bg-primary-subtle text-primary rounded-circle fw-semibold">02</span>
-                    </div>
-                    <h4 class="fs-16">{{ __('Register') }}</h4>
-                    <p class="text-muted fs-14">{{ __('New applicants self-register; OCBO admin approval is required before first sign-in.') }}</p>
-                    <a href="{{ route('register') }}" class="fs-13 fw-medium">{{ __('Start registration') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
+        {{-- Applicant --}}
+        <div class="landing-steps landing-reveal d-none" data-auth-visible="applicant">
+            <div class="landing-steps__item">
+                <div class="landing-steps__card landing-lift">
+                    <div class="landing-step-icon mx-auto mb-3" aria-hidden="true">01</div>
+                    <h3 class="fs-16">{{ __('Start an application') }}</h3>
+                    <p class="text-muted fs-14 mb-3">{{ __('Create a draft from unified QMS forms, attach documents, and submit for intake.') }}</p>
+                    <a href="{{ route('applications.index') }}" class="fs-13 fw-medium link-primary">{{ __('Start application') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
                 </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-3 mb-3 landing-reveal d-none" data-auth-visible="applicant">
-                <div class="text-center p-3 h-100 landing-lift rounded border bg-white">
-                    <div class="avatar-sm mx-auto mb-3">
-                        <span class="avatar-title bg-primary-subtle text-primary rounded-circle fw-semibold">02</span>
-                    </div>
-                    <h4 class="fs-16">{{ __('Start an application') }}</h4>
-                    <p class="text-muted fs-14">{{ __('Create a draft from unified QMS forms, attach documents, and submit for intake.') }}</p>
-                    <a href="{{ route('applications.index') }}" class="fs-13 fw-medium">{{ __('Start application') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
+            <div class="landing-steps__item">
+                <div class="landing-steps__card landing-lift">
+                    <div class="landing-step-icon mx-auto mb-3" aria-hidden="true">02</div>
+                    <h3 class="fs-16">{{ __('Your workspace') }}</h3>
+                    <p class="text-muted fs-14 mb-3">{{ __('Open Applications to draft, submit, and track building permit filings.') }}</p>
+                    <a href="{{ route('applications.index') }}" class="fs-13 fw-medium link-primary">{{ __('Open applications') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
                 </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-3 mb-3 landing-reveal d-none" data-auth-visible="admin">
-                <div class="text-center p-3 h-100 landing-lift rounded border bg-white">
-                    <div class="avatar-sm mx-auto mb-3">
-                        <span class="avatar-title bg-primary-subtle text-primary rounded-circle fw-semibold">02</span>
-                    </div>
-                    <h4 class="fs-16">{{ __('Manage master data') }}</h4>
-                    <p class="text-muted fs-14">{{ __('Keep departments, form definitions, and workflow rules current for OCBO offices.') }}</p>
-                    <a href="{{ route('admin.departments') }}" class="fs-13 fw-medium">{{ __('Manage departments') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
+            <div class="landing-steps__item">
+                <div class="landing-steps__card landing-lift">
+                    <div class="landing-step-icon mx-auto mb-3" aria-hidden="true">03</div>
+                    <h3 class="fs-16">{{ __('Track the pipeline') }}</h3>
+                    <p class="text-muted fs-14 mb-3">{{ __('Follow Draft → Submitted → Evaluation → Inspection → Payment → Release with shared status labels.') }}</p>
+                    <a href="{{ route('applications.index') }}" class="fs-13 fw-medium link-primary">{{ __('View applications') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
                 </div>
             </div>
+            <div class="landing-steps__item">
+                <div class="landing-steps__card landing-lift">
+                    <div class="landing-step-icon mx-auto mb-3" aria-hidden="true">04</div>
+                    <h3 class="fs-16">{{ __('Review the mandate') }}</h3>
+                    <p class="text-muted fs-14 mb-3">{{ __('APICS is grounded in P.D. 1096, RA 11032, and LGU QMS — see the compliance foundation above.') }}</p>
+                    <a href="#trust" class="fs-13 fw-medium link-primary">{{ __('Read mandate') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
 
-            <div class="col-12 col-md-6 col-lg-3 mb-3 landing-reveal" data-auth-visible="guest,applicant,admin">
-                <div class="text-center p-3 h-100 landing-lift rounded border bg-white">
-                    <div class="avatar-sm mx-auto mb-3">
-                        <span class="avatar-title bg-primary-subtle text-primary rounded-circle fw-semibold">03</span>
-                    </div>
-                    <h4 class="fs-16">{{ __('Track the pipeline') }}</h4>
-                    <p class="text-muted fs-14">{{ __('Follow Draft → Submitted → Evaluation → Inspection → Payment → Release with shared status labels.') }}</p>
-                    <a href="{{ route('applications.index') }}" class="fs-13 fw-medium">{{ __('View applications') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
+        {{-- Admin --}}
+        <div class="landing-steps landing-reveal d-none" data-auth-visible="admin">
+            <div class="landing-steps__item">
+                <div class="landing-steps__card landing-lift">
+                    <div class="landing-step-icon mx-auto mb-3" aria-hidden="true">01</div>
+                    <h3 class="fs-16">{{ __('Staff console') }}</h3>
+                    <p class="text-muted fs-14 mb-3">{{ __('Open the OCBO admin console for registrations, master data, and audit.') }}</p>
+                    <a href="{{ route('admin.dashboard') }}" class="fs-13 fw-medium link-primary">{{ __('View console') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
                 </div>
             </div>
-
-            <div class="col-12 col-md-6 col-lg-3 mb-3 landing-reveal" data-auth-visible="guest,applicant">
-                <div class="text-center p-3 h-100 landing-lift rounded border bg-white">
-                    <div class="avatar-sm mx-auto mb-3">
-                        <span class="avatar-title bg-primary-subtle text-primary rounded-circle fw-semibold">04</span>
-                    </div>
-                    <h4 class="fs-16">{{ __('Review the mandate') }}</h4>
-                    <p class="text-muted fs-14">{{ __('APICS is grounded in P.D. 1096, RA 11032, and LGU QMS — see the compliance foundation above.') }}</p>
-                    <a href="#trust" class="fs-13 fw-medium">{{ __('Read mandate') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
+            <div class="landing-steps__item">
+                <div class="landing-steps__card landing-lift">
+                    <div class="landing-step-icon mx-auto mb-3" aria-hidden="true">02</div>
+                    <h3 class="fs-16">{{ __('Manage master data') }}</h3>
+                    <p class="text-muted fs-14 mb-3">{{ __('Keep departments, form definitions, and workflow rules current for OCBO offices.') }}</p>
+                    <a href="{{ route('admin.departments') }}" class="fs-13 fw-medium link-primary">{{ __('Manage departments') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
                 </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-3 mb-3 landing-reveal d-none" data-auth-visible="admin">
-                <div class="text-center p-3 h-100 landing-lift rounded border bg-white">
-                    <div class="avatar-sm mx-auto mb-3">
-                        <span class="avatar-title bg-primary-subtle text-primary rounded-circle fw-semibold">04</span>
-                    </div>
-                    <h4 class="fs-16">{{ __('Audit trail') }}</h4>
-                    <p class="text-muted fs-14">{{ __('Review auth and mutation events with actor, IP, and safe metadata for ICT oversight.') }}</p>
-                    <a href="{{ route('admin.audit') }}" class="fs-13 fw-medium">{{ __('Open audit trail') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
+            <div class="landing-steps__item">
+                <div class="landing-steps__card landing-lift">
+                    <div class="landing-step-icon mx-auto mb-3" aria-hidden="true">03</div>
+                    <h3 class="fs-16">{{ __('Track the pipeline') }}</h3>
+                    <p class="text-muted fs-14 mb-3">{{ __('Follow Draft → Submitted → Evaluation → Inspection → Payment → Release with shared status labels.') }}</p>
+                    <a href="{{ route('applications.index') }}" class="fs-13 fw-medium link-primary">{{ __('View applications') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="landing-steps__item">
+                <div class="landing-steps__card landing-lift">
+                    <div class="landing-step-icon mx-auto mb-3" aria-hidden="true">04</div>
+                    <h3 class="fs-16">{{ __('Audit trail') }}</h3>
+                    <p class="text-muted fs-14 mb-3">{{ __('Review auth and mutation events with actor, IP, and safe metadata for ICT oversight.') }}</p>
+                    <a href="{{ route('admin.audit') }}" class="fs-13 fw-medium link-primary">{{ __('Open audit trail') }} <i class="ri-arrow-right-s-line align-bottom" aria-hidden="true"></i></a>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-{{-- Access --}}
-<section class="section bg-primary landing-section-fade" id="access">
+{{-- Access — midnight slate (matches auth left panel) --}}
+<section class="section landing-access landing-section-fade" id="access">
     <div class="container">
         <div class="row align-items-center g-4">
-            <div class="col-lg-6 text-white landing-reveal">
-                <h2 class="fw-semibold text-white mb-3">{{ __('Citizen applications & OCBO admin') }}</h2>
-                <p class="text-white-50 mb-4">{{ __('APICS uses Laravel Sanctum token authentication under /api/v1. New applicants self-register and wait for OCBO admin approval before signing in. Authorized staff use the admin console for master data, registration reviews, and audit.') }}</p>
+            <div class="col-lg-6 landing-reveal">
+                <span class="landing-eyebrow landing-eyebrow--on-dark">{{ __('Secure access') }}</span>
+                <h2 class="landing-access__title mb-3">{{ __('Citizen applications & OCBO admin') }}</h2>
+                <p class="landing-access__copy mb-4">{{ __('APICS uses Laravel Sanctum token authentication under /api/v1. New applicants self-register and wait for OCBO admin approval before signing in. Authorized staff use the admin console for master data, registration reviews, and audit.') }}</p>
                 <div class="d-flex flex-wrap gap-2">
                     <a href="{{ route('register') }}" class="btn btn-light" data-auth-visible="guest">{{ __('Register') }}</a>
                     <a href="{{ route('login') }}" class="btn btn-outline-light" data-auth-visible="guest">{{ __('Sign in') }}</a>
@@ -393,21 +447,17 @@
             <div class="col-lg-6">
                 <div class="row g-3">
                     <div class="col-12 col-sm-6 landing-reveal">
-                        <div class="card bg-white bg-opacity-10 border-0 h-100 mb-0 landing-lift">
-                            <div class="card-body text-white">
-                                <h3 class="fs-16 text-white">{{ __('Applicants') }}</h3>
-                                <p class="text-white-50 mb-3">{{ __('Draft, submit, and track building permit applications online.') }}</p>
-                                <a href="{{ route('applications.index') }}" class="text-white fw-medium">{{ __('Applications') }} <i class="ri-arrow-right-line" aria-hidden="true"></i></a>
-                            </div>
+                        <div class="landing-access-card landing-lift p-4">
+                            <h3>{{ __('Applicant portal') }}</h3>
+                            <p>{{ __('Draft, submit, and track building permit applications online.') }}</p>
+                            <a href="{{ route('applications.index') }}">{{ __('Applications') }} <i class="ri-arrow-right-line" aria-hidden="true"></i></a>
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 landing-reveal">
-                        <div class="card bg-white bg-opacity-10 border-0 h-100 mb-0 landing-lift">
-                            <div class="card-body text-white">
-                                <h3 class="fs-16 text-white">{{ __('OCBO staff') }}</h3>
-                                <p class="text-white-50 mb-3">{{ __('Departments, form definitions, and immutable audit visibility.') }}</p>
-                                <a href="{{ route('admin.dashboard') }}" class="text-white fw-medium">{{ __('Admin') }} <i class="ri-arrow-right-line" aria-hidden="true"></i></a>
-                            </div>
+                        <div class="landing-access-card landing-lift p-4">
+                            <h3>{{ __('OCBO admin') }}</h3>
+                            <p>{{ __('Departments, form definitions, and immutable audit visibility.') }}</p>
+                            <a href="{{ route('admin.dashboard') }}">{{ __('Admin') }} <i class="ri-arrow-right-line" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>
@@ -416,22 +466,20 @@
     </div>
 </section>
 
-{{-- CTA --}}
-<section class="section landing-section-fade">
+{{-- Closing CTA --}}
+<section class="section landing-section-fade landing-surface-white">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 text-center landing-reveal">
-                <h2 class="fw-semibold mb-3">{{ __('Ready to use APICS?') }}</h2>
-                <p class="text-muted mb-4" data-auth-visible="guest">{{ __('Register as an applicant (admin approval required), then sign in to draft and track permits. Staff continue to the admin console for registrations, master data, and audit.') }}</p>
-                <p class="text-muted mb-4 d-none" data-auth-visible="applicant">{{ __('Continue to your applications to create drafts, submit for intake, and track OCBO status updates.') }}</p>
-                <p class="text-muted mb-4 d-none" data-auth-visible="admin">{{ __('Open the admin console for registrations, master data, workflows, and audit — or review applicant filings.') }}</p>
-                <div class="d-flex flex-wrap justify-content-center gap-2">
-                    <a href="{{ route('register') }}" class="btn btn-success btn-lg" data-auth-visible="guest">{{ __('Register') }}</a>
-                    <a href="{{ route('login') }}" class="btn btn-outline-primary btn-lg" data-auth-visible="guest">{{ __('Sign in') }}</a>
-                    <a href="{{ route('applications.index') }}" class="btn btn-primary btn-lg d-none" data-auth-visible="applicant">{{ __('My applications') }}</a>
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-success btn-lg d-none" data-auth-visible="admin">{{ __('Admin console') }}</a>
-                    <a href="{{ route('admin.evaluation-queue') }}" class="btn btn-outline-primary btn-lg d-none" data-auth-visible="admin">{{ __('Evaluation queue') }}</a>
-                </div>
+        <div class="landing-cta-panel landing-reveal">
+            <h2 class="fw-semibold mb-3">{{ __('Ready to use APICS?') }}</h2>
+            <p class="text-muted mb-4" data-auth-visible="guest">{{ __('Register as an applicant (admin approval required), then sign in to draft and track permits.') }}</p>
+            <p class="text-muted mb-4 d-none" data-auth-visible="applicant">{{ __('Continue to your applications to create drafts, submit for intake, and track OCBO status updates.') }}</p>
+            <p class="text-muted mb-4 d-none" data-auth-visible="admin">{{ __('Open the admin console for registrations, master data, workflows, and audit.') }}</p>
+            <div class="landing-cta-panel__actions">
+                <a href="{{ route('register') }}" class="btn btn-primary btn-lg" data-auth-visible="guest">{{ __('Register as applicant') }}</a>
+                <a href="{{ route('login') }}" class="landing-cta-panel__link" data-auth-visible="guest">{{ __('Sign in to workspace') }} <span aria-hidden="true">→</span></a>
+                <a href="{{ route('applications.index') }}" class="btn btn-primary btn-lg d-none" data-auth-visible="applicant">{{ __('My applications') }}</a>
+                <a href="{{ route('admin.dashboard') }}" class="btn btn-primary btn-lg d-none" data-auth-visible="admin">{{ __('Admin console') }}</a>
+                <a href="{{ route('admin.evaluation-queue') }}" class="landing-cta-panel__link d-none" data-auth-visible="admin">{{ __('Evaluation queue') }} <span aria-hidden="true">→</span></a>
             </div>
         </div>
     </div>

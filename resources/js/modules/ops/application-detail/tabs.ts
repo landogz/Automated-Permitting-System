@@ -96,10 +96,10 @@ export function tabNavHtml(active = 'overview'): string {
         { id: 'technical', label: 'Technical (QMS-36)', icon: 'ri-building-2-line' },
         { id: 'documents', label: 'Document Vault', icon: 'ri-folder-2-line' },
         { id: 'routing', label: 'Routing & Reviews', icon: 'ri-organization-chart' },
-        { id: 'inspection', label: 'Inspection forms', icon: 'ri-clipboard-line' },
+        { id: 'inspection', label: 'Inspection Forms', icon: 'ri-clipboard-line' },
     ];
 
-    return `<ul class="nav nav-tabs nav-tabs-custom nav-success mb-0 flex-wrap" role="tablist">
+    return `<ul class="nav nav-tabs nav-tabs-custom apics-nav-tabs mb-0 flex-wrap" role="tablist">
         ${tabs
             .map(
                 (tab) => `<li class="nav-item" role="presentation">
@@ -108,7 +108,7 @@ export function tabNavHtml(active = 'overview'): string {
                         data-ops-detail-tab="${tab.id}"
                         role="tab"
                         aria-selected="${active === tab.id ? 'true' : 'false'}">
-                        <i class="${tab.icon} align-bottom me-1"></i>${escapeHtml(tab.label)}
+                        <i class="${tab.icon}" aria-hidden="true"></i>${escapeHtml(tab.label)}
                     </button>
                 </li>`,
             )

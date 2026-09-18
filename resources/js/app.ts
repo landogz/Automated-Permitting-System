@@ -12,6 +12,7 @@ import '../css/apics-notifications-inbox.css';
 import '../css/apics-audit.css';
 import '../css/apics-users.css';
 import '../css/landing-motion.css';
+import '../css/apics-landing.css';
 import { toastSuccess, toastError } from './utils/toast';
 import { showLoading, hideLoading, withLoading, withButtonLoading } from './utils/loading';
 import { initAppShell } from './modules/layout/shell';

@@ -17,7 +17,7 @@ export const APPLICATION_FORM_TABS: Array<{
 }> = [
     { id: 'project', label: 'Project & Site', icon: 'ri-map-pin-line', short: 'Project' },
     { id: 'owner', label: 'Owner / Applicant', icon: 'ri-user-line', short: 'Owner' },
-    { id: 'building', label: 'Building data', icon: 'ri-building-2-line', short: 'Building' },
+    { id: 'building', label: 'Building Data', icon: 'ri-building-2-line', short: 'Building' },
     { id: 'professionals', label: 'Professionals', icon: 'ri-account-box-line', short: 'Pros' },
     { id: 'documents', label: 'Documents', icon: 'ri-folder-2-line', short: 'Docs' },
 ];
@@ -50,7 +50,7 @@ export function groupSectionsByTab(schema?: FormSchema | null): Record<Applicati
 }
 
 export function applicationFormTabNavHtml(active: ApplicationFormTabId = 'project'): string {
-    return `<ul class="nav nav-tabs nav-tabs-custom nav-success mb-0 flex-wrap apics-app-form__tabs" role="tablist">
+    return `<ul class="nav nav-tabs nav-tabs-custom apics-nav-tabs mb-0 flex-wrap apics-app-form__tabs" role="tablist">
         ${APPLICATION_FORM_TABS.map(
             (tab) => `<li class="nav-item" role="presentation">
                 <button type="button"
@@ -58,7 +58,7 @@ export function applicationFormTabNavHtml(active: ApplicationFormTabId = 'projec
                     data-app-form-tab="${tab.id}"
                     role="tab"
                     aria-selected="${active === tab.id ? 'true' : 'false'}">
-                    <i class="${tab.icon} align-bottom me-1"></i>
+                    <i class="${tab.icon}" aria-hidden="true"></i>
                     <span class="d-none d-md-inline">${escapeHtml(tab.label)}</span>
                     <span class="d-md-none">${escapeHtml(tab.short)}</span>
                 </button>

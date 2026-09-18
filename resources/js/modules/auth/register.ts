@@ -1,3 +1,4 @@
+import { bindPasswordToggles } from '../../utils/password-toggle';
 import { toastError, toastSuccess } from '../../utils/toast';
 
 function firstValidationMessage(error: any): string {
@@ -11,6 +12,31 @@ function firstValidationMessage(error: any): string {
     return error?.response?.data?.message || 'Registration failed';
 }
 
+function normalizePhone(raw: string): string | null {
+    const digits = raw.replace(/\D/g, '');
+    if (!digits) {
+        return null;
+    }
+
+    if (digits.startsWith('63') && digits.length >= 12) {
+        return `0${digits.slice(2, 12)}`;
+    }
+
+    if (digits.startsWith('09') && digits.length >= 11) {
+        return digits.slice(0, 11);
+    }
+
+    if (digits.length === 9) {
+        return `09${digits}`;
+    }
+
+    if (digits.length === 10 && digits.startsWith('9')) {
+        return `0${digits}`;
+    }
+
+    return digits.length >= 11 ? digits.slice(0, 11) : `09${digits}`;
+}
+
 export function initRegisterPage(): void {
     const form = document.getElementById('register-form') as HTMLFormElement | null;
     if (!form) {
@@ -18,13 +44,12 @@ export function initRegisterPage(): void {
     }
 
     const submitBtn = document.getElementById('register-submit') as HTMLButtonElement | null;
-    const addon = document.getElementById('password-addon');
-    const passwordInput = document.getElementById('password') as HTMLInputElement | null;
+    const phoneInput = document.getElementById('phone') as HTMLInputElement | null;
 
-    addon?.addEventListener('click', () => {
-        if (!passwordInput) return;
-        const isPassword = passwordInput.type === 'password';
-        passwordInput.type = isPassword ? 'text' : 'password';
+    bindPasswordToggles(form);
+
+    phoneInput?.addEventListener('input', () => {
+        phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 9);
     });
 
     form.addEventListener('submit', async (event) => {
@@ -32,7 +57,7 @@ export function initRegisterPage(): void {
 
         const name = (document.getElementById('name') as HTMLInputElement).value.trim();
         const email = (document.getElementById('email') as HTMLInputElement).value.trim();
-        const phone = (document.getElementById('phone') as HTMLInputElement).value.trim();
+        const phoneRaw = (document.getElementById('phone') as HTMLInputElement).value.trim();
         const password = (document.getElementById('password') as HTMLInputElement).value;
         const passwordConfirmation = (document.getElementById('password_confirmation') as HTMLInputElement).value;
 
@@ -44,7 +69,7 @@ export function initRegisterPage(): void {
             const { data } = await window.axios.post('/api/v1/auth/register', {
                 name,
                 email,
-                phone: phone || null,
+                phone: normalizePhone(phoneRaw),
                 password,
                 password_confirmation: passwordConfirmation,
             });

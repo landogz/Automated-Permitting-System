@@ -5,6 +5,7 @@
     <title>@yield('title', 'Sign In') | APICS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="APICS — Automated Permitting, Inspection, and Compliance System for the Office of the City Building Official, City of San Fernando, Pampanga.">
     <link rel="shortcut icon" href="{{ asset('images/branding/favicon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/branding/apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('images/branding/csfp-seal.png') }}">
@@ -16,49 +17,68 @@
     <link href="{{ asset('master/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('master/assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('master/assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
+    @vite(['resources/css/apics-auth.css', 'resources/js/app.ts'])
 </head>
-<body>
-<div class="auth-page-wrapper pt-5">
-    <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
-        <div class="bg-overlay"></div>
-        <div class="shape">
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
-                <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
-            </svg>
-        </div>
-    </div>
+<body class="apics-auth">
+<a href="#apics-auth-form" class="visually-hidden-focusable position-absolute top-0 start-0 m-3 btn btn-light z-3">{{ __('Skip to form') }}</a>
 
-    <div class="auth-page-content">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="text-center mt-sm-5 mb-4 text-white-50">
-                        <div>
-                            <a href="{{ route('home') }}" class="d-inline-flex flex-column align-items-center gap-2 auth-logo text-decoration-none">
-                                <x-branding.logo :height="72" class="rounded-circle shadow" />
-                                <span class="fs-18 fw-semibold text-white">APICS</span>
-                            </a>
-                        </div>
-                        <p class="mt-3 fs-15 fw-medium">City of San Fernando, Pampanga · OCBO</p>
-                    </div>
-                </div>
+<div class="apics-auth-shell">
+    <aside class="apics-auth-panel" aria-label="{{ __('Agency identity') }}">
+        <img
+            src="{{ asset('images/branding/csfp-seal.png') }}"
+            alt=""
+            class="apics-auth-panel__watermark"
+            width="360"
+            height="360"
+            decoding="async"
+            aria-hidden="true"
+        >
+
+        <div class="apics-auth-panel__brand">
+            <img src="{{ asset('images/branding/csfp-seal.png') }}" alt="{{ __('City of San Fernando, Pampanga — Official Seal') }}" class="apics-auth-panel__seal" width="56" height="56" decoding="async">
+            <div class="apics-auth-panel__brand-text">
+                <strong>APICS</strong>
+                <span>{{ __('Office of the City Building Official') }}</span>
             </div>
+        </div>
 
+        <div class="apics-auth-panel__hero">
+            <div class="apics-auth-panel__copy">
+                <span class="apics-auth-panel__eyebrow">
+                    <i class="ri-government-line" aria-hidden="true"></i>
+                    {{ __('Secure civic portal') }}
+                </span>
+                <h1>@yield('panel-title', __('Welcome to APICS'))</h1>
+                <p>@yield('panel-copy', __('Sign in to file, track, and manage building permit applications with the City of San Fernando OCBO.'))</p>
+                <ul class="apics-auth-panel__points">
+                    <li>
+                        <span class="apics-auth-panel__point-icon" aria-hidden="true"><i class="ri-check-line"></i></span>
+                        <span>{{ __('Direct submission of building & ancillary permits') }}</span>
+                    </li>
+                    <li>
+                        <span class="apics-auth-panel__point-icon" aria-hidden="true"><i class="ri-check-line"></i></span>
+                        <span>{{ __('Real-time joint inspection scheduling & status tracking') }}</span>
+                    </li>
+                    <li>
+                        <span class="apics-auth-panel__point-icon" aria-hidden="true"><i class="ri-check-line"></i></span>
+                        <span>{{ __('Compliant with RA 11032 (Ease of Doing Business)') }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="apics-auth-panel__trust">
+            <strong>{{ __('Republic of the Philippines') }}</strong>
+            {{ __('City Government of San Fernando, Pampanga · OCBO') }}
+        </div>
+    </aside>
+
+    <main class="apics-auth-main">
+        <div id="apics-auth-form" tabindex="-1" class="w-100 d-flex justify-content-center">
             @yield('content')
         </div>
-    </div>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="text-center">
-                        <p class="mb-0 text-muted">&copy; <script>document.write(new Date().getFullYear())</script> APICS · CSFP OCBO</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
+        <p class="apics-auth-main__legal mb-0">&copy; <script>document.write(new Date().getFullYear())</script> APICS · CSFP OCBO</p>
+    </main>
 </div>
 
 <script src="{{ asset('master/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -67,9 +87,6 @@
 <script src="{{ asset('master/assets/libs/feather-icons/feather.min.js') }}"></script>
 <script src="{{ asset('master/assets/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
 <script src="{{ asset('master/assets/js/plugins.js') }}"></script>
-<script src="{{ asset('master/assets/libs/particles.js/particles.js') }}"></script>
-<script src="{{ asset('master/assets/js/pages/particles.app.js') }}"></script>
-<script src="{{ asset('master/assets/js/pages/password-addon.init.js') }}"></script>
-@vite(['resources/js/app.ts'])
+{{-- Password eye toggles are handled by Vite modules (utils/password-toggle) — do not load Velzon password-addon.init.js (double-bind cancels the toggle). --}}
 </body>
 </html>

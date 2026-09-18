@@ -179,17 +179,27 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="user-password" class="form-label">Password <span class="text-danger" id="user-password-required">*</span></label>
-                                <div class="form-icon">
-                                    <input type="password" class="form-control form-control-icon" id="user-password" autocomplete="new-password" placeholder="••••••••">
-                                    <i class="ri-lock-password-line" aria-hidden="true"></i>
+                                <div class="position-relative apics-pass-field">
+                                    <div class="form-icon">
+                                        <input type="password" class="form-control form-control-icon pe-5" id="user-password" autocomplete="new-password" placeholder="••••••••">
+                                        <i class="ri-lock-password-line" aria-hidden="true"></i>
+                                    </div>
+                                    <button class="btn btn-link apics-pass-field__toggle password-addon material-shadow-none" type="button" data-password-toggle="user-password" aria-label="Show password" aria-pressed="false">
+                                        <i class="ri-eye-line align-middle" aria-hidden="true"></i>
+                                    </button>
                                 </div>
                                 <div class="form-text" id="user-password-hint">Min 8 chars with upper, lower, number, symbol.</div>
                             </div>
                             <div class="col-md-6">
                                 <label for="user-password-confirmation" class="form-label">Confirm password <span class="text-danger" id="user-password-confirm-required">*</span></label>
-                                <div class="form-icon">
-                                    <input type="password" class="form-control form-control-icon" id="user-password-confirmation" autocomplete="new-password" placeholder="••••••••">
-                                    <i class="ri-lock-2-line" aria-hidden="true"></i>
+                                <div class="position-relative apics-pass-field">
+                                    <div class="form-icon">
+                                        <input type="password" class="form-control form-control-icon pe-5" id="user-password-confirmation" autocomplete="new-password" placeholder="••••••••">
+                                        <i class="ri-lock-2-line" aria-hidden="true"></i>
+                                    </div>
+                                    <button class="btn btn-link apics-pass-field__toggle password-addon material-shadow-none" type="button" data-password-toggle="user-password-confirmation" aria-label="Show password" aria-pressed="false">
+                                        <i class="ri-eye-line align-middle" aria-hidden="true"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>

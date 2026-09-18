@@ -15,6 +15,18 @@ Route::get('/login', LoginPageController::class)->name('login');
 Route::view('/register', 'auth.register')->name('register');
 Route::view('/applications', 'public.applications')->name('applications.index');
 
+Route::view('/transparency', 'public.policy.transparency')->name('transparency');
+Route::view('/citizens-charter', 'public.policy.citizens-charter')->name('citizens-charter');
+Route::view('/privacy', 'public.policy.privacy')->name('privacy');
+Route::view('/accessibility', 'public.policy.accessibility')->name('accessibility');
+Route::view('/contact', 'public.policy.contact')->name('contact');
+Route::view('/sitemap', 'public.policy.sitemap')->name('sitemap');
+Route::view('/faqs', 'public.policy.faqs')->name('faqs');
+Route::view('/downloads', 'public.policy.downloads')->name('downloads');
+Route::view('/archives', 'public.policy.archives')->name('archives');
+Route::view('/intellectual-property', 'public.policy.intellectual-property')->name('intellectual-property');
+Route::view('/security-policy', 'public.policy.security-policy')->name('security-policy');
+
 Route::prefix('admin')->group(function (): void {
     Route::get('/', DashboardController::class)->name('admin.dashboard');
     Route::view('/departments', 'admin.departments')->name('admin.departments');

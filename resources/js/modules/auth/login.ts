@@ -1,5 +1,6 @@
 import { setApiToken } from '../../bootstrap';
 import { setApiUser } from '../../utils/auth';
+import { bindPasswordToggles } from '../../utils/password-toggle';
 import { toastError, toastSuccess } from '../../utils/toast';
 
 function firstErrorMessage(error: any, fallback: string): string {
@@ -77,11 +78,7 @@ export function initLoginPage(): void {
     }
 
     const passwordInput = document.getElementById('password-input') as HTMLInputElement | null;
-    const addon = document.getElementById('password-addon');
-    addon?.addEventListener('click', () => {
-        if (!passwordInput) return;
-        passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
-    });
+    bindPasswordToggles(form);
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();

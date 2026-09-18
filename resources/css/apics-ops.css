@@ -82,26 +82,36 @@
     color: var(--vz-secondary-color, #878a99) !important;
 }
 
-/* Queue Active | Completed tabs */
+/* Queue Active | Completed tabs — Neutral Civic pills */
 .apics-ops-queue__tabs .nav-link {
     border-radius: 999px;
     font-size: 0.8125rem;
     font-weight: 600;
     padding: 0.4rem 0.9rem;
-    color: var(--vz-secondary-color, #878a99);
+    color: #64748b;
     background: transparent;
     border: 1px solid transparent;
 }
 
 .apics-ops-queue__tabs .nav-link:hover {
-    color: var(--vz-body-color, #212529);
-    background: var(--vz-secondary-bg, #f3f6f9);
+    color: #334155;
+    background: #f8fafc;
 }
 
 .apics-ops-queue__tabs .nav-link.active {
-    color: var(--vz-primary, #ff2222);
-    background: rgb(64 81 137 / 0.1);
-    border-color: rgb(64 81 137 / 0.15);
+    color: #0f172a;
+    background: #ffffff;
+    border-color: #e2e8f0;
+    box-shadow: inset 0 -2px 0 #0284c7;
+}
+
+.apics-ops-queue__tabs .nav-link .badge {
+    font-weight: 600;
+}
+
+.apics-ops-queue__count {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
 }
 
 .apics-ops-archive-card {
@@ -710,6 +720,122 @@
     font-size: 0.8125rem;
     font-weight: 500;
     padding: 0.55rem 0.85rem;
+}
+
+/**
+ * Neutral Civic content tabs (application detail / form / view)
+ * Inactive = slate gray (never brand red). Active = slate-900 + sky underline.
+ * Red reserved for alert badges only.
+ */
+.apics-nav-tabs.nav-tabs-custom,
+.apics-app-detail__tabnav .nav-tabs-custom,
+.apics-app-form__tabnav .nav-tabs-custom {
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.apics-nav-tabs.nav-tabs-custom .nav-link,
+.apics-app-detail__tabnav .nav-tabs-custom .nav-link,
+.apics-app-form__tabnav .nav-tabs-custom .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 0;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #64748b !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0;
+    box-shadow: none !important;
+}
+
+.apics-nav-tabs.nav-tabs-custom .nav-link > i,
+.apics-app-detail__tabnav .nav-tabs-custom .nav-link > i,
+.apics-app-form__tabnav .nav-tabs-custom .nav-link > i {
+    font-size: 1rem;
+    line-height: 1;
+    color: #94a3b8 !important;
+}
+
+.apics-nav-tabs.nav-tabs-custom .nav-link:hover,
+.apics-nav-tabs.nav-tabs-custom .nav-link:focus-visible,
+.apics-app-detail__tabnav .nav-tabs-custom .nav-link:hover,
+.apics-app-detail__tabnav .nav-tabs-custom .nav-link:focus-visible,
+.apics-app-form__tabnav .nav-tabs-custom .nav-link:hover,
+.apics-app-form__tabnav .nav-tabs-custom .nav-link:focus-visible {
+    color: #334155 !important;
+    background: transparent !important;
+}
+
+.apics-nav-tabs.nav-tabs-custom .nav-link:hover > i,
+.apics-nav-tabs.nav-tabs-custom .nav-link:focus-visible > i,
+.apics-app-detail__tabnav .nav-tabs-custom .nav-link:hover > i,
+.apics-app-detail__tabnav .nav-tabs-custom .nav-link:focus-visible > i,
+.apics-app-form__tabnav .nav-tabs-custom .nav-link:hover > i,
+.apics-app-form__tabnav .nav-tabs-custom .nav-link:focus-visible > i {
+    color: #64748b !important;
+}
+
+.apics-nav-tabs.nav-tabs-custom .nav-link.active,
+.apics-app-detail__tabnav .nav-tabs-custom .nav-link.active,
+.apics-app-form__tabnav .nav-tabs-custom .nav-link.active {
+    color: #0f172a !important;
+    font-weight: 700;
+    background: #ffffff !important;
+}
+
+.apics-nav-tabs.nav-tabs-custom .nav-link.active > i,
+.apics-app-detail__tabnav .nav-tabs-custom .nav-link.active > i,
+.apics-app-form__tabnav .nav-tabs-custom .nav-link.active > i {
+    color: #0284c7 !important;
+}
+
+.apics-nav-tabs.nav-tabs-custom .nav-link.active::after,
+.apics-app-detail__tabnav .nav-tabs-custom .nav-link.active::after,
+.apics-app-form__tabnav .nav-tabs-custom .nav-link.active::after {
+    content: '';
+    position: absolute;
+    left: 0.65rem;
+    right: 0.65rem;
+    bottom: 0;
+    height: 2px;
+    border-radius: 999px;
+    background: #0284c7;
+}
+
+/* Kill Velzon nav-success / nav-primary underline colors on APICS tabs */
+.apics-nav-tabs.nav-success .nav-link.active,
+.apics-nav-tabs.nav-primary .nav-link.active,
+.apics-app-detail__tabnav .nav-success .nav-link.active,
+.apics-app-form__tabnav .nav-success .nav-link.active {
+    color: #0f172a !important;
+}
+
+.apics-nav-tabs.nav-success .nav-link::after,
+.apics-nav-tabs.nav-primary .nav-link::after,
+.apics-app-detail__tabnav .nav-success .nav-link::after,
+.apics-app-form__tabnav .nav-success .nav-link::after {
+    background: transparent !important;
+}
+
+.apics-nav-alert-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.125rem;
+    height: 1.125rem;
+    margin-left: 0.25rem;
+    padding: 0 0.35rem;
+    border-radius: 9999px;
+    font-size: 0.625rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    background: #ff2222;
+    vertical-align: middle;
 }
 
 .apics-timeline-stepper {

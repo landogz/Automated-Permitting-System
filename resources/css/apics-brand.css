@@ -124,9 +124,11 @@
     border-color: var(--apics-brand);
 }
 
-.nav-pills .nav-link.active,
-.nav-tabs .nav-link.active {
-    color: var(--apics-brand);
+/* Do not paint every Bootstrap/Velzon tab active state brand-red —
+ * content tabs use Neutral Civic palette in apics-ops.css (.apics-nav-tabs). */
+.nav-pills .nav-link.active {
+    color: #fff;
+    background-color: var(--apics-brand);
 }
 
 .progress-bar {

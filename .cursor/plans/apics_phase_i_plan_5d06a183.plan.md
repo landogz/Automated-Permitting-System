@@ -516,6 +516,17 @@ Create [`.cursor/rules/update-project-plan-on-done.mdc`](.cursor/rules/update-pr
 | 2026-09-18 | **Sidebar production pass:** civic-blue active strip/icon (`#38BDF8`); flush edge tab; elevated badge contrast; fixed 20px icon boxes | Remaining: staging → KT → production |
 | 2026-09-18 | **Uniform modal footers:** shared `apics-btn-cancel` / `apics-btn-cta` craft (icon chip + red shadow) across account + admin + applicant modals | Remaining: staging → KT → production |
 | 2026-09-19 | **Modal footer flat CTAs:** solid `#FF2222` primary (View-details style); inline icons on Cancel/Close/secondary/CTA; removed chip/shadow craft | Remaining: staging → KT → production |
+| 2026-09-19 | **Neutral Civic tabs:** inactive slate `#64748B` (not brand red); active slate-900 + sky `#0284C7` underline; Title Case labels; red alert badge only | Remaining: staging → KT → production |
+| 2026-09-19 | **Password eye toggles:** shared `utils/password-toggle`; removed Velzon double-bind; login/register/profile/users eyes update icon + aria | Remaining: staging → KT → production |
+| 2026-09-19 | **Civic auth redesign:** split-screen login/register (navy panel + white form); navy CTAs; blue links; Forgot password modal; register 2-col + `09` phone prefix | Remaining: staging → KT → production |
+| 2026-09-19 | **Civic auth polish:** true-split (no floating card); left seal watermark + RA 11032 bullets; no card seal dupe; muted Back link; WCAG focus ring; clearer help text | Remaining: staging → KT → production |
+| 2026-09-19 | **Civic auth final pass:** form ~472–480px; 44px inputs; watermark bottom-right; soft check pills; ← Back to home; 11px legal footer | Remaining: staging → KT → production |
+| 2026-09-19 | **Civic auth 1% polish:** register form ~576px (placeholders clear eye toggle); shared form min-height (Sign In↔Register no jump); badge align; Slate-300 6px inputs | Remaining: staging → KT → production |
+| 2026-09-19 | **Landing civic slate:** midnight access band; slate CTAs (no alarm red); cool feature icons; hero grid + scale; macOS browser preview; section eyebrows | Remaining: staging → KT → production |
+| 2026-09-19 | **Landing rhythm polish:** tighter section padding; mandate trust cards; wider browser shadow; Register→Sign-in steps + connectors; closing CTA panel | Remaining: staging → KT → production |
+| 2026-09-19 | **DICT / GWTD alignment:** top bar (#222), masthead, PhST, Transparency Seal, skip-link, agency+standard footers; policy pages (charter, privacy, a11y, contact, sitemap, FAQs) | Remaining: staging → KT → production |
+| 2026-09-19 | **GWTD footer redesign:** agency footer (Downloads/Archives/Sitemap/FAQs); standard footer (large Republic seal, GOVPH directory, IPR/Privacy/Security, public-domain notice) | Remaining: staging → KT → production |
+| 2026-09-19 | **GWTD polish (Annex C tweaks):** GOVPH→gov.ph; Skip to content/footer; PhST label + WorldTimeAPI sync; Transparency→local page + FOI widget; public-domain under seal; data.gov.ph/foi.gov.ph; agency phone/email/hours; WCAG nav/footer contrast | Confirm Annex C PDF top-bar table + NGA vs GWTD sign-off with ICT |
 | — | Next | Staging, training/KT, production go-live + warranty |
 
 Also mirror this requirement in [`CLAUDE.md`](CLAUDE.md) under engineering standards.

@@ -1093,14 +1093,23 @@ html[data-sidebar-size='sm-hover']:not(:hover) .apics-brand-lockup__text {
     right: 0.15rem;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 3;
+    z-index: 5;
     color: #878a99 !important;
     padding: 0.45rem 0.65rem;
     line-height: 1;
+    pointer-events: auto;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.apics-pass-field .form-control-icon {
+    padding-right: 2.75rem !important;
 }
 
 .apics-pass-field__toggle:hover,
-.apics-pass-field__toggle:focus {
+.apics-pass-field__toggle:focus,
+.apics-pass-field__toggle:focus-visible {
     color: #ff2222 !important;
 }
 

@@ -100,7 +100,7 @@ function noticeTypeLabel(type: string): string {
 
 const VIEW_TABS = [
     { id: 'overview', label: 'Overview & Location', icon: 'ri-map-pin-line' },
-    { id: 'details', label: 'Form details', icon: 'ri-file-list-3-line' },
+    { id: 'details', label: 'Form Details', icon: 'ri-file-list-3-line' },
     { id: 'documents', label: 'Documents', icon: 'ri-folder-2-line' },
     { id: 'compliance', label: 'Compliance', icon: 'ri-alarm-warning-line' },
 ] as const;
@@ -108,11 +108,11 @@ const VIEW_TABS = [
 export type ApplicantViewTabId = (typeof VIEW_TABS)[number]['id'];
 
 export function applicantViewTabNavHtml(active: ApplicantViewTabId = 'overview', noticeCount = 0): string {
-    return `<ul class="nav nav-tabs nav-tabs-custom nav-success mb-0 flex-wrap" role="tablist">
+    return `<ul class="nav nav-tabs nav-tabs-custom apics-nav-tabs mb-0 flex-wrap" role="tablist">
         ${VIEW_TABS.map((tab) => {
             const badge =
                 tab.id === 'compliance' && noticeCount > 0
-                    ? `<span class="badge bg-danger ms-1">${noticeCount}</span>`
+                    ? `<span class="apics-nav-alert-badge" aria-label="${noticeCount} open notices">${noticeCount}</span>`
                     : '';
             return `<li class="nav-item" role="presentation">
                 <button type="button"
@@ -120,7 +120,7 @@ export function applicantViewTabNavHtml(active: ApplicantViewTabId = 'overview',
                     data-app-view-tab="${tab.id}"
                     role="tab"
                     aria-selected="${active === tab.id ? 'true' : 'false'}">
-                    <i class="${tab.icon} align-bottom me-1"></i>${escapeHtml(tab.label)}${badge}
+                    <i class="${tab.icon}" aria-hidden="true"></i>${escapeHtml(tab.label)}${badge}
                 </button>
             </li>`;
         }).join('')}

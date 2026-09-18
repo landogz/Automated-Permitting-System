@@ -1,5 +1,6 @@
 import { getApiUser, isAuthenticated, setApiUser, type ApicsUser } from '../../utils/auth';
 import { hideModal, showModal } from '../../utils/bootstrap-modal';
+import { bindPasswordToggles } from '../../utils/password-toggle';
 import { toastError, toastSuccess } from '../../utils/toast';
 import { paintUserAvatar } from '../../utils/user-avatar';
 
@@ -41,25 +42,6 @@ function setSubmitting(button: HTMLButtonElement | null, busy: boolean, idleLabe
     if (label) {
         label.textContent = busy ? busyLabel : idleLabel;
     }
-}
-
-function bindPasswordToggles(root: ParentNode): void {
-    root.querySelectorAll<HTMLButtonElement>('[data-password-toggle]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const id = btn.dataset.passwordToggle || '';
-            const input = document.getElementById(id) as HTMLInputElement | null;
-            if (!input) {
-                return;
-            }
-            const show = input.type === 'password';
-            input.type = show ? 'text' : 'password';
-            const icon = btn.querySelector('i');
-            if (icon) {
-                icon.className = show ? 'ri-eye-off-line align-middle' : 'ri-eye-line align-middle';
-            }
-            btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
-        });
-    });
 }
 
 function paintAvatarElement(el: HTMLElement, name: string, avatarUrl?: string | null): void {

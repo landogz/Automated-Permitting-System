@@ -87,7 +87,7 @@
     right: 0.75rem;
     bottom: 0.35rem;
     height: 2px;
-    background: var(--vz-primary, #ff2222);
+    background: #2563eb;
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform 0.2s ease-out;
@@ -230,8 +230,9 @@
     background: linear-gradient(to bottom, rgb(243 246 249 / 0.9), transparent);
 }
 
-.landing-section-fade.bg-primary::before {
-    background: linear-gradient(to bottom, rgb(64 81 137 / 0.35), transparent);
+.landing-section-fade.bg-primary::before,
+.landing-section-fade.landing-access::before {
+    background: linear-gradient(to bottom, rgb(248 250 252 / 0.08), transparent);
 }
 
 /* ---- Reduced motion: hard disable ---- */
