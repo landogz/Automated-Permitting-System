@@ -69,4 +69,27 @@ final class UserManagementRepository
     {
         return User::query()->role('admin')->where('is_active', true)->count();
     }
+
+    /**
+     * Unfiltered directory counts for the Users & Roles KPI strip.
+     *
+     * @return array{total: int, active: int, staff: int, applicants: int, pending: int, inactive: int}
+     */
+    public function summary(): array
+    {
+        $total = User::query()->count();
+        $active = User::query()->where('is_active', true)->count();
+        $pending = User::query()->where('approval_status', 'pending')->count();
+        $applicants = User::query()->role('applicant')->count();
+        $staff = max(0, $total - $applicants);
+
+        return [
+            'total' => $total,
+            'active' => $active,
+            'inactive' => max(0, $total - $active),
+            'staff' => $staff,
+            'applicants' => $applicants,
+            'pending' => $pending,
+        ];
+    }
 }

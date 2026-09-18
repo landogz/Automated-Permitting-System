@@ -7,6 +7,7 @@ namespace App\Http\Controllers\API\Staff;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Classifier\ClassifyApplicationRequest;
 use App\Http\Requests\Evaluation\DecideEvaluationRequest;
+use App\Http\Requests\Evaluation\SaveEvaluationFormsRequest;
 use App\Http\Requests\Evaluation\StoreEvaluationRequest;
 use App\Http\Resources\EvaluationResource;
 use App\Http\Resources\PermitApplicationResource;
@@ -21,6 +22,7 @@ use App\Services\Evaluation\EvaluationService;
 use App\Services\Operations\OperationsWorkflow;
 use App\Services\PermitApplication\PermitApplicationService;
 use App\Services\Routing\RoutingService;
+use App\Support\Evaluation\EvaluationFormCatalog;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -138,6 +140,12 @@ class WorkflowController extends Controller
             return ApiResponse::error($e->getMessage(), $e->errors(), 404);
         }
 
+        if ($user?->can('evaluations.manage') && $this->evaluation->pruneOrphanDrafts($model) > 0) {
+            $model->load([
+                'evaluations' => fn ($q) => $q->orderByDesc('id')->with('evaluator:id,uuid,name,email'),
+            ]);
+        }
+
         return ApiResponse::success('Application details retrieved', new PermitApplicationResource($model));
     }
 
@@ -253,6 +261,20 @@ class WorkflowController extends Controller
     }
 
     /**
+     * Blank evaluation form templates (QMS-61/62/63/64).
+     */
+    public function evaluationFormTemplates(Request $request): JsonResponse
+    {
+        abort_unless($request->user()?->can('evaluations.manage'), 403);
+
+        return ApiResponse::success('Evaluation form templates retrieved', [
+            'items' => EvaluationFormCatalog::templates(),
+            'qms63_default_items' => EvaluationFormCatalog::qms63DefaultItems(),
+            'qms64_default_items' => EvaluationFormCatalog::qms64DefaultItems(),
+        ]);
+    }
+
+    /**
      * Create an evaluation sheet.
      */
     public function storeEvaluation(StoreEvaluationRequest $request, PermitApplication $application): JsonResponse
@@ -260,6 +282,16 @@ class WorkflowController extends Controller
         $evaluation = $this->evaluation->create($application, $request->user(), $request->validated());
 
         return ApiResponse::success('Evaluation created', new EvaluationResource($evaluation), 201);
+    }
+
+    /**
+     * Save draft QMS-63/64 findings without deciding.
+     */
+    public function saveEvaluationForms(SaveEvaluationFormsRequest $request, Evaluation $evaluation): JsonResponse
+    {
+        $model = $this->evaluation->saveDraft($evaluation, $request->user(), $request->validated());
+
+        return ApiResponse::success('Evaluation forms saved', new EvaluationResource($model));
     }
 
     /**
@@ -286,17 +318,24 @@ class WorkflowController extends Controller
     {
         abort_unless($request->user()?->can('evaluations.manage'), 403);
 
-        $log = $this->evaluation->startTimer(
-            $application,
-            $request->user(),
-            $request->string('notes')->toString() ?: null,
-        );
+        $validated = $request->validate([
+            'notes' => ['nullable', 'string', 'max:500'],
+            'department_uuid' => ['nullable', 'uuid', 'exists:departments,uuid'],
+            'routing_slip_step_uuid' => ['nullable', 'uuid', 'exists:routing_slip_steps,uuid'],
+        ]);
+
+        $log = $this->evaluation->startTimer($application, $request->user(), $validated);
 
         return ApiResponse::success('Timer started', [
             'uuid' => $log->uuid,
             'started_at' => $log->started_at?->toIso8601String(),
             'application_no' => $application->application_no,
             'application_uuid' => $application->uuid,
+            'department' => $log->department ? [
+                'uuid' => $log->department->uuid,
+                'code' => $log->department->code,
+                'name' => $log->department->name,
+            ] : null,
         ], 201);
     }
 
@@ -318,6 +357,11 @@ class WorkflowController extends Controller
             'elapsed_seconds' => max(0, now()->diffInSeconds($open->started_at)),
             'application_no' => $open->application?->application_no,
             'application_uuid' => $open->application?->uuid,
+            'department' => $open->department ? [
+                'uuid' => $open->department->uuid,
+                'code' => $open->department->code,
+                'name' => $open->department->name,
+            ] : null,
         ]);
     }
 
@@ -334,6 +378,25 @@ class WorkflowController extends Controller
             'uuid' => $log->uuid,
             'duration_seconds' => $log->duration_seconds,
             'ended_at' => $log->ended_at?->toIso8601String(),
+            'department' => $log->department ? [
+                'uuid' => $log->department->uuid,
+                'code' => $log->department->code,
+                'name' => $log->department->name,
+            ] : null,
         ]);
+    }
+
+    /**
+     * Time tracking rollup by department and staff.
+     */
+    public function timeSummary(Request $request): JsonResponse
+    {
+        abort_unless($request->user()?->can('evaluations.manage'), 403);
+
+        $summary = $this->evaluation->timeSummary(
+            $request->string('application_uuid')->toString() ?: null,
+        );
+
+        return ApiResponse::success('Evaluation time summary retrieved', $summary);
     }
 }

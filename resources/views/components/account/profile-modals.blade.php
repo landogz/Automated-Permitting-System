@@ -18,10 +18,28 @@
 
                 <div class="modal-body apics-account-modal__body">
                     <div class="apics-account-modal__identity">
-                        <span class="apics-account-modal__avatar" data-profile-avatar aria-hidden="true">AA</span>
-                        <div class="min-w-0">
+                        <div class="apics-account-modal__avatar-wrap">
+                            <button type="button" class="apics-account-modal__avatar-btn" id="btn-profile-avatar-pick" aria-label="Change profile photo">
+                                <span class="apics-account-modal__avatar" data-profile-avatar aria-hidden="true">AA</span>
+                                <span class="apics-account-modal__avatar-overlay" aria-hidden="true">
+                                    <i class="ri-camera-line"></i>
+                                </span>
+                            </button>
+                            <input type="file" id="profile-avatar-input" class="d-none" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" capture="user">
+                        </div>
+                        <div class="min-w-0 flex-grow-1">
                             <p class="apics-account-modal__identity-name mb-0 text-truncate" data-profile-preview-name>Your name</p>
-                            <p class="apics-account-modal__identity-meta mb-0 text-truncate" data-profile-preview-email>email@example.com</p>
+                            <p class="apics-account-modal__identity-meta mb-1 text-truncate" data-profile-preview-email>email@example.com</p>
+                            <div class="d-flex flex-wrap gap-2 align-items-center">
+                                <button type="button" class="btn btn-sm btn-soft-primary" id="btn-profile-avatar-upload">
+                                    <i class="ri-upload-2-line align-middle me-1" aria-hidden="true"></i>Upload photo
+                                </button>
+                                <button type="button" class="btn btn-sm btn-ghost-danger d-none" id="btn-profile-avatar-remove">
+                                    <i class="ri-delete-bin-line align-middle me-1" aria-hidden="true"></i>Remove
+                                </button>
+                            </div>
+                            <p class="text-muted fs-11 mb-0 mt-1">JPEG, PNG, or WebP · max 2 MB</p>
+                            <div class="invalid-feedback d-block" data-error-for="avatar"></div>
                         </div>
                     </div>
 

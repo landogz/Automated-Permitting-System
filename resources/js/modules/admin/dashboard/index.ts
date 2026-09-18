@@ -2,6 +2,7 @@ import { hasPermission } from '../../../utils/auth';
 import { escapeHtml } from '../../../utils/bootstrap-modal';
 import { statusBadge } from '../../../utils/status-badge';
 import { toastError, toastSuccess } from '../../../utils/toast';
+import { userAvatarHtml } from '../../../utils/user-avatar';
 
 type PipelineStage = {
     key: string;
@@ -34,6 +35,7 @@ type ActivityItem = {
     uuid: string;
     event: string;
     actor_name?: string | null;
+    actor_avatar_url?: string | null;
     meta?: Record<string, unknown>;
     created_at?: string | null;
 };
@@ -195,8 +197,8 @@ function renderActivity(rows: ActivityItem[]): void {
                 .map((v) => escapeHtml(String(v)));
             return `
             <li class="apics-dashboard__activity-item">
-                <span class="apics-dashboard__activity-dot" aria-hidden="true"></span>
-                <span class="min-w-0">
+                ${userAvatarHtml(row.actor_name || 'System', row.actor_avatar_url, 'apics-user-avatar apics-user-avatar--sm')}
+                <span class="min-w-0 flex-grow-1">
                     <span class="d-block fw-semibold fs-13 text-truncate">${escapeHtml(humanizeEvent(row.event))}</span>
                     <span class="d-block text-muted fs-11">
                         ${escapeHtml(row.actor_name || 'System')}

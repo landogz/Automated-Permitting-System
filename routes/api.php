@@ -31,6 +31,10 @@ Route::prefix('v1')->group(function (): void {
             Route::get('me', [AuthController::class, 'me']);
             Route::put('profile', [ProfileController::class, 'update'])
                 ->middleware('throttle:30,1');
+            Route::post('profile/avatar', [ProfileController::class, 'uploadAvatar'])
+                ->middleware('throttle:20,1');
+            Route::delete('profile/avatar', [ProfileController::class, 'removeAvatar'])
+                ->middleware('throttle:20,1');
             Route::put('password', [ProfileController::class, 'changePassword'])
                 ->middleware('throttle:10,1');
         });
@@ -73,7 +77,13 @@ Route::prefix('v1')->group(function (): void {
             Route::post('routing-steps/{step}/start', [WorkflowController::class, 'startStep']);
             Route::post('routing-steps/{step}/complete', [WorkflowController::class, 'completeStep']);
             Route::post('applications/{application}/evaluations', [WorkflowController::class, 'storeEvaluation']);
+            Route::post('evaluations/{evaluation}/forms', [WorkflowController::class, 'saveEvaluationForms'])
+                ->middleware('throttle:60,1');
             Route::post('evaluations/{evaluation}/decide', [WorkflowController::class, 'decideEvaluation']);
+            Route::get('evaluation-form-templates', [WorkflowController::class, 'evaluationFormTemplates'])
+                ->middleware('throttle:60,1');
+            Route::get('evaluation-time-summary', [WorkflowController::class, 'timeSummary'])
+                ->middleware('throttle:60,1');
             Route::post('applications/{application}/timer/start', [WorkflowController::class, 'startTimer']);
             Route::get('timer/current', [WorkflowController::class, 'currentTimer']);
             Route::post('timer/stop', [WorkflowController::class, 'stopTimer']);

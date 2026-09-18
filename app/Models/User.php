@@ -94,4 +94,16 @@ class User extends Authenticatable
     {
         return 'uuid';
     }
+
+    /**
+     * Public URL for the user's profile photo, or null when unset.
+     */
+    public function avatarUrl(): ?string
+    {
+        if (! $this->avatar_path) {
+            return null;
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($this->avatar_path);
+    }
 }

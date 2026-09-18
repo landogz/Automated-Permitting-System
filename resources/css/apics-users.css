@@ -1,0 +1,100 @@
+/* Users & Roles console — KPI strip + directory table chrome */
+
+.apics-users-console__mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.15rem;
+    height: 2.15rem;
+    border-radius: 0.7rem;
+    color: var(--vz-primary, #405189);
+    background: rgba(64, 81, 137, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(64, 81, 137, 0.08);
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.apics-users-console__card .card-header {
+    border-bottom: 1px solid var(--vz-border-color, #e9ebec);
+    background:
+        linear-gradient(180deg, rgba(64, 81, 137, 0.045), transparent 85%);
+}
+
+.apics-users-console__legend {
+    align-items: center;
+    color: var(--vz-secondary-color, #878a99);
+    font-size: 0.75rem;
+}
+
+.apics-users-console__legend .badge {
+    margin-right: 0.25rem;
+}
+
+.apics-users-name {
+    max-width: 16rem;
+}
+
+.apics-users-email {
+    display: inline-flex;
+    align-items: center;
+    max-width: 18rem;
+    color: inherit;
+}
+
+.apics-users-email:hover span {
+    text-decoration: underline;
+}
+
+.apics-users-dept {
+    display: inline-flex;
+    align-items: center;
+    max-width: 14rem;
+}
+
+.apics-users-table td {
+    vertical-align: middle;
+}
+
+.apics-users-modal__section-title {
+    margin: 0 0 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--vz-secondary-color, #878a99);
+}
+
+.apics-users-modal__switch .form-check-label {
+    font-weight: 500;
+}
+
+.apics-users-console .apics-user-avatar {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.7rem;
+}
+
+@media (max-width: 575.98px) {
+    .apics-users-console__card .card-header {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+
+    .apics-users-console__card .card-header .btn {
+        width: 100%;
+    }
+
+    .apics-users-name {
+        max-width: 11rem;
+    }
+}
+
+[data-bs-theme='dark'] .apics-users-console__card .card-header {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 85%);
+}
+
+[data-bs-theme='dark'] .apics-users-console__mark {
+    background: rgba(255, 255, 255, 0.08);
+    color: #c5cbe3;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}

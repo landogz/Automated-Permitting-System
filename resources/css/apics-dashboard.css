@@ -115,6 +115,42 @@
     box-shadow: 0 0 0 3px rgb(64 81 137 / 0.15);
 }
 
+.apics-dashboard .apics-user-avatar {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.85rem;
+    height: 1.85rem;
+    border-radius: 50%;
+    font-size: 0.65rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #eef0f5;
+    color: var(--vz-primary, #405189);
+}
+
+.apics-dashboard .apics-user-avatar--sm {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.6rem;
+}
+
+.apics-dashboard .apics-user-avatar img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    display: block;
+}
+
+.apics-dashboard .apics-user-avatar.has-photo [data-avatar-initials] {
+    display: none;
+}
+
 .apics-dashboard__quick-card {
     display: flex;
     align-items: center;

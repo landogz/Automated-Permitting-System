@@ -113,6 +113,17 @@ export function statusSelectHtml(name: string, value = 'na'): string {
     </select>`;
 }
 
+function bindComplianceStatusPaint(container: HTMLElement): void {
+    container.querySelectorAll<HTMLSelectElement>('[data-status-field="status"]').forEach((select) => {
+        const paint = (): void => {
+            const card = select.closest('.apics-insp-check-card') as HTMLElement | null;
+            if (card) card.dataset.status = select.value;
+        };
+        paint();
+        select.addEventListener('change', paint);
+    });
+}
+
 export function renderComplianceChecklist(
     container: HTMLElement | null,
     items: ComplianceItem[],
@@ -125,17 +136,21 @@ export function renderComplianceChecklist(
             const status = item.status || 'na';
             const remarks = item.remarks || item.notes || '';
             return `<div class="col-12 col-md-6">
-                <div class="border rounded p-2 h-100" data-compliance-row data-code="${escapeHtml(code)}" data-label="${escapeHtml(label)}">
-                    <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
-                        <div class="fw-medium small min-w-0 flex-grow-1">${escapeHtml(label)}</div>
-                        <div class="flex-shrink-0" style="min-width: 5.5rem">${statusSelectHtml('status', status)}</div>
+                <div class="apics-insp-check-card" data-compliance-row data-status="${escapeHtml(status)}" data-code="${escapeHtml(code)}" data-label="${escapeHtml(label)}">
+                    <div class="apics-insp-check-card__top">
+                        <div class="min-w-0 flex-grow-1">
+                            <span class="apics-insp-check-card__code">${escapeHtml(code)}</span>
+                            <div class="apics-insp-check-card__label">${escapeHtml(label)}</div>
+                        </div>
+                        <div class="apics-insp-check-card__status">${statusSelectHtml('status', status)}</div>
                     </div>
                     <input type="text" class="form-control form-control-sm mt-2" data-compliance-remarks value="${escapeHtml(remarks)}" placeholder="Remarks (optional)" maxlength="1000">
                 </div>
             </div>`;
         })
         .join('');
-    container.innerHTML = `<div class="row g-2">${cards}</div>`;
+    container.innerHTML = `<div class="row g-2 g-md-3">${cards}</div>`;
+    bindComplianceStatusPaint(container);
 }
 
 export function readComplianceChecklist(container: HTMLElement | null): ComplianceItem[] {
@@ -158,14 +173,18 @@ export function renderElectricalFields(container: HTMLElement | null, values: Re
         { key: 'fixtures_devices', label: 'Fixtures / devices' },
         { key: 'load_schedule', label: 'Load schedule conformance' },
     ];
-    container.innerHTML = fields
-        .map(
-            (field) => `<div class="d-flex flex-wrap align-items-center gap-2 justify-content-between border rounded p-2 mb-2">
-                <span class="small fw-medium">${escapeHtml(field.label)}</span>
-                ${statusSelectHtml(field.key, values[field.key] || 'na')}
-            </div>`,
-        )
-        .join('');
+    container.innerHTML = `<div class="row g-2">
+        ${fields
+            .map(
+                (field) => `<div class="col-12 col-md-6">
+                    <div class="apics-insp-elec-row h-100">
+                        <span class="apics-insp-elec-row__label">${escapeHtml(field.label)}</span>
+                        <div style="min-width:5.75rem">${statusSelectHtml(field.key, values[field.key] || 'na')}</div>
+                    </div>
+                </div>`,
+            )
+            .join('')}
+    </div>`;
 }
 
 export function readElectricalFields(container: HTMLElement | null): Record<string, string> {

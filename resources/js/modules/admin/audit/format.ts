@@ -1,4 +1,5 @@
 import { escapeHtml } from '../../../utils/bootstrap-modal';
+import { userAvatarHtml } from '../../../utils/user-avatar';
 
 export type AuditResource = {
     type: string;
@@ -14,6 +15,7 @@ export type AuditRow = {
     severity?: string;
     badge_tone?: string;
     actor_name?: string | null;
+    actor_avatar_url?: string | null;
     actor_roles?: string[];
     actor_role_label?: string | null;
     ip_address?: string | null;
@@ -27,6 +29,7 @@ export type AuditRow = {
     has_diff?: boolean;
     meta?: Record<string, unknown> | null;
     created_at?: string | null;
+    user?: { uuid?: string; name?: string; email?: string; avatar_url?: string | null } | null;
 };
 
 const PHT: Intl.DateTimeFormatOptions = {
@@ -76,16 +79,11 @@ export function eventBadge(event: string, tone?: string): string {
 export function actorCell(row: AuditRow): string {
     const name = row.actor_name || '—';
     const role = row.actor_role_label || '';
-    const initials = name
-        .split(/\s+/)
-        .filter(Boolean)
-        .slice(0, 2)
-        .map((part) => part[0]?.toUpperCase() || '')
-        .join('') || '?';
+    const avatarUrl = row.actor_avatar_url || row.user?.avatar_url || null;
 
     return `
         <span class="apics-audit-actor">
-            <span class="apics-audit-actor__avatar" aria-hidden="true">${escapeHtml(initials)}</span>
+            ${userAvatarHtml(name === '—' ? 'User' : name, avatarUrl, 'apics-audit-actor__avatar')}
             <span class="min-w-0">
                 <span class="apics-audit-actor__name d-block text-truncate">${escapeHtml(name)}</span>
                 ${role ? `<span class="apics-audit-actor__role d-block text-truncate">${escapeHtml(role)}</span>` : ''}

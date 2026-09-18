@@ -358,13 +358,14 @@ final class PermitApplicationService
             'formDefinition',
             'documents',
             'user:id,uuid,name,email,phone',
-            'evaluations',
             'inspections.inspector:id,uuid,name,email',
             'ordersOfPayment',
             'complianceNotices.inspection',
             'complianceNotices.appeals',
             'routingSlips.steps.department',
             'routingSlips.template:id,uuid,code,name,classification',
+        ])->load([
+            'evaluations' => fn ($q) => $q->orderByDesc('id')->with('evaluator:id,uuid,name,email'),
         ]);
     }
 

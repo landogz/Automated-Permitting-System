@@ -190,90 +190,153 @@
 
 {{-- Complete · O-03 / QMS-65 / DPWH 77-006-E --}}
 <div class="modal fade" id="modal-complete-inspection" tabindex="-1" aria-hidden="true" aria-labelledby="modal-complete-inspection-label">
-    <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable apics-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal-complete-inspection-label">Record inspection forms</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable apics-modal apics-insp-record-modal">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header align-items-start">
+                <div class="pe-3 min-w-0">
+                    <h5 class="modal-title mb-0" id="modal-complete-inspection-label">Record inspection forms</h5>
+                    <div class="apics-insp-record-modal__meta" id="insp-complete-meta">
+                        <span class="apics-insp-record-modal__meta-app" id="insp-complete-meta-app">—</span>
+                        <span class="apics-insp-form-chip apics-insp-form-chip--primary">O-03</span>
+                        <span class="apics-insp-form-chip apics-insp-form-chip--success">QMS-65</span>
+                        <span class="apics-insp-form-chip apics-insp-form-chip--warning d-none" id="insp-complete-chip-elec">77-006-E</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-close mt-1" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="form-complete-inspection" class="apics-modal-form">
-                <div class="modal-body">
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-4">
-                            <label class="form-label" for="insp-complete-result">Result</label>
-                            <select id="insp-complete-result" class="form-select" required>
-                                <option value="passed">Passed</option>
-                                <option value="conditional">Conditional</option>
-                                <option value="failed">Failed</option>
-                            </select>
+                <div class="modal-body pt-2">
+                    <div class="apics-insp-outcome">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="apics-insp-section__icon apics-insp-section__icon--notes" aria-hidden="true">
+                                <i class="ri-flag-2-line"></i>
+                            </span>
+                            <div>
+                                <p class="apics-insp-section__title mb-0">Inspection outcome</p>
+                                <p class="apics-insp-section__hint mb-0">Set the official result before completing. Save only keeps the ticket open.</p>
+                            </div>
                         </div>
-                        <div class="col-md-8">
-                            <label class="form-label" for="insp-complete-notes">Summary notes <span class="text-muted">(required if failed)</span></label>
-                            <textarea id="insp-complete-notes" class="form-control" rows="2" maxlength="5000" placeholder="Short outcome summary for compliance / applicant…"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="border rounded p-3 mb-3">
-                        <h6 class="mb-3">O-03 · Individual inspector notes</h6>
                         <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label" for="insp-complete-weather">Weather / access</label>
-                                <input id="insp-complete-weather" type="text" class="form-control" maxlength="255">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label" for="insp-complete-site">Site conditions</label>
-                                <textarea id="insp-complete-site" class="form-control" rows="2" maxlength="2000"></textarea>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label" for="insp-complete-findings">Findings</label>
-                                <textarea id="insp-complete-findings" class="form-control" rows="3" maxlength="5000"></textarea>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label" for="insp-complete-defects">Observed defects</label>
-                                <textarea id="insp-complete-defects" class="form-control" rows="2" maxlength="5000"></textarea>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label" for="insp-complete-recommendations">Recommendations</label>
-                                <textarea id="insp-complete-recommendations" class="form-control" rows="2" maxlength="5000"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="border rounded p-3 mb-3">
-                        <h6 class="mb-3">QMS-65 · Compliance sheet</h6>
-                        <div id="insp-complete-compliance" class="apics-insp-checklist"></div>
-                        <label class="form-label mt-2" for="insp-complete-overall">Overall remarks</label>
-                        <textarea id="insp-complete-overall" class="form-control" rows="2" maxlength="5000"></textarea>
-                    </div>
-
-                    <div class="border rounded p-3 mb-0 d-none" id="insp-complete-electrical-section">
-                        <h6 class="mb-3">DPWH 77-006-E · Final electrical inspection</h6>
-                        <div id="insp-complete-electrical"></div>
-                        <div class="row g-3 mt-1">
                             <div class="col-md-4">
-                                <label class="form-label" for="insp-complete-elec-result">Electrical result</label>
-                                <select id="insp-complete-elec-result" class="form-select">
-                                    <option value="na">N/A</option>
+                                <label class="form-label" for="insp-complete-result">Result</label>
+                                <select id="insp-complete-result" class="form-select" required>
                                     <option value="passed">Passed</option>
                                     <option value="conditional">Conditional</option>
                                     <option value="failed">Failed</option>
                                 </select>
                             </div>
                             <div class="col-md-8">
-                                <label class="form-label" for="insp-complete-elec-remarks">Electrical remarks</label>
-                                <textarea id="insp-complete-elec-remarks" class="form-control" rows="2" maxlength="5000"></textarea>
+                                <label class="form-label" for="insp-complete-notes">
+                                    Summary notes
+                                    <span class="text-muted fw-normal">· required if failed</span>
+                                </label>
+                                <textarea id="insp-complete-notes" class="form-control" rows="2" maxlength="5000" placeholder="Short outcome summary for compliance / applicant…"></textarea>
                             </div>
                         </div>
                     </div>
+
+                    <section class="apics-insp-section" aria-labelledby="insp-section-o03-title">
+                        <div class="apics-insp-section__head">
+                            <div class="apics-insp-section__head-main">
+                                <span class="apics-insp-section__icon apics-insp-section__icon--notes" aria-hidden="true">
+                                    <i class="ri-file-list-3-line"></i>
+                                </span>
+                                <div>
+                                    <h6 class="apics-insp-section__title" id="insp-section-o03-title">Individual inspector notes</h6>
+                                    <p class="apics-insp-section__hint">O-03 · Site observations and recommendations</p>
+                                </div>
+                            </div>
+                            <span class="apics-insp-form-chip apics-insp-form-chip--primary">O-03</span>
+                        </div>
+                        <div class="apics-insp-section__body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="insp-complete-weather">Weather / access</label>
+                                    <input id="insp-complete-weather" type="text" class="form-control" maxlength="255" placeholder="e.g. Fair · gate accessible">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="insp-complete-site">Site conditions</label>
+                                    <input id="insp-complete-site" type="text" class="form-control" maxlength="2000" placeholder="e.g. Clear staging area">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label" for="insp-complete-findings">Findings</label>
+                                    <textarea id="insp-complete-findings" class="form-control" rows="3" maxlength="5000" placeholder="Record observed conditions relative to approved plans…"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="insp-complete-defects">Observed defects</label>
+                                    <textarea id="insp-complete-defects" class="form-control" rows="2" maxlength="5000" placeholder="Non-conformances, if any…"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="insp-complete-recommendations">Recommendations</label>
+                                    <textarea id="insp-complete-recommendations" class="form-control" rows="2" maxlength="5000" placeholder="Corrective actions or next steps…"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="apics-insp-section" aria-labelledby="insp-section-qms65-title">
+                        <div class="apics-insp-section__head">
+                            <div class="apics-insp-section__head-main">
+                                <span class="apics-insp-section__icon apics-insp-section__icon--compliance" aria-hidden="true">
+                                    <i class="ri-checkbox-multiple-line"></i>
+                                </span>
+                                <div>
+                                    <h6 class="apics-insp-section__title" id="insp-section-qms65-title">Compliance sheet</h6>
+                                    <p class="apics-insp-section__hint">QMS-65 · Mark each item OK, Fail, or N/A</p>
+                                </div>
+                            </div>
+                            <span class="apics-insp-form-chip apics-insp-form-chip--success">QMS-65</span>
+                        </div>
+                        <div class="apics-insp-section__body">
+                            <div id="insp-complete-compliance" class="apics-insp-checklist mb-3"></div>
+                            <label class="form-label" for="insp-complete-overall">Overall remarks</label>
+                            <textarea id="insp-complete-overall" class="form-control" rows="2" maxlength="5000" placeholder="Summary of compliance findings…"></textarea>
+                        </div>
+                    </section>
+
+                    <section class="apics-insp-section d-none" id="insp-complete-electrical-section" aria-labelledby="insp-section-elec-title">
+                        <div class="apics-insp-section__head">
+                            <div class="apics-insp-section__head-main">
+                                <span class="apics-insp-section__icon apics-insp-section__icon--electrical" aria-hidden="true">
+                                    <i class="ri-flashlight-line"></i>
+                                </span>
+                                <div>
+                                    <h6 class="apics-insp-section__title" id="insp-section-elec-title">Final electrical inspection</h6>
+                                    <p class="apics-insp-section__hint">DPWH Form 77-006-E · Required for electrical / final types</p>
+                                </div>
+                            </div>
+                            <span class="apics-insp-form-chip apics-insp-form-chip--warning">77-006-E</span>
+                        </div>
+                        <div class="apics-insp-section__body">
+                            <div id="insp-complete-electrical" class="mb-3"></div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label" for="insp-complete-elec-result">Electrical result</label>
+                                    <select id="insp-complete-elec-result" class="form-select">
+                                        <option value="na">N/A</option>
+                                        <option value="passed">Passed</option>
+                                        <option value="conditional">Conditional</option>
+                                        <option value="failed">Failed</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="form-label" for="insp-complete-elec-remarks">Electrical remarks</label>
+                                    <textarea id="insp-complete-elec-remarks" class="form-control" rows="2" maxlength="5000" placeholder="Notes on electrical installations…"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-                <div class="modal-footer flex-wrap gap-2">
+                <div class="modal-footer flex-wrap">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-soft-primary" id="btn-insp-save-only">
-                        Save only
-                    </button>
-                    <button type="submit" class="btn btn-primary" id="btn-insp-save-complete">
-                        Save &amp; complete
-                    </button>
+                    <div class="ms-md-auto d-flex flex-wrap gap-2">
+                        <button type="button" class="btn btn-soft-primary" id="btn-insp-save-only">
+                            <i class="ri-save-line align-bottom me-1" aria-hidden="true"></i>Save only
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="btn-insp-save-complete">
+                            <i class="ri-checkbox-circle-line align-bottom me-1" aria-hidden="true"></i>Save &amp; complete
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>

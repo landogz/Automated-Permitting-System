@@ -68,6 +68,7 @@
 <div class="vertical-overlay"></div>
 
 @include('components.account.profile-modals')
+@include('components.ops.application-detail-modals')
 
 <script src="{{ asset('master/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('master/assets/libs/simplebar/simplebar.min.js') }}"></script>

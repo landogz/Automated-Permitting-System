@@ -20,6 +20,7 @@ class RegistrationResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
+            'avatar_url' => $this->avatarUrl(),
             'approval_status' => $this->approval_status?->value ?? $this->approval_status,
             'approval_notes' => $this->approval_notes,
             'is_active' => $this->is_active,

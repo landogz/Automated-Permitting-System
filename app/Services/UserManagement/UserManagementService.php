@@ -44,6 +44,14 @@ final class UserManagementService
     }
 
     /**
+     * @return array{total: int, active: int, staff: int, applicants: int, pending: int, inactive: int}
+     */
+    public function summary(): array
+    {
+        return $this->repository->summary();
+    }
+
+    /**
      * @return array{roles: list<string>, staff_roles: list<string>, departments: list<array{uuid: string, code: string, name: string}>}
      */
     public function formMeta(): array

@@ -87,6 +87,7 @@ class AuditTrailTest extends TestCase
         $this->assertNotNull($loginItem);
         $this->assertNotEmpty($loginItem['actor_name']);
         $this->assertSame('authentication', $loginItem['category']);
+        $this->assertArrayHasKey('actor_avatar_url', $loginItem);
         $this->assertArrayHasKey('resource', $loginItem);
         $this->assertArrayHasKey('badge_tone', $loginItem);
 
@@ -95,7 +96,8 @@ class AuditTrailTest extends TestCase
             ->getJson("/api/v1/admin/audit-logs/{$uuid}")
             ->assertOk()
             ->assertJsonPath('data.uuid', $uuid)
-            ->assertJsonPath('data.event', 'auth.login');
+            ->assertJsonPath('data.event', 'auth.login')
+            ->assertJsonStructure(['data' => ['actor_avatar_url', 'user']]);
 
         $this->actingAsApiToken($token)
             ->getJson('/api/v1/admin/audit-logs/summary')
@@ -117,5 +119,27 @@ class AuditTrailTest extends TestCase
         $this->actingAsApiToken($token)
             ->getJson('/api/v1/admin/audit-logs/summary')
             ->assertForbidden();
+    }
+
+    public function test_audit_actor_includes_avatar_url_when_set(): void
+    {
+        $admin = \App\Models\User::query()->where('email', 'admin@csfp.local')->firstOrFail();
+        $admin->forceFill(['avatar_path' => 'avatars/test-admin.png'])->save();
+
+        $token = $this->postJson('/api/v1/auth/login', [
+            'email' => 'admin@csfp.local',
+            'password' => 'Admin@12345',
+        ])->assertOk()->json('data.token');
+
+        $list = $this->actingAsApiToken($token)
+            ->getJson('/api/v1/admin/audit-logs?range=7d&per_page=50')
+            ->assertOk();
+
+        $loginItem = collect($list->json('data.items'))
+            ->first(fn (array $row): bool => ($row['event'] ?? '') === 'auth.login');
+
+        $this->assertNotNull($loginItem);
+        $this->assertNotEmpty($loginItem['actor_avatar_url']);
+        $this->assertStringContainsString('avatars/test-admin.png', (string) $loginItem['actor_avatar_url']);
     }
 }

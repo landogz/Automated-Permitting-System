@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EvaluationPrintController;
 use App\Http\Controllers\Admin\InspectionPrintController;
 use App\Http\Controllers\Admin\LogbookPrintController;
+use App\Http\Controllers\Admin\RoutingSlipPrintController;
 use App\Http\Controllers\Auth\LoginPageController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +24,12 @@ Route::prefix('admin')->group(function (): void {
     Route::view('/classification-rules', 'admin.classification-rules')->name('admin.classification-rules');
     Route::view('/routing-templates', 'admin.routing-templates')->name('admin.routing-templates');
     Route::view('/evaluation-queue', 'admin.evaluation-queue')->name('admin.evaluation-queue');
+    Route::get('/routing-slips/{slip}/print', RoutingSlipPrintController::class)
+        ->middleware('signed')
+        ->name('admin.routing-slips.print');
+    Route::get('/evaluations/{evaluation}/print', EvaluationPrintController::class)
+        ->middleware('signed')
+        ->name('admin.evaluations.print');
     Route::view('/fee-rules', 'admin.fee-rules')->name('admin.fee-rules');
     Route::view('/inspections', 'admin.inspections')->name('admin.inspections');
     Route::get('/inspections/{inspection}/print', InspectionPrintController::class)

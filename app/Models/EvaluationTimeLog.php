@@ -18,6 +18,8 @@ class EvaluationTimeLog extends Model
         'permit_application_id',
         'evaluation_id',
         'user_id',
+        'department_id',
+        'routing_slip_step_id',
         'started_at',
         'ended_at',
         'duration_seconds',
@@ -55,6 +57,16 @@ class EvaluationTimeLog extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function routingSlipStep(): BelongsTo
+    {
+        return $this->belongsTo(RoutingSlipStep::class, 'routing_slip_step_id');
     }
 
     public function getRouteKeyName(): string

@@ -92,7 +92,7 @@ export async function startEvaluation(app: StaffApplicationDetail): Promise<void
     if (
         !(await confirmAction(
             'Start evaluation?',
-            'Creates an evaluation sheet and starts the statutory processing timer for this filing.',
+            'Opens or continues the single draft evaluation sheet and starts the processing timer.',
         ))
     ) {
         return;
@@ -101,10 +101,13 @@ export async function startEvaluation(app: StaffApplicationDetail): Promise<void
     try {
         await window.axios.post(`/api/v1/staff/applications/${app.uuid}/timer/start`).catch(() => null);
         const { data: created } = await window.axios.post(`/api/v1/staff/applications/${app.uuid}/evaluations`, {
-            findings: [{ item: 'Completeness', status: 'ok' }],
+            findings: {
+                completeness: [{ code: 'APP_FORM', label: 'Unified application form complete (QMS-36)', status: 'na' }],
+                technical: [],
+            },
             remarks: 'Evaluation started from application detail modal',
         });
-        toastSuccess(`Evaluation ${created.data?.uuid ? 'started' : 'created'}`);
+        toastSuccess(created.data?.status === 'draft' ? 'Evaluation draft ready' : 'Evaluation started');
     } catch (error: any) {
         toastError(error?.response?.data?.message || 'Unable to start evaluation');
     }

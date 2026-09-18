@@ -48,6 +48,7 @@ class AuditLogResource extends JsonResource
             'badge_tone' => AuditEventClassifier::badgeTone($event),
             'actor_name' => $this->actor_name
                 ?: ($meta['attempted_email'] ?? $meta['email'] ?? $meta['actor_email'] ?? null),
+            'actor_avatar_url' => $this->relationLoaded('user') ? $this->user?->avatarUrl() : null,
             'actor_roles' => $roles,
             'actor_role_label' => $this->formatRoleLabel($roles),
             'ip_address' => $this->ip_address,
@@ -65,6 +66,7 @@ class AuditLogResource extends JsonResource
                 'uuid' => $this->user?->uuid,
                 'name' => $this->user?->name,
                 'email' => $this->user?->email,
+                'avatar_url' => $this->user?->avatarUrl(),
             ]),
         ];
     }

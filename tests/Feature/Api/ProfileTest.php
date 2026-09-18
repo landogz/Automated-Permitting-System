@@ -7,7 +7,9 @@ namespace Tests\Feature\Api;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ProfileTest extends TestCase
@@ -86,5 +88,64 @@ class ProfileTest extends TestCase
             'password_confirmation' => 'NewPass@12345',
         ])->assertStatus(422)
             ->assertJsonValidationErrors(['current_password']);
+    }
+
+    public function test_authenticated_user_can_upload_and_remove_avatar(): void
+    {
+        Storage::fake('public');
+
+        $token = $this->postJson('/api/v1/auth/login', [
+            'email' => 'admin@csfp.local',
+            'password' => 'Admin@12345',
+            'device_name' => 'test',
+        ])->json('data.token');
+
+        $file = UploadedFile::fake()->image('avatar.jpg', 240, 240);
+
+        $upload = $this->withToken($token)->post('/api/v1/auth/profile/avatar', [
+            'avatar' => $file,
+        ], ['Accept' => 'application/json']);
+
+        $upload->assertOk()
+            ->assertJsonPath('status', true);
+
+        $avatarUrl = $upload->json('data.avatar_url');
+        $this->assertNotEmpty($avatarUrl);
+
+        $user = User::query()->where('email', 'admin@csfp.local')->firstOrFail();
+        $this->assertNotEmpty($user->avatar_path);
+        Storage::disk('public')->assertExists($user->avatar_path);
+
+        $this->assertDatabaseHas('audit_logs', [
+            'event' => 'user.avatar_updated',
+        ]);
+
+        $this->withToken($token)->deleteJson('/api/v1/auth/profile/avatar')
+            ->assertOk()
+            ->assertJsonPath('data.avatar_url', null);
+
+        $user->refresh();
+        $this->assertNull($user->avatar_path);
+
+        $this->assertDatabaseHas('audit_logs', [
+            'event' => 'user.avatar_removed',
+        ]);
+    }
+
+    public function test_avatar_upload_rejects_non_image(): void
+    {
+        Storage::fake('public');
+
+        $token = $this->postJson('/api/v1/auth/login', [
+            'email' => 'admin@csfp.local',
+            'password' => 'Admin@12345',
+            'device_name' => 'test',
+        ])->json('data.token');
+
+        $this->withToken($token)->post('/api/v1/auth/profile/avatar', [
+            'avatar' => UploadedFile::fake()->create('notes.pdf', 100, 'application/pdf'),
+        ], ['Accept' => 'application/json'])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['avatar']);
     }
 }

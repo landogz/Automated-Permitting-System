@@ -41,6 +41,7 @@ export type StaffApplicationDetail = {
         slip_no?: string;
         status?: string;
         generated_at?: string | null;
+        print_urls?: Partial<Record<'qms-61' | 'qms-62', string>> | null;
         template?: { uuid?: string; code?: string; name?: string; classification?: string } | null;
         steps?: Array<{
             uuid?: string;
@@ -53,7 +54,24 @@ export type StaffApplicationDetail = {
             department?: { code?: string; name?: string };
         }>;
     }>;
-    evaluations?: Array<{ decided_at?: string | null; status?: string | null; result?: string | null }>;
+    evaluations?: Array<{
+        uuid?: string;
+        decided_at?: string | null;
+        created_at?: string | null;
+        updated_at?: string | null;
+        status?: string | null;
+        result?: string | null;
+        remarks?: string | null;
+        findings?: {
+            form_code?: string;
+            completeness?: Array<{ code?: string; label?: string; status?: string; remarks?: string }>;
+            technical?: Array<{ code?: string; label?: string; status?: string; remarks?: string }>;
+            overall_remarks?: string;
+            discipline_remarks?: string;
+        } | null;
+        print_urls?: Partial<Record<'qms-63' | 'qms-64', string>> | null;
+        evaluator?: { name?: string };
+    }>;
     inspections?: Array<{
         uuid?: string;
         inspection_no?: string;

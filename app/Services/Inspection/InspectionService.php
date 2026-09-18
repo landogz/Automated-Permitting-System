@@ -32,7 +32,7 @@ final class InspectionService
         return Inspection::query()
             ->with([
                 'application:id,uuid,application_no,project_title,status',
-                'inspector:id,uuid,name,email',
+                'inspector:id,uuid,name,email,avatar_path',
             ])
             ->when($bucket === 'active', function ($q): void {
                 $q->whereIn('status', [

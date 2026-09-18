@@ -59,6 +59,7 @@ class InspectionResource extends JsonResource
             'inspector' => $this->whenLoaded('inspector', fn () => [
                 'uuid' => $this->inspector?->uuid,
                 'name' => $this->inspector?->name,
+                'avatar_url' => $this->inspector?->avatarUrl(),
             ]),
         ];
     }

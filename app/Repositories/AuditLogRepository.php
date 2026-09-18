@@ -36,7 +36,7 @@ final class AuditLogRepository
         $perPage = min(max($perPage, 1), 100);
 
         return AuditLog::query()
-            ->with(['user:id,uuid,name,email'])
+            ->with(['user:id,uuid,name,email,avatar_path'])
             ->when($search !== '', function ($query) use ($search): void {
                 $like = '%'.$search.'%';
                 $query->where(function ($inner) use ($like): void {
@@ -68,7 +68,7 @@ final class AuditLogRepository
 
     public function findByUuid(string $uuid): ?AuditLog
     {
-        return AuditLog::query()->with('user:id,uuid,name,email')->where('uuid', $uuid)->first();
+        return AuditLog::query()->with('user:id,uuid,name,email,avatar_path')->where('uuid', $uuid)->first();
     }
 
     private function applyCategoryFilter($query, string $category): void

@@ -1,20 +1,10 @@
 import { getApiUser, isAuthenticated, setApiUser, type ApicsUser } from '../../utils/auth';
 import { hideModal, showModal } from '../../utils/bootstrap-modal';
 import { toastError, toastSuccess } from '../../utils/toast';
+import { paintUserAvatar } from '../../utils/user-avatar';
 
 function notifyTopbarRefresh(): void {
     window.dispatchEvent(new CustomEvent('apics:user-updated'));
-}
-
-function userInitials(name: string): string {
-    const parts = name.trim().split(/\s+/).filter(Boolean);
-    if (parts.length === 0) {
-        return 'AP';
-    }
-    if (parts.length === 1) {
-        return parts[0].slice(0, 2).toUpperCase();
-    }
-    return `${parts[0].charAt(0)}${parts[parts.length - 1].charAt(0)}`.toUpperCase();
 }
 
 function clearFieldErrors(form: HTMLFormElement): void {
@@ -72,11 +62,16 @@ function bindPasswordToggles(root: ParentNode): void {
     });
 }
 
+function paintAvatarElement(el: HTMLElement, name: string, avatarUrl?: string | null): void {
+    paintUserAvatar(el, name, avatarUrl);
+}
+
 function syncProfilePreview(): void {
     const nameInput = document.getElementById('profile-name') as HTMLInputElement | null;
     const emailInput = document.getElementById('profile-email') as HTMLInputElement | null;
     const name = nameInput?.value.trim() || getApiUser()?.name || 'Your name';
     const email = emailInput?.value.trim() || getApiUser()?.email || 'email@example.com';
+    const avatarUrl = getApiUser()?.avatar_url || null;
 
     document.querySelectorAll<HTMLElement>('[data-profile-preview-name]').forEach((el) => {
         el.textContent = name;
@@ -85,8 +80,11 @@ function syncProfilePreview(): void {
         el.textContent = email;
     });
     document.querySelectorAll<HTMLElement>('[data-profile-avatar]').forEach((el) => {
-        el.textContent = userInitials(name);
+        paintAvatarElement(el, name, avatarUrl);
     });
+
+    const removeBtn = document.getElementById('btn-profile-avatar-remove');
+    removeBtn?.classList.toggle('d-none', !avatarUrl);
 }
 
 function fillProfileForm(): void {
@@ -94,6 +92,7 @@ function fillProfileForm(): void {
     const name = document.getElementById('profile-name') as HTMLInputElement | null;
     const email = document.getElementById('profile-email') as HTMLInputElement | null;
     const phone = document.getElementById('profile-phone') as HTMLInputElement | null;
+    const avatarInput = document.getElementById('profile-avatar-input') as HTMLInputElement | null;
     if (name) {
         name.value = user?.name || '';
     }
@@ -103,7 +102,116 @@ function fillProfileForm(): void {
     if (phone) {
         phone.value = user?.phone || '';
     }
+    if (avatarInput) {
+        avatarInput.value = '';
+    }
+    const avatarError = document.querySelector<HTMLElement>('#form-edit-profile [data-error-for="avatar"]');
+    if (avatarError) {
+        avatarError.textContent = '';
+    }
     syncProfilePreview();
+}
+
+async function uploadAvatarFile(file: File): Promise<void> {
+    if (!file.type.match(/^image\/(jpeg|png|webp)$/)) {
+        toastError('Use a JPEG, PNG, or WebP image.');
+        return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+        toastError('Profile photo must be 2 MB or smaller.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    try {
+        const { data } = await window.axios.post('/api/v1/auth/profile/avatar', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        if (!data?.status) {
+            throw Object.assign(new Error(data?.message || 'Upload failed'), { response: { data } });
+        }
+        const updated = data.data as ApicsUser;
+        setApiUser({
+            ...getApiUser(),
+            ...updated,
+        });
+        notifyTopbarRefresh();
+        syncProfilePreview();
+        toastSuccess(data.message || 'Profile photo updated');
+    } catch (error: any) {
+        const form = document.getElementById('form-edit-profile') as HTMLFormElement | null;
+        if (form) {
+            applyFieldErrors(form, error?.response?.data?.errors);
+        }
+        toastError(error?.response?.data?.message || error?.response?.data?.errors?.avatar?.[0] || 'Unable to upload photo');
+    }
+}
+
+async function removeAvatar(): Promise<void> {
+    try {
+        const { data } = await window.axios.delete('/api/v1/auth/profile/avatar');
+        if (!data?.status) {
+            throw Object.assign(new Error(data?.message || 'Remove failed'), { response: { data } });
+        }
+        const updated = data.data as ApicsUser;
+        setApiUser({
+            ...getApiUser(),
+            ...updated,
+            avatar_url: null,
+        });
+        notifyTopbarRefresh();
+        syncProfilePreview();
+        toastSuccess(data.message || 'Profile photo removed');
+    } catch (error: any) {
+        toastError(error?.response?.data?.message || 'Unable to remove photo');
+    }
+}
+
+function bindAvatarControls(): void {
+    const pickBtn = document.getElementById('btn-profile-avatar-pick');
+    const uploadBtn = document.getElementById('btn-profile-avatar-upload');
+    const removeBtn = document.getElementById('btn-profile-avatar-remove');
+    const input = document.getElementById('profile-avatar-input') as HTMLInputElement | null;
+    if (!input) {
+        return;
+    }
+
+    const openPicker = (): void => {
+        input.click();
+    };
+
+    pickBtn?.addEventListener('click', (event) => {
+        event.preventDefault();
+        openPicker();
+    });
+    uploadBtn?.addEventListener('click', (event) => {
+        event.preventDefault();
+        openPicker();
+    });
+    removeBtn?.addEventListener('click', (event) => {
+        event.preventDefault();
+        void removeAvatar();
+    });
+
+    input.addEventListener('change', () => {
+        const file = input.files?.[0];
+        if (!file) {
+            return;
+        }
+
+        // Local preview while upload runs
+        const previewUrl = URL.createObjectURL(file);
+        document.querySelectorAll<HTMLElement>('[data-profile-avatar]').forEach((el) => {
+            paintAvatarElement(el, getApiUser()?.name || 'You', previewUrl);
+        });
+
+        void uploadAvatarFile(file).finally(() => {
+            URL.revokeObjectURL(previewUrl);
+            input.value = '';
+        });
+    });
 }
 
 function evaluatePassword(value: string): {
@@ -332,6 +440,7 @@ export function initAccountProfile(): void {
     });
 
     bindPasswordToggles(document);
+    bindAvatarControls();
     bindProfileForm();
     bindPasswordForm();
 }

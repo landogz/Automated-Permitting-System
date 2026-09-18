@@ -1,4 +1,5 @@
 import { escapeHtml } from './bootstrap-modal';
+import { userAvatarHtml } from './user-avatar';
 
 const STATUS_LABELS: Record<string, string> = {
     draft: 'Draft',
@@ -126,16 +127,12 @@ export function inspectionTypeLabel(type: string | null | undefined): string {
     return humanizeKey(key);
 }
 
-export function inspectorAvatarHtml(name?: string | null): string {
+export function inspectorAvatarHtml(name?: string | null, avatarUrl?: string | null): string {
     const display = (name || '').trim();
     if (!display) {
         return `<span class="text-muted">Unassigned</span>`;
     }
     const parts = display.split(/\s+/).filter(Boolean);
-    const initials =
-        parts.length >= 2
-            ? `${parts[0]![0] || ''}${parts[parts.length - 1]![0] || ''}`.toUpperCase()
-            : display.slice(0, 2).toUpperCase();
     const short =
         /administrator/i.test(display) || /^admin\b/i.test(display)
             ? 'Admin'
@@ -143,7 +140,7 @@ export function inspectorAvatarHtml(name?: string | null): string {
               ? `${parts[0]} ${parts[parts.length - 1]![0]}.`
               : display;
 
-    return `<span class="apics-inspector"><span class="apics-avatar" aria-hidden="true">${escapeHtml(initials)}</span><span>${escapeHtml(short)}</span></span>`;
+    return `<span class="apics-inspector">${userAvatarHtml(display, avatarUrl, 'apics-avatar')}<span>${escapeHtml(short)}</span></span>`;
 }
 
 export function resultPendingHtml(label = 'Pending Verification'): string {

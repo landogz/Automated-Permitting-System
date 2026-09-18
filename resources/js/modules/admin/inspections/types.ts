@@ -73,7 +73,7 @@ export type InspectionRow = {
         longitude?: number | null;
         status?: string;
     };
-    inspector?: { uuid?: string; name?: string };
+    inspector?: { uuid?: string; name?: string; avatar_url?: string | null };
 };
 
 export type InspectionTemplatesPayload = {

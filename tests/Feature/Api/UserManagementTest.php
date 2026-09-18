@@ -41,7 +41,20 @@ class UserManagementTest extends TestCase
             ->getJson('/api/v1/admin/users')
             ->assertOk()
             ->assertJsonPath('status', true)
-            ->assertJsonStructure(['data' => ['items', 'meta']]);
+            ->assertJsonStructure([
+                'data' => [
+                    'items',
+                    'summary' => [
+                        'total',
+                        'active',
+                        'inactive',
+                        'staff',
+                        'applicants',
+                        'pending',
+                    ],
+                    'meta',
+                ],
+            ]);
     }
 
     public function test_admin_can_create_and_update_staff_user(): void

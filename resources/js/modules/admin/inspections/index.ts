@@ -167,7 +167,7 @@ function inspectionColumns(): ApicsColumn<InspectionRow>[] {
             responsivePriority: 3,
             render: (_d, _t, row) => {
                 const teamCount = row.team_inspectors?.length || 0;
-                const lead = inspectorAvatarHtml(row.inspector?.name);
+                const lead = inspectorAvatarHtml(row.inspector?.name, row.inspector?.avatar_url);
                 if (teamCount > 1) {
                     return `${lead}<div class="text-muted small mt-1">+${teamCount - 1} team</div>`;
                 }
@@ -259,11 +259,18 @@ export function initInspectionsPage(): void {
         if (title) {
             title.textContent = `Record forms · ${row.inspection_no}`;
         }
+        const metaApp = document.getElementById('insp-complete-meta-app');
+        if (metaApp) {
+            const appNo = row.application?.application_no || '—';
+            const project = row.application?.project_title || inspectionTypeLabel(row.type);
+            metaApp.textContent = `${appNo} · ${project}`;
+        }
+        document.getElementById('insp-complete-chip-elec')?.classList.toggle('d-none', !row.requires_electrical_form);
 
         const resultEl = document.getElementById('insp-complete-result') as HTMLSelectElement | null;
         const notesEl = document.getElementById('insp-complete-notes') as HTMLTextAreaElement | null;
         const weatherEl = document.getElementById('insp-complete-weather') as HTMLInputElement | null;
-        const siteEl = document.getElementById('insp-complete-site') as HTMLTextAreaElement | null;
+        const siteEl = document.getElementById('insp-complete-site') as HTMLInputElement | null;
         const findingsEl = document.getElementById('insp-complete-findings') as HTMLTextAreaElement | null;
         const defectsEl = document.getElementById('insp-complete-defects') as HTMLTextAreaElement | null;
         const recoEl = document.getElementById('insp-complete-recommendations') as HTMLTextAreaElement | null;
@@ -539,7 +546,7 @@ export function initInspectionsPage(): void {
             notes: notes || undefined,
             inspector_notes: {
                 weather: (document.getElementById('insp-complete-weather') as HTMLInputElement).value.trim(),
-                site_conditions: (document.getElementById('insp-complete-site') as HTMLTextAreaElement).value.trim(),
+                site_conditions: (document.getElementById('insp-complete-site') as HTMLInputElement).value.trim(),
                 findings,
                 observed_defects: (document.getElementById('insp-complete-defects') as HTMLTextAreaElement).value.trim(),
                 recommendations: (

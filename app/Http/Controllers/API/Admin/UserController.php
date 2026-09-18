@@ -36,6 +36,7 @@ class UserController extends Controller
 
         return ApiResponse::success('Users retrieved', [
             'items' => ManagedUserResource::collection($paginator->items()),
+            'summary' => $this->service->summary(),
             'meta' => [
                 'current_page' => $paginator->currentPage(),
                 'last_page' => $paginator->lastPage(),

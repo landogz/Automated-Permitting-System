@@ -6,6 +6,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\URL;
 
 /** @mixin \App\Models\RoutingSlip */
 class RoutingSlipResource extends JsonResource
@@ -15,12 +16,29 @@ class RoutingSlipResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $printUrls = null;
+        if ($request->user()?->can('evaluations.manage')) {
+            $printUrls = [
+                'qms-61' => URL::temporarySignedRoute(
+                    'admin.routing-slips.print',
+                    now()->addMinutes(15),
+                    ['slip' => $this->uuid, 'doc' => 'qms-61'],
+                ),
+                'qms-62' => URL::temporarySignedRoute(
+                    'admin.routing-slips.print',
+                    now()->addMinutes(15),
+                    ['slip' => $this->uuid, 'doc' => 'qms-62'],
+                ),
+            ];
+        }
+
         return [
             'uuid' => $this->uuid,
             'slip_no' => $this->slip_no,
             'classification' => $this->classification?->value ?? $this->classification,
             'status' => $this->status,
             'generated_at' => $this->generated_at?->toIso8601String(),
+            'print_urls' => $printUrls,
             'template' => $this->whenLoaded('template', fn () => $this->template ? [
                 'uuid' => $this->template->uuid,
                 'code' => $this->template->code,

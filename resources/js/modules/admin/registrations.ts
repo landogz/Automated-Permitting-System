@@ -1,12 +1,14 @@
 import { escapeHtml, hideModal, showModal } from '../../utils/bootstrap-modal';
 import { createApicsDataTable, type ApicsDataTableApi } from '../../utils/datatable';
 import { confirmAction, toastError, toastSuccess } from '../../utils/toast';
+import { userAvatarHtml } from '../../utils/user-avatar';
 
 type RegistrationRow = {
     uuid: string;
     name: string;
     email: string;
     phone?: string | null;
+    avatar_url?: string | null;
     approval_status: string;
     registered_at?: string | null;
 };
@@ -67,7 +69,11 @@ export function initRegistrationsPage(): void {
                         data: 'name',
                         title: 'Name',
                         responsivePriority: 1,
-                        render: (data) => `<span class="fw-medium">${escapeHtml(String(data ?? ''))}</span>`,
+                        render: (_data, _type, row) => `
+                            <span class="d-inline-flex align-items-center gap-2 min-w-0">
+                                ${userAvatarHtml(row.name, row.avatar_url, 'apics-user-avatar')}
+                                <span class="fw-medium text-truncate">${escapeHtml(row.name || '')}</span>
+                            </span>`,
                     },
                     { data: 'email', title: 'Email', responsivePriority: 1 },
                     {

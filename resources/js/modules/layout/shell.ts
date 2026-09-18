@@ -9,6 +9,7 @@ import {
     type ApicsUser,
 } from '../../utils/auth';
 import { toastError, toastSuccess } from '../../utils/toast';
+import { paintUserAvatar } from '../../utils/user-avatar';
 
 const OFFICE_ROLES = [
     'admin',
@@ -132,7 +133,7 @@ function applyNavVisibility(): void {
 
 function titleCaseRole(role: string): string {
     const labels: Record<string, string> = {
-        admin: 'Administrator',
+        admin: 'System Administrator',
         building_official: 'Building Official',
         receiving: 'Receiving',
         evaluator: 'Evaluator',
@@ -153,18 +154,6 @@ function titleCaseRole(role: string): string {
         .filter(Boolean)
         .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
         .join(' ');
-}
-
-function userInitials(name: string): string {
-    const parts = name.trim().split(/\s+/).filter(Boolean);
-    if (parts.length === 0) {
-        return 'AP';
-    }
-    if (parts.length === 1) {
-        return parts[0].slice(0, 2).toUpperCase();
-    }
-
-    return `${parts[0].charAt(0)}${parts[parts.length - 1].charAt(0)}`.toUpperCase();
 }
 
 function applyTopbarUser(): void {
@@ -203,10 +192,9 @@ function applyTopbarUser(): void {
             : 'Sign in to continue';
     }
 
-    const initials = userInitials(displayName);
+    const avatarUrl = user?.avatar_url || null;
     avatarEls.forEach((el) => {
-        el.textContent = initials;
-        el.setAttribute('title', displayName);
+        paintUserAvatar(el, displayName, avatarUrl);
     });
 
     trigger?.classList.toggle('is-authenticated', isAuthenticated());

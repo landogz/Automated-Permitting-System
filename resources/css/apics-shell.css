@@ -585,6 +585,7 @@ html[data-sidebar-size='sm-hover']:not(:hover) .apics-nav-badge {
 }
 
 .apics-topbar-user__avatar {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -594,10 +595,34 @@ html[data-sidebar-size='sm-hover']:not(:hover) .apics-nav-badge {
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.02em;
-    color: #fff;
-    background: linear-gradient(145deg, #405189 0%, #5b6aa8 55%, #0ab39c 130%);
-    box-shadow: 0 0 0 2px #fff, 0 0 0 3px rgba(64, 81, 137, 0.18);
+    color: #405189;
+    background: #eef0f5;
+    box-shadow: 0 0 0 1px rgba(64, 81, 137, 0.08);
     flex-shrink: 0;
+    overflow: hidden;
+}
+
+.apics-topbar-user__avatar [data-avatar-initials] {
+    line-height: 1;
+}
+
+.apics-topbar-user__avatar img[data-avatar-img] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    display: block;
+}
+
+.apics-topbar-user__avatar.has-photo {
+    background: #eef0f5;
+    color: transparent;
+}
+
+.apics-topbar-user__avatar.has-photo [data-avatar-initials] {
+    display: none;
 }
 
 .apics-topbar-user__avatar--lg {
@@ -721,7 +746,9 @@ html[data-sidebar-size='sm-hover']:not(:hover) .apics-nav-badge {
 }
 
 [data-bs-theme='dark'] .apics-topbar-user__avatar {
-    box-shadow: 0 0 0 2px #1a1d21, 0 0 0 3px rgba(99, 102, 241, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+    color: #c5cbe3;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 [data-bs-theme='dark'] .apics-account-menu {
@@ -809,20 +836,93 @@ html[data-sidebar-size='sm-hover']:not(:hover) .apics-nav-badge {
     border: 1px solid var(--vz-border-color, #e9ebec);
 }
 
+.apics-account-modal__avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.apics-account-modal__avatar-btn {
+    position: relative;
+    display: block;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    border-radius: 999px;
+    cursor: pointer;
+    line-height: 0;
+}
+
+.apics-account-modal__avatar-btn:focus-visible {
+    outline: 2px solid #405189;
+    outline-offset: 3px;
+}
+
 .apics-account-modal__avatar {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.85rem;
-    height: 2.85rem;
+    width: 4rem;
+    height: 4rem;
     border-radius: 999px;
-    font-size: 0.8125rem;
+    font-size: 0.9375rem;
     font-weight: 700;
     letter-spacing: 0.02em;
-    color: #fff;
-    background: linear-gradient(145deg, #405189, #3577f1);
-    box-shadow: 0 0 0 3px rgba(64, 81, 137, 0.12);
+    color: #405189;
+    background: #eef0f5;
+    box-shadow: 0 0 0 1px rgba(64, 81, 137, 0.08);
     flex-shrink: 0;
+    overflow: hidden;
+}
+
+.apics-account-modal__avatar [data-avatar-initials] {
+    line-height: 1;
+}
+
+.apics-account-modal__avatar img[data-avatar-img] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    display: block;
+}
+
+.apics-account-modal__avatar.has-photo {
+    background: #eef0f5;
+    color: transparent;
+}
+
+.apics-account-modal__avatar.has-photo [data-avatar-initials] {
+    display: none;
+}
+
+.apics-account-modal__avatar-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.45);
+    color: #fff;
+    font-size: 1.15rem;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.apics-account-modal__avatar-btn:hover .apics-account-modal__avatar-overlay,
+.apics-account-modal__avatar-btn:focus-visible .apics-account-modal__avatar-overlay {
+    opacity: 1;
+}
+
+@media (hover: none) {
+    .apics-account-modal__avatar-overlay {
+        opacity: 1;
+        background: rgba(15, 23, 42, 0.35);
+        font-size: 0.95rem;
+    }
 }
 
 .apics-account-modal__identity-name {

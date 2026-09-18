@@ -398,6 +398,286 @@
     border-top: 0;
 }
 
+/* Record / complete inspection forms modal */
+.apics-insp-record-modal .modal-header {
+    border-bottom: 0;
+    padding-bottom: 0.35rem;
+    background: linear-gradient(180deg, rgba(64, 81, 137, 0.06) 0%, transparent 100%);
+}
+
+.apics-insp-record-modal .modal-title {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.apics-insp-record-modal__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.65rem;
+    margin-top: 0.35rem;
+}
+
+.apics-insp-record-modal__meta-app {
+    font-size: 0.8125rem;
+    color: var(--vz-secondary-color, #878a99);
+}
+
+.apics-insp-form-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    line-height: 1.2;
+}
+
+.apics-insp-form-chip--primary {
+    color: #405189;
+    background: rgba(64, 81, 137, 0.1);
+    border-color: rgba(64, 81, 137, 0.18);
+}
+
+.apics-insp-form-chip--success {
+    color: #0ab39c;
+    background: rgba(10, 179, 156, 0.1);
+    border-color: rgba(10, 179, 156, 0.18);
+}
+
+.apics-insp-form-chip--info {
+    color: #299cdb;
+    background: rgba(41, 156, 219, 0.1);
+    border-color: rgba(41, 156, 219, 0.18);
+}
+
+.apics-insp-form-chip--warning {
+    color: #f7b84b;
+    background: rgba(247, 184, 75, 0.12);
+    border-color: rgba(247, 184, 75, 0.22);
+}
+
+.apics-insp-outcome {
+    border: 1px solid rgba(64, 81, 137, 0.14);
+    border-radius: 0.85rem;
+    padding: 1rem 1.1rem;
+    margin-bottom: 1rem;
+    background:
+        linear-gradient(135deg, rgba(64, 81, 137, 0.07) 0%, rgba(255, 255, 255, 0.9) 48%),
+        #fff;
+}
+
+.apics-insp-section {
+    border: 1px solid var(--vz-border-color, #e9ebec);
+    border-radius: 0.85rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.apics-insp-section:last-child {
+    margin-bottom: 0;
+}
+
+.apics-insp-section__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.65rem;
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--vz-border-color, #e9ebec);
+    background: #f8f9fa;
+}
+
+.apics-insp-section__head-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.apics-insp-section__icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.65rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.05rem;
+}
+
+.apics-insp-section__icon--notes {
+    color: #405189;
+    background: rgba(64, 81, 137, 0.12);
+}
+
+.apics-insp-section__icon--compliance {
+    color: #0ab39c;
+    background: rgba(10, 179, 156, 0.12);
+}
+
+.apics-insp-section__icon--electrical {
+    color: #f7b84b;
+    background: rgba(247, 184, 75, 0.16);
+}
+
+.apics-insp-section__title {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--vz-body-color, #212529);
+}
+
+.apics-insp-section__hint {
+    margin: 0.15rem 0 0;
+    font-size: 0.75rem;
+    color: var(--vz-secondary-color, #878a99);
+}
+
+.apics-insp-section__body {
+    padding: 1rem 1.1rem 1.1rem;
+}
+
+.apics-insp-section .form-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #495057;
+    margin-bottom: 0.35rem;
+}
+
+.apics-insp-section .form-control,
+.apics-insp-section .form-select,
+.apics-insp-outcome .form-control,
+.apics-insp-outcome .form-select {
+    border-radius: 0.55rem;
+    border-color: #dfe2e6;
+    resize: vertical;
+}
+
+.apics-insp-section .form-control:focus,
+.apics-insp-section .form-select:focus,
+.apics-insp-outcome .form-control:focus,
+.apics-insp-outcome .form-select:focus {
+    border-color: rgba(64, 81, 137, 0.45);
+    box-shadow: 0 0 0 0.2rem rgba(64, 81, 137, 0.12);
+}
+
+.apics-insp-check-card {
+    height: 100%;
+    border: 1px solid #e6e9ef;
+    border-radius: 0.7rem;
+    padding: 0.75rem 0.85rem;
+    background: #fcfcfd;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.apics-insp-check-card:hover {
+    border-color: rgba(64, 81, 137, 0.28);
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+.apics-insp-check-card__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem 0.65rem;
+}
+
+.apics-insp-check-card__code {
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #878a99;
+    margin-bottom: 0.2rem;
+}
+
+.apics-insp-check-card__label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: #212529;
+    min-width: 0;
+    flex: 1 1 8rem;
+}
+
+.apics-insp-check-card__status {
+    flex: 0 0 auto;
+    min-width: 5.75rem;
+}
+
+.apics-insp-check-card__status .form-select {
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+.apics-insp-check-card[data-status='ok'] {
+    border-color: rgba(10, 179, 156, 0.35);
+    background: rgba(10, 179, 156, 0.04);
+}
+
+.apics-insp-check-card[data-status='fail'] {
+    border-color: rgba(240, 101, 72, 0.35);
+    background: rgba(240, 101, 72, 0.04);
+}
+
+.apics-insp-elec-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 0.75rem;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid #e6e9ef;
+    border-radius: 0.65rem;
+    background: #fcfcfd;
+    margin-bottom: 0.5rem;
+}
+
+.apics-insp-elec-row:last-child {
+    margin-bottom: 0;
+}
+
+.apics-insp-elec-row__label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.apics-insp-record-modal .modal-footer {
+    background: #f8f9fa;
+    gap: 0.5rem;
+}
+
+@media (max-width: 575.98px) {
+    .apics-insp-section__body,
+    .apics-insp-outcome {
+        padding-left: 0.85rem;
+        padding-right: 0.85rem;
+    }
+
+    .apics-insp-check-card__status {
+        width: 100%;
+    }
+
+    .apics-insp-check-card__status .form-select {
+        width: 100%;
+    }
+}
+
 .apics-agency-tip {
     cursor: help;
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Models\FormDefinition;
+use App\Support\Evaluation\EvaluationFormCatalog;
 use App\Support\Inspection\InspectionFormCatalog;
 use App\Support\PermitApplication\FieldCatalog;
 use Illuminate\Database\Seeder;
@@ -43,12 +44,25 @@ class FormDefinitionSeeder extends Seeder
             [
                 'code' => 'QMS-61',
                 'title' => 'Routing Slip (QMS-61)',
-                'schema' => [
-                    'fields' => [
-                        ['name' => 'route_to', 'label' => 'Route To Department', 'type' => 'text', 'required' => true],
-                        ['name' => 'remarks', 'label' => 'Remarks', 'type' => 'textarea', 'required' => false],
-                    ],
-                ],
+                'schema' => EvaluationFormCatalog::qms61Schema(),
+                'required_attachments' => [],
+            ],
+            [
+                'code' => 'QMS-62',
+                'title' => 'Routing Path Template (QMS-62)',
+                'schema' => EvaluationFormCatalog::qms62Schema(),
+                'required_attachments' => [],
+            ],
+            [
+                'code' => 'QMS-63',
+                'title' => 'Evaluation Sheet (QMS-63)',
+                'schema' => EvaluationFormCatalog::qms63Schema(),
+                'required_attachments' => [],
+            ],
+            [
+                'code' => 'QMS-64',
+                'title' => 'Technical Findings (QMS-64)',
+                'schema' => EvaluationFormCatalog::qms64Schema(),
                 'required_attachments' => [],
             ],
             [

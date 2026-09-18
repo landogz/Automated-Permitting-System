@@ -220,13 +220,15 @@ final class DashboardService
     private function recentActivity(): array
     {
         return AuditLog::query()
+            ->with(['user:id,uuid,name,email,avatar_path'])
             ->latest('id')
             ->limit(10)
-            ->get(['uuid', 'event', 'actor_name', 'meta', 'created_at'])
+            ->get(['id', 'uuid', 'user_id', 'event', 'actor_name', 'meta', 'created_at'])
             ->map(static fn (AuditLog $log): array => [
                 'uuid' => $log->uuid,
                 'event' => $log->event,
                 'actor_name' => $log->actor_name,
+                'actor_avatar_url' => $log->user?->avatarUrl(),
                 'meta' => is_array($log->meta) ? array_intersect_key($log->meta, array_flip([
                     'application_id',
                     'application_no',

@@ -267,8 +267,12 @@ export async function openOpsApplicationDetail(
     const meta = document.getElementById('ops-application-detail-header-meta');
     const actions = document.getElementById('ops-application-detail-actions');
     const tabnav = document.getElementById('ops-application-detail-tabnav');
-    if (!body || !applicationUuid) {
-        toastError('Application detail viewer is not available on this page.');
+    if (!applicationUuid) {
+        toastError('Missing application reference. Reload the page and try again.');
+        return;
+    }
+    if (!body) {
+        toastError('Application detail viewer failed to load. Hard-refresh the page (Cmd/Ctrl+Shift+R).');
         return;
     }
 

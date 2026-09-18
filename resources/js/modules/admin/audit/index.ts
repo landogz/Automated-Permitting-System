@@ -1,6 +1,7 @@
 import { escapeHtml } from '../../../utils/bootstrap-modal';
 import { createApicsDataTable, type ApicsDataTableApi } from '../../../utils/datatable';
 import { toastError, toastSuccess } from '../../../utils/toast';
+import { userAvatarHtml } from '../../../utils/user-avatar';
 import {
     actorCell,
     clientCell,
@@ -106,8 +107,17 @@ export function initAuditPage(): void {
                     <div>
                         <dt>Actor</dt>
                         <dd>
-                            <strong>${escapeHtml(item.actor_name || '—')}</strong>
-                            ${item.actor_role_label ? `<div class="text-muted fs-12">${escapeHtml(item.actor_role_label)}</div>` : ''}
+                            <span class="apics-audit-actor">
+                                ${userAvatarHtml(
+                                    item.actor_name || 'User',
+                                    item.actor_avatar_url || item.user?.avatar_url || null,
+                                    'apics-audit-actor__avatar',
+                                )}
+                                <span class="min-w-0">
+                                    <strong class="d-block">${escapeHtml(item.actor_name || '—')}</strong>
+                                    ${item.actor_role_label ? `<div class="text-muted fs-12">${escapeHtml(item.actor_role_label)}</div>` : ''}
+                                </span>
+                            </span>
                         </dd>
                     </div>
                     <div>

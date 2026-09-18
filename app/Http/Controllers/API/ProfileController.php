@@ -7,10 +7,12 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Profile\ChangePasswordRequest;
 use App\Http\Requests\Profile\UpdateProfileRequest;
+use App\Http\Requests\Profile\UploadAvatarRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Responses\ApiResponse;
 use App\Services\Profile\ProfileService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
@@ -29,6 +31,31 @@ class ProfileController extends Controller
         );
 
         return ApiResponse::success('Profile updated successfully', new UserResource($user));
+    }
+
+    /**
+     * Upload or replace the authenticated user's profile photo.
+     */
+    public function uploadAvatar(UploadAvatarRequest $request): JsonResponse
+    {
+        $user = $this->profileService->updateAvatar(
+            $request->user(),
+            $request->file('avatar'),
+        );
+
+        return ApiResponse::success('Profile photo updated', new UserResource($user));
+    }
+
+    /**
+     * Remove the authenticated user's profile photo.
+     */
+    public function removeAvatar(Request $request): JsonResponse
+    {
+        abort_unless($request->user() !== null, 401);
+
+        $user = $this->profileService->removeAvatar($request->user());
+
+        return ApiResponse::success('Profile photo removed', new UserResource($user));
     }
 
     /**

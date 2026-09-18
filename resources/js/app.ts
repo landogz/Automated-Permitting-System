@@ -9,6 +9,7 @@ import '../css/apics-location-picker.css';
 import '../css/apics-dashboard.css';
 import '../css/apics-notifications-inbox.css';
 import '../css/apics-audit.css';
+import '../css/apics-users.css';
 import '../css/landing-motion.css';
 import { toastSuccess, toastError } from './utils/toast';
 import { showLoading, hideLoading, withLoading, withButtonLoading } from './utils/loading';

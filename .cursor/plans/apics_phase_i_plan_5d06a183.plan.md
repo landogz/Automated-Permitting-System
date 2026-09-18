@@ -500,6 +500,15 @@ Create [`.cursor/rules/update-project-plan-on-done.mdc`](.cursor/rules/update-pr
 | 2026-09-18 | **Inspection form products:** QMS-38/39 schedule+team, O-03 notes, QMS-65 checklist, DPWH 77-006-E capture; FormDefinition seeds; signed government print; Complete-with-forms UI; `InspectionFormsTest` | Remaining: staging → KT → production |
 | 2026-09-18 | **Application details · Inspection forms tab:** shows QMS-38/39/O-03/QMS-65/DPWH sheets + signed print buttons; Inspect from `/admin/inspections` opens that tab | Remaining: staging → KT → production |
 | 2026-09-18 | **Inspection Save only:** `POST …/inspections/{id}/forms` drafts O-03/QMS-65/DPWH without completing; modal has Save only + Save & complete; status → in_progress | Remaining: staging → KT → production |
+| 2026-09-18 | **Record forms modal UI polish:** Velzon section cards, form-code chips, outcome band, two-column QMS-65 tiles with OK/Fail tint, DPWH grid | Remaining: staging → KT → production |
+| 2026-09-18 | **Evaluation & Routing form products:** QMS-61/62/63/64 catalog+seeds; structured findings Save only / Save & decide; dept time logs + rollup; signed print; Evaluation Queue modal + Application detail Routing print/sheets; `EvaluationFormsTest` | Remaining: staging → KT → production |
+| 2026-09-18 | **Fix duplicate evaluation sheets:** one draft per application (reuse + prune orphans); Evaluate modal reloads draft; detail shows decided + latest draft only | Remaining: staging → KT → production |
+| 2026-09-18 | **Application detail modal always available:** moved viewer + map expand into Velzon layout (fixes “not available on this page” on Logbooks/Archives and any admin screen) | Remaining: staging → KT → production |
+| 2026-09-18 | **Hide eval mutations on released filings:** Regenerate slip / Start Evaluation / Start timer only while `submitted` or `under_evaluation` (Archives & completed views) | Remaining: staging → KT → production |
+| 2026-09-18 | **Profile photo upload:** Edit profile avatar upload/remove (JPEG/PNG/WebP ≤2MB); topbar shows photo; `POST/DELETE /api/v1/auth/profile/avatar`; audit + ProfileTest | Remaining: staging → KT → production |
+| 2026-09-18 | **Topbar avatar photo chip:** soft grey initials circle (matches account menu) + real `<img>` profile photo in topbar/dropdown/Edit profile | Remaining: staging → KT → production |
+| 2026-09-18 | **Profile photos across admin lists:** audit Actor column + drawer, Users, Registrations, Inspections lead, dashboard activity use `avatar_url` / `actor_avatar_url`; shared `userAvatarHtml` | Remaining: staging → KT → production |
+| 2026-09-18 | **Users & Roles console redesign:** KPI strip (total/staff/applicants/pending), polished directory card + avatar/role/access cells, sectioned create/edit modal; API `summary` on users list | Remaining: staging → KT → production |
 | — | Next | Staging, training/KT, production go-live + warranty |
 
 Also mirror this requirement in [`CLAUDE.md`](CLAUDE.md) under engineering standards.

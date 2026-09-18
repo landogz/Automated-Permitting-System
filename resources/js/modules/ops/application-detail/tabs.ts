@@ -60,7 +60,10 @@ export function headerMetaHtml(app: StaffApplicationDetail): string {
 
 export function headerActionsHtml(app: StaffApplicationDetail): string {
     const canEval = hasPermission('evaluations.manage');
-    const canRoute = canEval;
+    const status = String(app.status || '').toLowerCase();
+    const evaluationOpen = status === 'submitted' || status === 'under_evaluation';
+    const canRoute = canEval && evaluationOpen;
+    const canStartEval = canEval && evaluationOpen;
     const hasSlip = (app.routing_slips || []).length > 0;
     const classified = Boolean(app.classification);
 
@@ -78,7 +81,7 @@ export function headerActionsHtml(app: StaffApplicationDetail): string {
                 : ''
         }
         ${
-            canEval
+            canStartEval
                 ? `<button type="button" class="btn btn-sm btn-primary" data-ops-detail-action="evaluate">
                     <i class="ri-play-circle-line align-bottom me-1"></i><span class="d-none d-md-inline">Start Evaluation</span>
                    </button>`
@@ -418,9 +421,114 @@ function documentsTabHtml(app: StaffApplicationDetail): string {
     `;
 }
 
+function routingPrintButtonsHtml(
+    urls: NonNullable<StaffApplicationDetail['routing_slips']>[number]['print_urls'],
+): string {
+    if (!urls) return '';
+    const docs: Array<{ key: keyof NonNullable<typeof urls>; label: string }> = [
+        { key: 'qms-61', label: 'QMS-61' },
+        { key: 'qms-62', label: 'QMS-62' },
+    ];
+    return docs
+        .filter((d) => Boolean(urls[d.key]))
+        .map(
+            (d) => `<button type="button" class="btn btn-sm btn-soft-secondary"
+                data-ops-insp-print="${escapeHtml(String(urls[d.key] || ''))}">
+                <i class="ri-printer-line align-bottom me-1"></i>${escapeHtml(d.label)}
+            </button>`,
+        )
+        .join('');
+}
+
+function evaluationPrintButtonsHtml(
+    urls: NonNullable<StaffApplicationDetail['evaluations']>[number]['print_urls'],
+): string {
+    if (!urls) return '';
+    const docs: Array<{ key: keyof NonNullable<typeof urls>; label: string }> = [
+        { key: 'qms-63', label: 'QMS-63' },
+        { key: 'qms-64', label: 'QMS-64' },
+    ];
+    return docs
+        .filter((d) => Boolean(urls[d.key]))
+        .map(
+            (d) => `<button type="button" class="btn btn-sm btn-soft-secondary"
+                data-ops-insp-print="${escapeHtml(String(urls[d.key] || ''))}">
+                <i class="ri-printer-line align-bottom me-1"></i>${escapeHtml(d.label)}
+            </button>`,
+        )
+        .join('');
+}
+
+function evaluationsBlockHtml(app: StaffApplicationDetail): string {
+    const evaluations = app.evaluations || [];
+    if (!evaluations.length) {
+        return `<div class="border rounded p-3 mt-3 bg-light-subtle">
+            <p class="fw-medium mb-1">No evaluation sheets yet</p>
+            <p class="text-muted small mb-0">QMS-63/64 sheets appear here after an evaluator saves or decides from the Evaluation Queue.</p>
+        </div>`;
+    }
+
+    const decided = evaluations
+        .filter((ev) => String(ev.status || '') === 'decided')
+        .slice()
+        .sort((a, b) => String(b.decided_at || b.created_at || '').localeCompare(String(a.decided_at || a.created_at || '')));
+    const drafts = evaluations
+        .filter((ev) => String(ev.status || '') === 'draft')
+        .slice()
+        .sort((a, b) => String(b.updated_at || b.created_at || '').localeCompare(String(a.updated_at || a.created_at || '')));
+    const latestDraft = drafts[0];
+    const visible = [...decided, ...(latestDraft ? [latestDraft] : [])];
+    const hiddenDrafts = Math.max(0, drafts.length - (latestDraft ? 1 : 0));
+
+    return `${
+        hiddenDrafts > 0
+            ? `<p class="text-muted small mb-2">Showing the latest draft (${hiddenDrafts} older draft${hiddenDrafts === 1 ? '' : 's'} hidden — open Evaluate to continue the active sheet).</p>`
+            : ''
+    }${visible
+        .map((ev) => {
+            const findings = ev.findings || {};
+            const completeness = findings.completeness || [];
+            const technical = findings.technical || [];
+            return `<div class="border rounded p-3 mt-3">
+                <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
+                    <div>
+                        <p class="fw-semibold mb-0">Evaluation sheet
+                            <span class="badge bg-primary-subtle text-primary ms-1">${escapeHtml(humanizeKey(String(ev.status || '')))}</span>
+                            ${ev.result ? `<span class="badge bg-info-subtle text-info ms-1">${escapeHtml(humanizeKey(String(ev.result)))}</span>` : ''}
+                        </p>
+                        <p class="text-muted small mb-0">${escapeHtml(ev.evaluator?.name || 'Evaluator')}${ev.decided_at ? ` · decided ${escapeHtml(formatWhen(ev.decided_at))}` : ''}</p>
+                    </div>
+                    <div class="d-flex flex-wrap gap-1">${evaluationPrintButtonsHtml(ev.print_urls)}</div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <p class="text-muted text-uppercase fw-medium fs-11 mb-1">QMS-63 completeness (${completeness.length})</p>
+                        ${complianceItemsSummaryHtml(completeness)}
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted text-uppercase fw-medium fs-11 mb-1">QMS-64 technical (${technical.length})</p>
+                        ${complianceItemsSummaryHtml(technical)}
+                    </div>
+                </div>
+                ${
+                    findings.overall_remarks || findings.discipline_remarks || ev.remarks
+                        ? `<div class="mt-2 small">
+                            ${findings.overall_remarks ? `<div><span class="text-muted">Overall:</span> ${escapeHtml(findings.overall_remarks)}</div>` : ''}
+                            ${findings.discipline_remarks ? `<div><span class="text-muted">Discipline:</span> ${escapeHtml(findings.discipline_remarks)}</div>` : ''}
+                            ${ev.remarks ? `<div><span class="text-muted">Decision:</span> ${escapeHtml(ev.remarks)}</div>` : ''}
+                           </div>`
+                        : ''
+                }
+            </div>`;
+        })
+        .join('')}`;
+}
+
 function routingTabHtml(app: StaffApplicationDetail): string {
     const slips = app.routing_slips || [];
-    const canRoute = hasPermission('evaluations.manage');
+    const status = String(app.status || '').toLowerCase();
+    const evaluationOpen = status === 'submitted' || status === 'under_evaluation';
+    const canRoute = hasPermission('evaluations.manage') && evaluationOpen;
 
     if (!slips.length) {
         return `
@@ -432,13 +540,16 @@ function routingTabHtml(app: StaffApplicationDetail): string {
                         ? `<button type="button" class="btn btn-primary btn-sm" data-ops-detail-action="routing" ${!app.classification ? 'disabled title="Classify first"' : ''}>
                             <i class="ri-git-branch-line align-bottom me-1"></i> Generate Routing Slips
                            </button>`
-                        : `<p class="text-muted small mb-0">Ask an evaluator with routing permission to generate the slip.</p>`
+                        : evaluationOpen
+                          ? `<p class="text-muted small mb-0">Ask an evaluator with routing permission to generate the slip.</p>`
+                          : `<p class="text-muted small mb-0">Routing actions are closed for ${escapeHtml(humanizeKey(status || 'this'))} filings.</p>`
                 }
             </div>
+            ${evaluationsBlockHtml(app)}
         `;
     }
 
-    return slips
+    const slipsHtml = slips
         .map((slip) => {
             const steps = (slip.steps || [])
                 .map(
@@ -472,18 +583,23 @@ function routingTabHtml(app: StaffApplicationDetail): string {
                                 : ''
                         }
                     </div>
-                    ${
-                        canRoute
-                            ? `<button type="button" class="btn btn-sm btn-soft-primary" data-ops-detail-action="timer">
-                                <i class="ri-timer-line align-bottom me-1"></i> Start timer
-                               </button>`
-                            : ''
-                    }
+                    <div class="d-flex flex-wrap gap-1 align-items-center">
+                        ${routingPrintButtonsHtml(slip.print_urls)}
+                        ${
+                            canRoute
+                                ? `<button type="button" class="btn btn-sm btn-soft-primary" data-ops-detail-action="timer">
+                                    <i class="ri-timer-line align-bottom me-1"></i> Start timer
+                                   </button>`
+                                : ''
+                        }
+                    </div>
                 </div>
                 <div>${steps || '<p class="text-muted mb-0">No steps</p>'}</div>
             </div>`;
         })
         .join('');
+
+    return `${slipsHtml}${evaluationsBlockHtml(app)}`;
 }
 
 function inspectionTypeLabel(type: string | null | undefined): string {
