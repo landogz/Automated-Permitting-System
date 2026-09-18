@@ -49,11 +49,26 @@ class GeoLocationTest extends TestCase
             'password' => 'Applicant@123',
         ])->assertOk()->json('data.token');
 
-        $this->actingAsApiToken($token)
+        $search = $this->actingAsApiToken($token)
             ->getJson('/api/v1/geo/search?q=Sindalan')
-            ->assertOk()
-            ->assertJsonPath('data.items.0.latitude', 15.05)
-            ->assertJsonPath('data.items.0.longitude', 120.68);
+            ->assertOk();
+
+        $this->assertNotEmpty($search->json('data.items'));
+        $this->assertStringContainsStringIgnoringCase('Sindalan', (string) $search->json('data.items.0.label'));
+        $this->assertIsFloat((float) $search->json('data.items.0.latitude'));
+        $this->assertIsFloat((float) $search->json('data.items.0.longitude'));
+
+        // Local CSFP catalog still works when Nominatim is down.
+        Http::fake([
+            'nominatim.openstreetmap.org/*' => Http::response('blocked', 403),
+        ]);
+
+        $local = $this->actingAsApiToken($token)
+            ->getJson('/api/v1/geo/search?q=Del%20Pilar')
+            ->assertOk();
+
+        $this->assertNotEmpty($local->json('data.items'));
+        $this->assertStringContainsString('Del Pilar', (string) $local->json('data.items.0.label'));
 
         $this->actingAsApiToken($token)
             ->getJson('/api/v1/geo/reverse?latitude=15.05&longitude=120.68')

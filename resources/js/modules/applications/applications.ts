@@ -416,13 +416,13 @@ export function initApplicationsPage(): void {
         (document.getElementById('application-project-title') as HTMLInputElement).value =
             row?.project_title || '';
         ensureProjectLocationPicker()?.setValue({
-            address: row?.project_location || 'City of San Fernando, Pampanga',
+            address: row?.project_location || '',
             latitude: row?.latitude ?? null,
             longitude: row?.longitude ?? null,
         });
         if (!projectLocationPicker) {
             (document.getElementById('application-project-location') as HTMLInputElement).value =
-                row?.project_location || 'City of San Fernando, Pampanga';
+                row?.project_location || '';
         }
         fillFormSelect();
         if (row?.form?.uuid) {

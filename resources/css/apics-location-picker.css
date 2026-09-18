@@ -26,7 +26,17 @@
 }
 
 .apics-location-picker__results {
+    position: relative;
+    z-index: 5;
+    margin-top: 0.35rem;
+    max-height: 14rem;
+    overflow: auto;
     background: var(--vz-secondary-bg, #fff);
+    box-shadow: 0 0.5rem 1.25rem rgba(15, 23, 42, 0.12);
+}
+
+.apics-location-picker__results.d-none {
+    display: none !important;
 }
 
 .apics-location-picker .maplibregl-ctrl-attrib {

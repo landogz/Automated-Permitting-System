@@ -509,6 +509,7 @@ Create [`.cursor/rules/update-project-plan-on-done.mdc`](.cursor/rules/update-pr
 | 2026-09-18 | **Topbar avatar photo chip:** soft grey initials circle (matches account menu) + real `<img>` profile photo in topbar/dropdown/Edit profile | Remaining: staging → KT → production |
 | 2026-09-18 | **Profile photos across admin lists:** audit Actor column + drawer, Users, Registrations, Inspections lead, dashboard activity use `avatar_url` / `actor_avatar_url`; shared `userAvatarHtml` | Remaining: staging → KT → production |
 | 2026-09-18 | **Users & Roles console redesign:** KPI strip (total/staff/applicants/pending), polished directory card + avatar/role/access cells, sectioned create/edit modal; API `summary` on users list | Remaining: staging → KT → production |
+| 2026-09-18 | **Location search fix:** results no longer clipped in application modal; CSFP barangay catalog fallback when Nominatim fails; clearer empty/error UX | Remaining: staging → KT → production |
 | — | Next | Staging, training/KT, production go-live + warranty |
 
 Also mirror this requirement in [`CLAUDE.md`](CLAUDE.md) under engineering standards.

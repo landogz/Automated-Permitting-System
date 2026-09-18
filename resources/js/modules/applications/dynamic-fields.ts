@@ -76,10 +76,10 @@ function locationPickerHtml(
                 </button>
             </div>
             <div
-                class="list-group position-absolute w-100 shadow-sm border rounded mt-1 d-none apics-location-picker__results"
+                class="list-group w-100 border rounded apics-location-picker__results d-none"
                 data-location-results
-                style="z-index: 1080; max-height: 14rem; overflow: auto;"
                 role="listbox"
+                aria-hidden="true"
             ></div>
         </div>
         <input type="hidden" id="${id}-lat" data-dyn-field="${name}_lat" data-location-lat value="${latVal}">

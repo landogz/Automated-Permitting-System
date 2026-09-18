@@ -8,6 +8,7 @@
 import * as maplibregl from 'maplibre-gl';
 import type { Map, Marker, StyleSpecification } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { toastError } from '../../utils/toast';
 
 export type LocationValue = {
     address: string;
@@ -171,18 +172,31 @@ export function createLocationPicker(options: Options): LocationPickerApi {
 
     const renderResults = (
         items: Array<{ label: string; latitude: number; longitude: number }>,
+        emptyHint = false,
     ): void => {
         if (!resultsEl) return;
         if (!items.length) {
+            if (emptyHint) {
+                resultsEl.classList.remove('d-none');
+                resultsEl.setAttribute('aria-hidden', 'false');
+                resultsEl.innerHTML = `<div class="list-group-item text-muted fs-13 py-2">
+                    No matches. Try a barangay name (e.g. Sindalan) or click the map to drop a pin.
+                </div>`;
+                resultsEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                return;
+            }
             resultsEl.innerHTML = '';
             resultsEl.classList.add('d-none');
+            resultsEl.setAttribute('aria-hidden', 'true');
             return;
         }
         resultsEl.classList.remove('d-none');
+        resultsEl.setAttribute('aria-hidden', 'false');
         resultsEl.innerHTML = items
             .map(
                 (item, index) =>
-                    `<button type="button" class="list-group-item list-group-item-action py-2 px-3 fs-13" data-result-index="${index}">
+                    `<button type="button" class="list-group-item list-group-item-action py-2 px-3 fs-13 text-start" data-result-index="${index}">
+                        <i class="ri-map-pin-line text-primary me-1" aria-hidden="true"></i>
                         ${item.label.replace(/</g, '&lt;')}
                     </button>`,
             )
@@ -197,9 +211,13 @@ export function createLocationPicker(options: Options): LocationPickerApi {
                 if (searchInput !== addressInput) searchInput.value = hit.label;
                 placeMarker(hit.longitude, hit.latitude);
                 resultsEl.classList.add('d-none');
+                resultsEl.setAttribute('aria-hidden', 'true');
                 resultsEl.innerHTML = '';
             });
         });
+
+        // Keep the first hit visible inside scrollable modals.
+        resultsEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     };
 
     const runSearch = debounce(async () => {
@@ -210,12 +228,18 @@ export function createLocationPicker(options: Options): LocationPickerApi {
         }
         try {
             const { data } = await window.axios.get('/api/v1/geo/search', {
-                params: { q, limit: 6 },
+                params: { q, limit: 8 },
                 skipLoading: true,
             });
-            renderResults(data.data?.items || []);
-        } catch {
+            const items = data.data?.items || [];
+            renderResults(items, items.length === 0);
+        } catch (error: any) {
             renderResults([]);
+            const msg =
+                error?.response?.data?.message ||
+                error?.response?.data?.errors?.search?.[0] ||
+                'Location search failed. Check your connection or click the map to pin.';
+            toastError(String(msg));
         }
     }, 350);
 
