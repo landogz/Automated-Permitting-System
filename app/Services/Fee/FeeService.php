@@ -89,6 +89,19 @@ final class FeeService
      */
     public function updateRule(FeeRule $rule, array $data): FeeRule
     {
+        $snapshot = static fn (FeeRule $model): array => [
+            'code' => $model->code,
+            'name' => $model->name,
+            'agency' => $model->agency?->value ?? $model->agency,
+            'basis' => $model->basis,
+            'amount' => $model->amount,
+            'rate' => $model->rate,
+            'conditions' => $model->conditions,
+            'priority' => $model->priority,
+            'is_active' => $model->is_active,
+        ];
+
+        $before = $snapshot($rule);
         $rule->fill($data);
         $rule->save();
 
@@ -96,9 +109,11 @@ final class FeeService
             'rule_id' => $rule->uuid,
             'code' => $rule->code,
             'agency' => $rule->agency?->value ?? $rule->agency,
+            'old_values' => $before,
+            'new_values' => $snapshot($rule->refresh()),
         ]);
 
-        return $rule->refresh();
+        return $rule;
     }
 
     public function deleteRule(FeeRule $rule): void

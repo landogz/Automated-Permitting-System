@@ -123,6 +123,7 @@ Route::prefix('v1')->group(function (): void {
             Route::get('form-definitions/templates', [FormDefinitionController::class, 'templates']);
             Route::apiResource('form-definitions', FormDefinitionController::class);
 
+            Route::get('audit-logs/summary', [AuditLogController::class, 'summary']);
             Route::get('audit-logs', [AuditLogController::class, 'index']);
             Route::get('audit-logs/{auditLog}', [AuditLogController::class, 'show']);
 

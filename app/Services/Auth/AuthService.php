@@ -25,6 +25,11 @@ final class AuthService
         $generic = __('Unable to sign in with those credentials.');
 
         if (! $user || ! Hash::check($password, $user->password)) {
+            $this->audit->log('auth.login_failed', [
+                'attempted_email' => $email,
+                'reason' => 'invalid_credentials',
+            ]);
+
             throw ValidationException::withMessages([
                 'email' => [$generic],
             ]);
@@ -35,12 +40,24 @@ final class AuthService
             : RegistrationApprovalStatus::tryFrom((string) $user->approval_status);
 
         if ($status === RegistrationApprovalStatus::Pending) {
+            $this->audit->log('auth.login_failed', [
+                'attempted_email' => $email,
+                'user_id' => $user->uuid,
+                'reason' => 'pending_approval',
+            ], $user);
+
             throw ValidationException::withMessages([
                 'email' => [__('Unable to sign in with those credentials. If your registration is pending approval, please wait for the email confirmation.')],
             ]);
         }
 
         if ($status === RegistrationApprovalStatus::Declined || ! $user->is_active || $status !== RegistrationApprovalStatus::Approved) {
+            $this->audit->log('auth.login_failed', [
+                'attempted_email' => $email,
+                'user_id' => $user->uuid,
+                'reason' => 'inactive_or_declined',
+            ], $user);
+
             throw ValidationException::withMessages([
                 'email' => [$generic],
             ]);
@@ -52,7 +69,7 @@ final class AuthService
             'user_id' => $user->uuid,
             'email' => $user->email,
             'device' => $deviceName,
-        ]);
+        ], $user);
 
         return compact('user', 'token');
     }
@@ -89,6 +106,6 @@ final class AuthService
         $this->audit->log('auth.logout', [
             'user_id' => $user->uuid,
             'email' => $user->email,
-        ]);
+        ], $user);
     }
 }

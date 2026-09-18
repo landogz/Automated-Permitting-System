@@ -496,6 +496,7 @@ Create [`.cursor/rules/update-project-plan-on-done.mdc`](.cursor/rules/update-pr
 | 2026-09-17 | **Admin dashboard redesign:** OCBO operations console with hero, attention KPIs, pipeline bars, needs-attention queues, recent filings, audit activity, quick access; richer dashboard-stats API | Remaining: staging → KT → production |
 | 2026-09-17 | **Audit trail admin-only:** `audit.view` synced to Spatie `admin` only; API `hasRole('admin')`; sidebar/dashboard/shell `requireRoles`; staff denied `/api/v1/admin/audit-logs` in PrivilegeMatrixTest | Remaining: staging → KT → production |
 | 2026-09-18 | **Notifications inbox:** `/admin/notifications` redesigned as Velzon mailbox-style full-page inbox (All/Unread/Read, search, detail pane, mark all); API `status`/`search`/`counts`; bell “View all”; Compose removed | Remaining: staging → KT → production |
+| 2026-09-18 | **Audit trail compliance console:** actor fixed on `auth.login` + failed attempts; resource/diff inspect drawer; KPI strip; category/actor/severity/date filters; humanized timestamps & event badges | Remaining: staging → KT → production |
 | — | Next | Staging, training/KT, production go-live + warranty |
 
 Also mirror this requirement in [`CLAUDE.md`](CLAUDE.md) under engineering standards.
