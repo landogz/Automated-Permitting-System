@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\FormDefinition;
 
+use App\Support\PermitApplication\FieldCatalog;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
@@ -31,9 +32,7 @@ class StoreFormDefinitionRequest extends FormRequest
             'schema.sections.*.fields' => ['nullable', 'array'],
             'schema.sections.*.fields.*.name' => ['required', 'string', 'max:60', 'regex:/^[a-z][a-z0-9_]*$/'],
             'schema.sections.*.fields.*.label' => ['required', 'string', 'max:255'],
-            'schema.sections.*.fields.*.type' => ['required', 'string', Rule::in([
-                'text', 'number', 'email', 'tel', 'date', 'textarea', 'select',
-            ])],
+            'schema.sections.*.fields.*.type' => ['required', 'string', Rule::in(FieldCatalog::allowedFieldTypes())],
             'schema.sections.*.fields.*.required' => ['sometimes', 'boolean'],
             'schema.sections.*.fields.*.options' => ['nullable', 'array'],
             'schema.sections.*.fields.*.options.*' => ['string', 'max:120'],
@@ -41,6 +40,17 @@ class StoreFormDefinitionRequest extends FormRequest
             'required_attachments' => ['nullable', 'array'],
             'required_attachments.*' => ['string', 'max:80'],
             'is_active' => ['sometimes', 'boolean'],
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'schema.sections.*.fields.*.type.in' => 'Each field type must be one of: text, number, email, phone, date, long text, dropdown, or map location.',
+            'schema.sections.*.fields.*.name.regex' => 'Field keys must be lowercase snake_case (e.g. lot_area).',
         ];
     }
 

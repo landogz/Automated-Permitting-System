@@ -10,6 +10,16 @@ namespace App\Support\PermitApplication;
 final class FieldCatalog
 {
     /**
+     * Field types allowed in form-definition schemas (admin builder + API).
+     *
+     * @return list<string>
+     */
+    public static function allowedFieldTypes(): array
+    {
+        return ['text', 'number', 'email', 'tel', 'date', 'textarea', 'select', 'location'];
+    }
+
+    /**
      * @return array{sections: list<array{title: string, fields: list<array<string, mixed>>}>}
      */
     public static function qms36Schema(): array

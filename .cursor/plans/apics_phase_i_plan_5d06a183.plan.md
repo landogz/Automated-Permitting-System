@@ -527,6 +527,7 @@ Create [`.cursor/rules/update-project-plan-on-done.mdc`](.cursor/rules/update-pr
 | 2026-09-19 | **DICT / GWTD alignment:** top bar (#222), masthead, PhST, Transparency Seal, skip-link, agency+standard footers; policy pages (charter, privacy, a11y, contact, sitemap, FAQs) | Remaining: staging → KT → production |
 | 2026-09-19 | **GWTD footer redesign:** agency footer (Downloads/Archives/Sitemap/FAQs); standard footer (large Republic seal, GOVPH directory, IPR/Privacy/Security, public-domain notice) | Remaining: staging → KT → production |
 | 2026-09-19 | **GWTD polish (Annex C tweaks):** GOVPH→gov.ph; Skip to content/footer; PhST label + WorldTimeAPI sync; Transparency→local page + FOI widget; public-domain under seal; data.gov.ph/foi.gov.ph; agency phone/email/hours; WCAG nav/footer contrast | Confirm Annex C PDF top-bar table + NGA vs GWTD sign-off with ICT |
+| 2026-09-19 | **Form builder fix:** allow `location` (Map location) in form-definition schema validation — matched admin builder + FieldCatalog / applicant picker | Remaining: staging → KT → production |
 | — | Next | Staging, training/KT, production go-live + warranty |
 
 Also mirror this requirement in [`CLAUDE.md`](CLAUDE.md) under engineering standards.

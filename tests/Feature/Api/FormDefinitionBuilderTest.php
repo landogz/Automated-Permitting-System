@@ -66,6 +66,51 @@ class FormDefinitionBuilderTest extends TestCase
         $this->assertTrue(collect($flat)->contains(fn ($field) => ($field['name'] ?? '') === 'custom_plot_notes'));
     }
 
+    public function test_admin_can_save_map_location_field_type(): void
+    {
+        $token = $this->postJson('/api/v1/auth/login', [
+            'email' => 'admin@csfp.local',
+            'password' => 'Admin@12345',
+            'device_name' => 'test',
+        ])->assertOk()->json('data.token');
+
+        $this->withToken($token)
+            ->postJson('/api/v1/admin/form-definitions', [
+                'code' => 'QMS-LOC',
+                'title' => 'Location field form',
+                'schema' => [
+                    'sections' => [
+                        [
+                            'title' => 'Site',
+                            'fields' => [
+                                [
+                                    'name' => 'owner_name',
+                                    'label' => 'Owner name',
+                                    'type' => 'text',
+                                    'required' => true,
+                                ],
+                                [
+                                    'name' => 'site_address',
+                                    'label' => 'Site address',
+                                    'type' => 'location',
+                                    'required' => true,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'is_active' => true,
+            ])
+            ->assertCreated()
+            ->assertJsonPath('status', true);
+
+        $form = FormDefinition::query()->where('code', 'QMS-LOC')->firstOrFail();
+        $flat = FieldCatalog::flattenFields($form->schema);
+        $this->assertTrue(collect($flat)->contains(
+            fn ($field) => ($field['name'] ?? '') === 'site_address' && ($field['type'] ?? '') === 'location'
+        ));
+    }
+
     public function test_admin_cannot_create_form_without_fields(): void
     {
         $token = $this->postJson('/api/v1/auth/login', [
