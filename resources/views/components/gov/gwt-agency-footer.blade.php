@@ -43,8 +43,8 @@
                 <h3 class="gwt-agency-footer__heading">{{ __('Site map') }}</h3>
                 <ul class="gwt-agency-footer__list">
                     <li><a href="{{ route('sitemap') }}">{{ __('Full sitemap') }}</a></li>
-                    <li><a href="{{ route('home') }}">{{ __('Home') }}</a></li>
-                    <li><a href="{{ route('home') }}#services">{{ __('Services') }}</a></li>
+                    <li><a href="{{ route('documentation.privileges', ['locale' => 'en']) }}">{{ __('Privileges (EN)') }}</a></li>
+                    <li><a href="{{ route('documentation.privileges', ['locale' => 'tl']) }}">{{ __('Pribilehiyo (TL)') }}</a></li>
                 </ul>
             </div>
 

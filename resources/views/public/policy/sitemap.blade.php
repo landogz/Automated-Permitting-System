@@ -16,6 +16,8 @@
         ['FAQs', route('faqs'), __('Frequently asked questions')],
         ['Downloads', route('downloads'), __('Forms and manuals')],
         ['Archives', route('archives'), __('News and releases archive')],
+        ['Privilege documentation (EN)', route('documentation.privileges', ['locale' => 'en']), __('System privileges and roles — English')],
+        ['Dokumentasyon ng pribilehiyo (TL)', route('documentation.privileges', ['locale' => 'tl']), __('Mga pribilehiyo at tungkulin — Tagalog')],
         ['Intellectual Property', route('intellectual-property'), __('IPR / public domain policy')],
         ['Security Policy', route('security-policy'), __('Site security policy')],
         ['Admin console', route('admin.dashboard'), __('Staff console (authorized users)')],

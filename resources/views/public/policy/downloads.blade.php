@@ -22,10 +22,13 @@
     </li>
     <li class="list-group-item d-flex justify-content-between align-items-start gap-3">
         <div>
-            <strong>{{ __('Applicant registration') }}</strong>
-            <div class="text-muted fs-13">{{ __('Create an APICS applicant account online') }}</div>
+            <strong>{{ __('Privilege & role documentation') }}</strong>
+            <div class="text-muted fs-13">{{ __('English and Tagalog guides to every system privilege and office role') }}</div>
         </div>
-        <a href="{{ route('register') }}" class="btn btn-sm btn-outline-primary flex-shrink-0">{{ __('Register') }}</a>
+        <div class="d-flex flex-shrink-0 gap-1">
+            <a href="{{ route('documentation.privileges', ['locale' => 'en']) }}" class="btn btn-sm btn-outline-primary">EN</a>
+            <a href="{{ route('documentation.privileges', ['locale' => 'tl']) }}" class="btn btn-sm btn-outline-primary">TL</a>
+        </div>
     </li>
 </ul>
 @endsection

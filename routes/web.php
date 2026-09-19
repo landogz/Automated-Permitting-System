@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\InspectionPrintController;
 use App\Http\Controllers\Admin\LogbookPrintController;
 use App\Http\Controllers\Admin\RoutingSlipPrintController;
 use App\Http\Controllers\Auth\LoginPageController;
+use App\Http\Controllers\PublicSite\PrivilegeDocumentationController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'public.home')->name('home');
@@ -26,6 +27,11 @@ Route::view('/downloads', 'public.policy.downloads')->name('downloads');
 Route::view('/archives', 'public.policy.archives')->name('archives');
 Route::view('/intellectual-property', 'public.policy.intellectual-property')->name('intellectual-property');
 Route::view('/security-policy', 'public.policy.security-policy')->name('security-policy');
+
+Route::redirect('/documentation/privileges', '/documentation/privileges/en');
+Route::get('/documentation/privileges/{locale}', PrivilegeDocumentationController::class)
+    ->whereIn('locale', ['en', 'tl'])
+    ->name('documentation.privileges');
 
 Route::prefix('admin')->group(function (): void {
     Route::get('/', DashboardController::class)->name('admin.dashboard');
