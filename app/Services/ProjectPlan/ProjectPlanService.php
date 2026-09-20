@@ -119,13 +119,16 @@ final class ProjectPlanService
     /**
      * @return array{
      *     project: string,
+     *     overview: string|null,
      *     current_focus: string,
      *     updated_at: string,
      *     source: string,
-     *     summary: array{total: int, completed: int, pending: int, in_progress: int, percent: int},
+     *     summary: array{total: int, completed: int, pending: int, in_progress: int, percent: int, todos_total: int, todos_completed: int},
      *     phases: list<array<string, mixed>>,
      *     roadmap: list<array{id: string, title: string, label: string}>,
-     *     todos: list<array{id: string, label: string, status: string}>
+     *     todos: list<array{id: string, label: string, status: string}>,
+     *     changelog: list<array{date: string, completed: string, notes: string}>,
+     *     next_steps: list<string>
      * }
      */
     public function summary(): array
@@ -135,6 +138,9 @@ final class ProjectPlanService
         $todos = $this->parseTodosFromMarkdown($contents);
         $deliveryPhases = $this->parseDeliveryPhasesFromMarkdown($contents);
         $phases = $this->buildDeliveryPhases($todos, $deliveryPhases);
+        $overview = $this->parseOverviewFromMarkdown($contents);
+        $changelog = $this->parseChangelogFromMarkdown($contents);
+        $nextSteps = $this->parseNextStepsFromMarkdown($contents);
 
         $total = count($phases);
         $completed = 0;
@@ -149,6 +155,11 @@ final class ProjectPlanService
             };
         }
 
+        $todosCompleted = count(array_filter(
+            $todos,
+            static fn (array $todo): bool => $todo['status'] === 'completed',
+        ));
+
         $currentFocus = $this->resolveCurrentFocus($todos, $phases);
         $updatedAt = File::exists($path)
             ? Carbon::createFromTimestamp(File::lastModified($path))->toDateString()
@@ -156,6 +167,7 @@ final class ProjectPlanService
 
         return [
             'project' => 'APICS Phase I — OCBO, City of San Fernando, Pampanga',
+            'overview' => $overview,
             'current_focus' => $currentFocus,
             'updated_at' => $updatedAt,
             'source' => self::PLAN_RELATIVE_PATH,
@@ -165,6 +177,8 @@ final class ProjectPlanService
                 'pending' => $pending,
                 'in_progress' => $inProgress,
                 'percent' => $total > 0 ? (int) round(($completed / $total) * 100) : 0,
+                'todos_total' => count($todos),
+                'todos_completed' => $todosCompleted,
             ],
             'phases' => $phases,
             'roadmap' => [
@@ -180,6 +194,8 @@ final class ProjectPlanService
                 ],
             ],
             'todos' => $todos,
+            'changelog' => $changelog,
+            'next_steps' => $nextSteps,
         ];
     }
 
@@ -213,6 +229,106 @@ final class ProjectPlanService
         }
 
         return $todos !== [] ? $todos : $this->fallbackTodosFromConfig();
+    }
+
+    private function parseOverviewFromMarkdown(string $contents): ?string
+    {
+        if ($contents === '' || ! preg_match('/^---\s*\n(.*?)\n---\s*/s', $contents, $matches)) {
+            return null;
+        }
+
+        $frontmatter = $matches[1];
+        if (preg_match('/^overview:\s*"([^"]*)"/m', $frontmatter, $overviewMatch)) {
+            return trim($overviewMatch[1]);
+        }
+        if (preg_match('/^overview:\s*(.+)$/m', $frontmatter, $overviewMatch)) {
+            return trim($overviewMatch[1], " \t\"'");
+        }
+
+        return null;
+    }
+
+    /**
+     * @return list<array{date: string, completed: string, notes: string}>
+     */
+    private function parseChangelogFromMarkdown(string $contents): array
+    {
+        if ($contents === '') {
+            return [];
+        }
+
+        if (! preg_match('/### Progress changelog\s*\n+(.*?)(?=\n### |\n## |\n---\s*\n|$)/s', $contents, $section)) {
+            return [];
+        }
+
+        $rows = [];
+        if (! preg_match_all(
+            '/^\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|$/m',
+            $section[1],
+            $matches,
+            PREG_SET_ORDER
+        )) {
+            return [];
+        }
+
+        foreach ($matches as $match) {
+            $date = trim($match[1]);
+            $completed = trim($match[2]);
+            $notes = trim($match[3]);
+
+            if ($date === '' || strcasecmp($date, 'Date') === 0 || preg_match('/^[-:]+$/', $date) === 1) {
+                continue;
+            }
+            if ($date === '—' || strcasecmp($date, 'Next') === 0) {
+                continue;
+            }
+
+            $rows[] = [
+                'date' => $date,
+                'completed' => $this->stripMarkdownInline($completed),
+                'notes' => $this->stripMarkdownInline($notes),
+            ];
+        }
+
+        // Newest first for the admin page.
+        return array_reverse($rows);
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function parseNextStepsFromMarkdown(string $contents): array
+    {
+        if ($contents === '') {
+            return [];
+        }
+
+        if (! preg_match('/## 12\.\s*Immediate next execution order\s*\n+(.*?)(?=\n## |\n---\s*\n|$)/s', $contents, $section)) {
+            return [];
+        }
+
+        $steps = [];
+        if (! preg_match_all('/^\d+\.\s+(.+)$/m', $section[1], $matches)) {
+            return [];
+        }
+
+        foreach ($matches[1] as $line) {
+            $cleaned = $this->stripMarkdownInline(trim($line));
+            if ($cleaned !== '') {
+                $steps[] = $cleaned;
+            }
+        }
+
+        return $steps;
+    }
+
+    private function stripMarkdownInline(string $value): string
+    {
+        $value = preg_replace('/\*\*(.+?)\*\*/', '$1', $value) ?? $value;
+        $value = preg_replace('/`([^`]+)`/', '$1', $value) ?? $value;
+        $value = preg_replace('/~~(.+?)~~/', '$1', $value) ?? $value;
+
+        return trim($value);
     }
 
     /**

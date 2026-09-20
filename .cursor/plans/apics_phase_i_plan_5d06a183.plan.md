@@ -533,6 +533,7 @@ Create [`.cursor/rules/update-project-plan-on-done.mdc`](.cursor/rules/update-pr
 | 2026-09-20 | **HTML email design rule + templates:** `.cursor/rules/html-email-design.mdc`; shared `emails.layouts.apics` (CSFP letterhead, mobile tables, dark-mode media); registration + status mailables use HTML+text | Remaining: staging → KT → production |
 | 2026-09-20 | **Fee rule conditions editor:** `/admin/fee-rules` Add/Edit modal can add/remove Field·Op·Value rows (AND match); API validates operators; clears/updates `conditions` JSON | Remaining: staging → KT → production |
 | 2026-09-20 | **Security leak fixes:** only admin may assign admin; signed prints require Sanctum+ability; demo passwords removed from login DOM; notification URL allowlist; pinned CORS; mutation throttles | Remaining: staging → KT → production |
+| 2026-09-20 | **Project Plan page sync:** `/admin/project-plan` shows MD overview, frontmatter todos, next-steps list, and progress changelog (newest first) from the living plan file | Remaining: staging → KT → production |
 | — | Next | Staging, training/KT, production go-live + warranty |
 
 Also mirror this requirement in [`CLAUDE.md`](CLAUDE.md) under engineering standards.

@@ -35,4 +35,32 @@ class ProjectPlanServiceTest extends TestCase
         $this->assertNotEmpty($summary['roadmap']);
         $this->assertSame('phase-ii', $summary['roadmap'][0]['id']);
     }
+
+    public function test_summary_includes_markdown_overview_changelog_and_next_steps(): void
+    {
+        $summary = app(ProjectPlanService::class)->summary();
+
+        $this->assertNotEmpty($summary['overview']);
+        $this->assertStringContainsString('Phase I', (string) $summary['overview']);
+
+        $this->assertGreaterThanOrEqual(8, $summary['summary']['todos_total']);
+        $this->assertGreaterThanOrEqual(7, $summary['summary']['todos_completed']);
+        $this->assertNotEmpty($summary['todos']);
+
+        $this->assertNotEmpty($summary['changelog']);
+        $this->assertArrayHasKey('date', $summary['changelog'][0]);
+        $this->assertArrayHasKey('completed', $summary['changelog'][0]);
+        $this->assertTrue(
+            collect($summary['changelog'])->contains(
+                fn (array $row): bool => str_contains($row['completed'], 'Project Plan page sync')
+                    || str_contains($row['completed'], 'Security leak'),
+            ),
+        );
+        $this->assertNotEmpty($summary['next_steps']);
+        $this->assertTrue(
+            collect($summary['next_steps'])->contains(
+                fn (string $step): bool => str_contains(strtolower($step), 'staging'),
+            ),
+        );
+    }
 }

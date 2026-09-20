@@ -22,8 +22,21 @@ type PlanRoadmap = {
     label: string;
 };
 
+type PlanTodo = {
+    id: string;
+    label: string;
+    status: string;
+};
+
+type PlanChangelogRow = {
+    date: string;
+    completed: string;
+    notes: string;
+};
+
 type ProjectPlanPayload = {
     project: string;
+    overview?: string | null;
     current_focus: string;
     updated_at: string;
     source?: string | null;
@@ -33,9 +46,14 @@ type ProjectPlanPayload = {
         pending: number;
         in_progress: number;
         percent: number;
+        todos_total?: number;
+        todos_completed?: number;
     };
     phases: PlanPhase[];
     roadmap?: PlanRoadmap[];
+    todos?: PlanTodo[];
+    changelog?: PlanChangelogRow[];
+    next_steps?: string[];
 };
 
 function statusBadge(status: string): { className: string; label: string } {
@@ -58,8 +76,113 @@ function itemIcon(status: string): string {
     return '<i class="ri-checkbox-blank-circle-line text-muted fs-5 mt-0" aria-hidden="true"></i><span class="visually-hidden">Pending:</span>';
 }
 
+function renderTodos(todos: PlanTodo[] | undefined): string {
+    if (!todos || todos.length === 0) {
+        return '';
+    }
+
+    const rows = todos
+        .map((todo) => {
+            const badge = statusBadge(todo.status);
+            return `
+                <tr>
+                    <td class="text-nowrap"><code class="fs-12">${escapeHtml(todo.id)}</code></td>
+                    <td>${escapeHtml(todo.label)}</td>
+                    <td class="text-nowrap"><span class="badge ${badge.className}">${badge.label}</span></td>
+                </tr>
+            `;
+        })
+        .join('');
+
+    return `
+        <div class="mt-4">
+            <h6 class="fw-semibold mb-2">Plan todos (from markdown frontmatter)</h6>
+            <div class="table-responsive border rounded">
+                <table class="table table-sm table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Work item</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+function renderChangelog(rows: PlanChangelogRow[] | undefined): string {
+    if (!rows || rows.length === 0) {
+        return '';
+    }
+
+    const recent = rows.slice(0, 12);
+    const body = recent
+        .map(
+            (row) => `
+            <tr>
+                <td class="text-nowrap fw-medium">${escapeHtml(row.date)}</td>
+                <td>${escapeHtml(row.completed)}</td>
+                <td class="text-muted small">${escapeHtml(row.notes)}</td>
+            </tr>
+        `,
+        )
+        .join('');
+
+    return `
+        <div class="mt-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                <h6 class="fw-semibold mb-0">Progress changelog</h6>
+                <span class="text-muted small">Showing ${recent.length} of ${rows.length} (newest first)</span>
+            </div>
+            <div class="table-responsive border rounded" style="max-height: 22rem; overflow: auto;">
+                <table class="table table-sm table-striped align-middle mb-0">
+                    <thead class="table-light sticky-top">
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Completed</th>
+                            <th scope="col">Notes / next</th>
+                        </tr>
+                    </thead>
+                    <tbody>${body}</tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+function renderNextSteps(steps: string[] | undefined): string {
+    if (!steps || steps.length === 0) {
+        return '';
+    }
+
+    const items = steps
+        .map((step) => {
+            const markedDone = /\(done\)/i.test(step);
+            return `
+                <li class="list-group-item d-flex align-items-start gap-2 px-0">
+                    ${itemIcon(markedDone ? 'completed' : 'pending')}
+                    <span class="${markedDone ? 'text-muted text-decoration-line-through' : ''}">${escapeHtml(step)}</span>
+                </li>
+            `;
+        })
+        .join('');
+
+    return `
+        <div class="mt-4">
+            <h6 class="fw-semibold mb-2">Immediate next execution order</h6>
+            <ul class="list-group list-group-flush border rounded px-3 py-1">${items}</ul>
+        </div>
+    `;
+}
+
 function renderPlan(plan: ProjectPlanPayload): string {
     const percent = plan.summary.percent;
+    const todosTotal = plan.summary.todos_total ?? plan.todos?.length ?? 0;
+    const todosCompleted = plan.summary.todos_completed ?? 0;
+
     const phasesHtml = (plan.phases || [])
         .map((phase) => {
             const badge = statusBadge(phase.status);
@@ -158,17 +281,28 @@ function renderPlan(plan: ProjectPlanPayload): string {
             </div>
         </div>
 
+        ${
+            plan.overview
+                ? `<div class="alert alert-secondary border-0 mb-4" role="note">
+                    <div class="text-uppercase fw-semibold fs-11 text-muted mb-1">Plan overview</div>
+                    <p class="mb-0">${escapeHtml(plan.overview)}</p>
+                   </div>`
+                : ''
+        }
+
         <div class="row g-3 mb-4">
-            <div class="col-6 col-md-3">
-                <div class="border rounded p-3 h-100">
-                    <p class="text-muted text-uppercase fw-medium fs-12 mb-1">Overall</p>
-                    <h4 class="mb-0">${percent}%</h4>
-                </div>
-            </div>
             <div class="col-6 col-md-3">
                 <div class="border rounded p-3 h-100">
                     <p class="text-muted text-uppercase fw-medium fs-12 mb-1">Phases done</p>
                     <h4 class="mb-0 text-success">${plan.summary.completed}/${plan.summary.total}</h4>
+                    <p class="text-muted mb-0 fs-12 mt-1">${percent}% of delivery phases</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="border rounded p-3 h-100">
+                    <p class="text-muted text-uppercase fw-medium fs-12 mb-1">Todos done</p>
+                    <h4 class="mb-0 text-primary">${todosCompleted}/${todosTotal}</h4>
+                    <p class="text-muted mb-0 fs-12 mt-1">Frontmatter checklist</p>
                 </div>
             </div>
             <div class="col-6 col-md-3">
@@ -179,7 +313,7 @@ function renderPlan(plan: ProjectPlanPayload): string {
             </div>
             <div class="col-6 col-md-3">
                 <div class="border rounded p-3 h-100">
-                    <p class="text-muted text-uppercase fw-medium fs-12 mb-1">Pending</p>
+                    <p class="text-muted text-uppercase fw-medium fs-12 mb-1">Pending phases</p>
                     <h4 class="mb-0 text-muted">${plan.summary.pending}</h4>
                 </div>
             </div>
@@ -199,7 +333,11 @@ function renderPlan(plan: ProjectPlanPayload): string {
             <strong>Current focus:</strong> ${escapeHtml(plan.current_focus)}
         </div>
 
+        <h6 class="fw-semibold mb-2">Delivery phases</h6>
         <div class="accordion" id="projectPlanAccordion">${phasesHtml}</div>
+        ${renderTodos(plan.todos)}
+        ${renderNextSteps(plan.next_steps)}
+        ${renderChangelog(plan.changelog)}
         ${roadmapHtml}
     `;
 }

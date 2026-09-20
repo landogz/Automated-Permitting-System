@@ -10,7 +10,7 @@ declare(strict_types=1);
 return [
     'project' => 'APICS Phase I — OCBO, City of San Fernando, Pampanga',
     'plan_markdown' => '.cursor/plans/apics_phase_i_plan_5d06a183.plan.md',
-    'updated_at' => '2026-09-17',
+    'updated_at' => '2026-09-20',
 
     'phases' => [
         [
@@ -54,7 +54,7 @@ return [
             'title' => 'QA, UAT & go-live',
             'status' => 'in_progress',
             'items' => [
-                ['id' => 'qa-uat-deploy', 'label' => 'Automated tests, security review, device-matrix QA, UAT, staging, training/KT, production go-live + warranty process', 'status' => 'pending'],
+                ['id' => 'qa-uat-deploy', 'label' => 'QA gate: automated tests + security review + UAT scripts (done). Remaining: staging, training/KT, production go-live + warranty process', 'status' => 'pending'],
             ],
         ],
     ],
