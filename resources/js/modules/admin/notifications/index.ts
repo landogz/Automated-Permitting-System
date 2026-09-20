@@ -5,6 +5,7 @@ import {
     escapeHtml,
     formatWhen,
     iconFor,
+    navigateInternal,
     resolveNotificationItems,
     timeAgo,
     type InboxNotification,
@@ -350,8 +351,8 @@ export function initNotificationsPage(): void {
 
     detailBody.addEventListener('click', (event) => {
         const openBtn = (event.target as HTMLElement).closest<HTMLElement>('[data-notif-detail-open]');
-        if (openBtn?.dataset.url) {
-            window.location.href = openBtn.dataset.url;
+        if (openBtn?.dataset.url && !navigateInternal(openBtn.dataset.url)) {
+            toastError('Unsafe notification link blocked.');
         }
     });
 
@@ -361,8 +362,8 @@ export function initNotificationsPage(): void {
 
     openRelatedBtn?.addEventListener('click', () => {
         const url = openRelatedBtn.dataset.url;
-        if (url) {
-            window.location.href = url;
+        if (url && !navigateInternal(url)) {
+            toastError('Unsafe notification link blocked.');
         }
     });
 

@@ -40,7 +40,7 @@ class SecurityHardeningTest extends TestCase
             ->assertForbidden();
     }
 
-    public function test_signed_logbook_print_is_allowed(): void
+    public function test_signed_logbook_print_requires_auth_and_permission(): void
     {
         $entry = LogbookEntry::query()->create([
             'entry_no' => 'G01-TEST-0001',
@@ -56,7 +56,21 @@ class SecurityHardeningTest extends TestCase
             ['logbook' => $entry->uuid],
         );
 
-        $this->get($url)->assertOk();
+        $this->flushAuthState()->get($url)->assertUnauthorized();
+
+        $applicantToken = $this->postJson('/api/v1/auth/login', [
+            'email' => 'applicant@csfp.local',
+            'password' => 'Applicant@123',
+        ])->assertOk()->json('data.token');
+
+        $this->flushAuthState()->withToken($applicantToken)->get($url)->assertForbidden();
+
+        $recordsToken = $this->postJson('/api/v1/auth/login', [
+            'email' => 'records@csfp.local',
+            'password' => 'Records@123',
+        ])->assertOk()->json('data.token');
+
+        $this->flushAuthState()->withToken($recordsToken)->get($url)->assertOk();
     }
 
     public function test_login_failures_use_generic_message(): void

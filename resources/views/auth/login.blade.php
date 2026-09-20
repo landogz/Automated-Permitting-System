@@ -50,12 +50,10 @@
                             type="button"
                             class="btn w-100 text-start py-2 quick-login-btn"
                             data-email="{{ $demo['email'] }}"
-                            data-password="{{ $demo['password'] }}"
                             data-redirect="{{ $demo['redirect'] }}"
                         >
                             <span class="d-block fw-semibold">{{ $demo['label'] }}</span>
                             <span class="d-block text-muted fs-12 text-truncate">{{ $demo['email'] }}</span>
-                            <span class="d-block text-muted fs-11 font-monospace">{{ $demo['password'] }}</span>
                         </button>
                     </div>
                 @endforeach

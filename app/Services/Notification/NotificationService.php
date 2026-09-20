@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\UserNotification;
 use App\Services\Audit\AuditLogger;
 use App\Services\Mail\MailSender;
+use App\Support\Security\SafeInternalPath;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -258,7 +259,10 @@ final class NotificationService
             ],
             [
                 'sent_by' => $actor->uuid,
-                'url' => (string) ($data['url'] ?? '/applications'),
+                'url' => SafeInternalPath::sanitize(
+                    isset($data['url']) ? (string) $data['url'] : null,
+                    '/applications',
+                ),
                 'event' => $templateCode === 'document.correction_requested'
                     ? 'document.correction_requested'
                     : 'manual.send',

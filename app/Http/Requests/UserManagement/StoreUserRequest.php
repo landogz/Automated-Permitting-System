@@ -26,7 +26,18 @@ class StoreUserRequest extends FormRequest
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'phone' => ['nullable', 'string', 'max:30'],
             'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
-            'role' => ['required', 'string', Rule::in(UserManagementService::STAFF_ROLES)],
+            'role' => [
+                'required',
+                'string',
+                Rule::in(
+                    $this->user()?->hasRole('admin')
+                        ? UserManagementService::STAFF_ROLES
+                        : array_values(array_filter(
+                            UserManagementService::STAFF_ROLES,
+                            static fn (string $role): bool => $role !== 'admin',
+                        ))
+                ),
+            ],
             'department_uuid' => ['nullable', 'uuid', 'exists:departments,uuid'],
             'is_active' => ['sometimes', 'boolean'],
         ];

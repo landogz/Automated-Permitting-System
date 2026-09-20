@@ -130,4 +130,30 @@ class UserManagementTest extends TestCase
             ])
             ->assertUnprocessable();
     }
+
+    public function test_building_official_cannot_assign_admin_role(): void
+    {
+        $token = $this->postJson('/api/v1/auth/login', [
+            'email' => 'official@csfp.local',
+            'password' => 'Official@123',
+        ])->assertOk()->json('data.token');
+
+        $meta = $this->withToken($token)
+            ->getJson('/api/v1/admin/users/meta')
+            ->assertOk();
+
+        $this->assertNotContains('admin', $meta->json('data.staff_roles') ?? []);
+        $this->assertNotContains('admin', $meta->json('data.roles') ?? []);
+
+        $this->withToken($token)
+            ->postJson('/api/v1/admin/users', [
+                'name' => 'Escalation Attempt',
+                'email' => 'escalation@csfp.local',
+                'password' => 'Escalate@123',
+                'password_confirmation' => 'Escalate@123',
+                'role' => 'admin',
+                'is_active' => true,
+            ])
+            ->assertUnprocessable();
+    }
 }

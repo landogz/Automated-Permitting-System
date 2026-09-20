@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsurePrintAuthorized;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -18,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
+        $middleware->alias([
+            'print.authz' => EnsurePrintAuthorized::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (ValidationException $e, Request $request) {
@@ -31,7 +35,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (AuthenticationException $e, Request $request) {
-            if ($request->is('api/*') || $request->expectsJson()) {
+            if ($request->is('api/*') || $request->expectsJson() || $request->is('admin/*/print') || $request->is('admin/*/*/print')) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthenticated.',

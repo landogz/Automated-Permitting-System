@@ -43,21 +43,21 @@ Route::prefix('admin')->group(function (): void {
     Route::view('/routing-templates', 'admin.routing-templates')->name('admin.routing-templates');
     Route::view('/evaluation-queue', 'admin.evaluation-queue')->name('admin.evaluation-queue');
     Route::get('/routing-slips/{slip}/print', RoutingSlipPrintController::class)
-        ->middleware('signed')
+        ->middleware(['signed', 'auth:sanctum', 'print.authz:evaluations.manage,applications.manage,workflow.manage'])
         ->name('admin.routing-slips.print');
     Route::get('/evaluations/{evaluation}/print', EvaluationPrintController::class)
-        ->middleware('signed')
+        ->middleware(['signed', 'auth:sanctum', 'print.authz:evaluations.manage'])
         ->name('admin.evaluations.print');
     Route::view('/fee-rules', 'admin.fee-rules')->name('admin.fee-rules');
     Route::view('/inspections', 'admin.inspections')->name('admin.inspections');
     Route::get('/inspections/{inspection}/print', InspectionPrintController::class)
-        ->middleware('signed')
+        ->middleware(['signed', 'auth:sanctum', 'print.authz:inspections.manage'])
         ->name('admin.inspections.print');
     Route::view('/orders-of-payment', 'admin.orders-of-payment')->name('admin.orders-of-payment');
     Route::view('/compliance-notices', 'admin.compliance-notices')->name('admin.compliance-notices');
     Route::view('/logbooks', 'admin.logbooks')->name('admin.logbooks');
     Route::get('/logbooks/{logbook}/print', LogbookPrintController::class)
-        ->middleware('signed')
+        ->middleware(['signed', 'auth:sanctum', 'print.authz:records.manage'])
         ->name('admin.logbooks.print');
     Route::view('/archives', 'admin.archives')->name('admin.archives');
     Route::view('/notifications', 'admin.notifications')->name('admin.notifications');

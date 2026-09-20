@@ -20,6 +20,23 @@ export function escapeHtml(value: string): string {
         .replace(/'/g, '&#39;');
 }
 
+/** Same-origin relative paths only — blocks https://evil and //. */
+export function isSafeInternalPath(url: string | undefined | null): boolean {
+    const value = (url || '').trim();
+    if (!value || value.startsWith('//')) return false;
+    if (/^[a-z][a-z0-9+.-]*:/i.test(value)) return false;
+    return /^\/[A-Za-z0-9/_\-.?=&%]*$/.test(value);
+}
+
+export function navigateInternal(url: string | undefined | null): boolean {
+    const value = (url || '').trim();
+    if (!isSafeInternalPath(value)) {
+        return false;
+    }
+    window.location.href = value;
+    return true;
+}
+
 export function timeAgo(iso?: string | null): string {
     if (!iso) return '';
     const then = new Date(iso).getTime();

@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 /**
  * Local/demo quick-login accounts (shown on /login when APP_ENV=local).
- * Passwords match Password::min(8)->mixedCase()->numbers()->symbols().
+ * Passwords stay server-side only (demo-login API) — never render in Blade.
  *
- * Temporarily restores password-in-DOM quick login for local convenience.
  * Disable in production: APICS_DEMO_QUICK_LOGIN=false (or non-local APP_ENV).
  */
 return [

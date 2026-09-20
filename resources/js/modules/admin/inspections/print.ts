@@ -1,4 +1,4 @@
-import { toastError } from '../../../utils/toast';
+import { openAuthenticatedPrint } from '../../../utils/print';
 import type { InspectionPrintUrls, InspectionRow } from './types';
 
 const DOC_LABELS: Record<string, string> = {
@@ -10,11 +10,7 @@ const DOC_LABELS: Record<string, string> = {
 };
 
 export function openInspectionPrint(url: string | undefined | null): void {
-    if (!url) {
-        toastError('Print link unavailable. Reload the list and try again.');
-        return;
-    }
-    window.open(url, '_blank', 'noopener,noreferrer');
+    void openAuthenticatedPrint(url);
 }
 
 export function printActionsForRow(

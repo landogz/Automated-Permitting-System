@@ -46,16 +46,19 @@ Route::prefix('v1')->group(function (): void {
 
         Route::get('applications/forms', [PermitApplicationController::class, 'forms']);
         Route::get('applications', [PermitApplicationController::class, 'index']);
-        Route::post('applications', [PermitApplicationController::class, 'store']);
+        Route::post('applications', [PermitApplicationController::class, 'store'])
+            ->middleware('throttle:30,1');
         Route::get('applications/{application}', [PermitApplicationController::class, 'show']);
-        Route::put('applications/{application}', [PermitApplicationController::class, 'update']);
+        Route::put('applications/{application}', [PermitApplicationController::class, 'update'])
+            ->middleware('throttle:30,1');
         Route::post('applications/{application}/documents', [PermitApplicationController::class, 'uploadDocument'])
             ->middleware('throttle:30,1');
         Route::get('applications/{application}/documents/{document}/file', [PermitApplicationController::class, 'streamDocument'])
             ->middleware('throttle:60,1');
         Route::delete('applications/{application}/documents/{document}', [PermitApplicationController::class, 'destroyDocument'])
             ->middleware('throttle:30,1');
-        Route::post('applications/{application}/submit', [PermitApplicationController::class, 'submit']);
+        Route::post('applications/{application}/submit', [PermitApplicationController::class, 'submit'])
+            ->middleware('throttle:20,1');
 
         // Applicant (or staff) appeal against an issued compliance notice
         Route::post('compliance-notices/{notice}/appeals', [PhaseFiveController::class, 'fileAppeal'])
@@ -74,19 +77,25 @@ Route::prefix('v1')->group(function (): void {
                 ->middleware('throttle:30,1');
             Route::get('routing-templates', [WorkflowController::class, 'listRoutingTemplates'])
                 ->middleware('throttle:60,1');
-            Route::post('routing-steps/{step}/start', [WorkflowController::class, 'startStep']);
-            Route::post('routing-steps/{step}/complete', [WorkflowController::class, 'completeStep']);
-            Route::post('applications/{application}/evaluations', [WorkflowController::class, 'storeEvaluation']);
+            Route::post('routing-steps/{step}/start', [WorkflowController::class, 'startStep'])
+                ->middleware('throttle:30,1');
+            Route::post('routing-steps/{step}/complete', [WorkflowController::class, 'completeStep'])
+                ->middleware('throttle:30,1');
+            Route::post('applications/{application}/evaluations', [WorkflowController::class, 'storeEvaluation'])
+                ->middleware('throttle:30,1');
             Route::post('evaluations/{evaluation}/forms', [WorkflowController::class, 'saveEvaluationForms'])
                 ->middleware('throttle:60,1');
-            Route::post('evaluations/{evaluation}/decide', [WorkflowController::class, 'decideEvaluation']);
+            Route::post('evaluations/{evaluation}/decide', [WorkflowController::class, 'decideEvaluation'])
+                ->middleware('throttle:30,1');
             Route::get('evaluation-form-templates', [WorkflowController::class, 'evaluationFormTemplates'])
                 ->middleware('throttle:60,1');
             Route::get('evaluation-time-summary', [WorkflowController::class, 'timeSummary'])
                 ->middleware('throttle:60,1');
-            Route::post('applications/{application}/timer/start', [WorkflowController::class, 'startTimer']);
+            Route::post('applications/{application}/timer/start', [WorkflowController::class, 'startTimer'])
+                ->middleware('throttle:30,1');
             Route::get('timer/current', [WorkflowController::class, 'currentTimer']);
-            Route::post('timer/stop', [WorkflowController::class, 'stopTimer']);
+            Route::post('timer/stop', [WorkflowController::class, 'stopTimer'])
+                ->middleware('throttle:30,1');
 
             Route::get('inspections', [PhaseFiveController::class, 'listInspections']);
             Route::get('inspection-form-templates', [PhaseFiveController::class, 'inspectionFormTemplates'])
@@ -132,10 +141,12 @@ Route::prefix('v1')->group(function (): void {
         Route::prefix('admin')->group(function (): void {
             Route::get('departments/export', [DepartmentController::class, 'export']);
             Route::post('departments/import', [DepartmentController::class, 'import']);
-            Route::apiResource('departments', DepartmentController::class);
+            Route::apiResource('departments', DepartmentController::class)
+                ->middleware('throttle:60,1');
 
             Route::get('form-definitions/templates', [FormDefinitionController::class, 'templates']);
-            Route::apiResource('form-definitions', FormDefinitionController::class);
+            Route::apiResource('form-definitions', FormDefinitionController::class)
+                ->middleware('throttle:60,1');
 
             Route::get('audit-logs/summary', [AuditLogController::class, 'summary']);
             Route::get('audit-logs', [AuditLogController::class, 'index']);
@@ -150,16 +161,21 @@ Route::prefix('v1')->group(function (): void {
                 ->middleware('throttle:30,1');
 
             Route::get('users/meta', [UserController::class, 'meta']);
-            Route::apiResource('users', UserController::class);
+            Route::apiResource('users', UserController::class)
+                ->middleware('throttle:60,1');
 
             Route::apiResource('classification-rules', ClassificationRuleController::class)
-                ->only(['index', 'store', 'update', 'destroy']);
+                ->only(['index', 'store', 'update', 'destroy'])
+                ->middleware('throttle:60,1');
             Route::apiResource('routing-templates', RoutingTemplateController::class)
-                ->only(['index', 'store', 'update', 'destroy']);
+                ->only(['index', 'store', 'update', 'destroy'])
+                ->middleware('throttle:60,1');
             Route::apiResource('fee-rules', FeeRuleController::class)
-                ->only(['index', 'store', 'update', 'destroy']);
+                ->only(['index', 'store', 'update', 'destroy'])
+                ->middleware('throttle:60,1');
             Route::apiResource('notification-templates', NotificationTemplateController::class)
-                ->only(['index', 'store', 'destroy']);
+                ->only(['index', 'store', 'destroy'])
+                ->middleware('throttle:60,1');
         });
     });
 });

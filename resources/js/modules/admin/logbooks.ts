@@ -1,5 +1,6 @@
 import { escapeHtml, hideModal, showModal } from '../../utils/bootstrap-modal';
 import { createApicsDataTable, type ApicsDataTableApi } from '../../utils/datatable';
+import { openAuthenticatedPrint } from '../../utils/print';
 import { openOpsApplicationDetail } from '../ops/application-detail/index';
 import { initApplicationSelects } from '../application-select/application-select';
 import { toastError, toastSuccess } from '../../utils/toast';
@@ -147,7 +148,7 @@ function renderLogbookDetailHtml(row: LogbookRow): string {
 
 function openPrint(row: LogbookRow): void {
     const url = row.print_url || `/admin/logbooks/${row.uuid}/print`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+    void openAuthenticatedPrint(url);
 }
 
 export function initLogbooksPage(): void {

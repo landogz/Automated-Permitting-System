@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Requests\Notification;
 
 use App\Enums\NotificationChannel;
+use App\Support\Security\SafeInternalPath;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class SendNotificationRequest extends FormRequest
 {
@@ -36,5 +38,18 @@ class SendNotificationRequest extends FormRequest
             'vars' => ['nullable', 'array'],
             'url' => ['nullable', 'string', 'max:255'],
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator): void {
+            $url = $this->input('url');
+            if ($url !== null && $url !== '' && ! SafeInternalPath::isValid((string) $url)) {
+                $validator->errors()->add(
+                    'url',
+                    __('Notification links must be relative APICS paths (e.g. /applications).'),
+                );
+            }
+        });
     }
 }

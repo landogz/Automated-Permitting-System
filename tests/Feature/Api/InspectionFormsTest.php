@@ -211,7 +211,8 @@ class InspectionFormsTest extends TestCase
             ['inspection' => $inspectionUuid, 'doc' => 'qms-65'],
         );
 
-        $this->get($url)->assertOk()->assertSee('QMS-65', false);
+        $this->flushAuthState()->get($url)->assertUnauthorized();
+        $this->withToken($token)->get($url)->assertOk()->assertSee('QMS-65', false);
     }
 
     public function test_staff_can_save_inspection_forms_without_completing(): void

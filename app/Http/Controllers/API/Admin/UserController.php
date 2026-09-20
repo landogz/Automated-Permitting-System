@@ -53,7 +53,7 @@ class UserController extends Controller
     {
         abort_unless($request->user()?->can('users.manage'), 403);
 
-        return ApiResponse::success('User form meta retrieved', $this->service->formMeta());
+        return ApiResponse::success('User form meta retrieved', $this->service->formMeta($request->user()));
     }
 
     /**

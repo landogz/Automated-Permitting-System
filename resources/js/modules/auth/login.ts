@@ -71,13 +71,29 @@ async function loginAndRedirect(
     completeLogin(data.data, successMessage, preferredRedirect);
 }
 
+async function demoLoginAndRedirect(
+    email: string,
+    preferredRedirect?: string,
+    successMessage = 'Login successful',
+): Promise<void> {
+    const { data } = await window.axios.post('/api/v1/auth/demo-login', {
+        email,
+        device_name: 'web-demo',
+    });
+
+    if (!data.status) {
+        throw { response: { data: { message: data.message || 'Login failed' } } };
+    }
+
+    completeLogin(data.data, successMessage, preferredRedirect);
+}
+
 export function initLoginPage(): void {
     const form = document.getElementById('login-form') as HTMLFormElement | null;
     if (!form) {
         return;
     }
 
-    const passwordInput = document.getElementById('password-input') as HTMLInputElement | null;
     bindPasswordToggles(form);
 
     form.addEventListener('submit', async (event) => {
@@ -100,14 +116,10 @@ export function initLoginPage(): void {
     document.querySelectorAll<HTMLButtonElement>('.quick-login-btn').forEach((btn) => {
         btn.addEventListener('click', async () => {
             const email = btn.dataset.email || '';
-            const password = btn.dataset.password || '';
             const preferredRedirect = btn.dataset.redirect || undefined;
             const label = btn.querySelector('.fw-semibold')?.textContent || email;
 
             (document.getElementById('email') as HTMLInputElement).value = email;
-            if (passwordInput) {
-                passwordInput.value = password;
-            }
 
             const buttons = document.querySelectorAll<HTMLButtonElement>('.quick-login-btn');
             buttons.forEach((b) => {
@@ -115,7 +127,7 @@ export function initLoginPage(): void {
             });
 
             try {
-                await loginAndRedirect(email, password, preferredRedirect, `Signed in as ${label}`);
+                await demoLoginAndRedirect(email, preferredRedirect, `Signed in as ${label}`);
             } catch (error: any) {
                 toastError(firstErrorMessage(error, 'Quick login failed'));
                 buttons.forEach((b) => {

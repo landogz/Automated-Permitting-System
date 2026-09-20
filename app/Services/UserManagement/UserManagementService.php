@@ -54,9 +54,15 @@ final class UserManagementService
     /**
      * @return array{roles: list<string>, staff_roles: list<string>, departments: list<array{uuid: string, code: string, name: string}>}
      */
-    public function formMeta(): array
+    public function formMeta(?User $actor = null): array
     {
-        $roles = Role::query()->orderBy('name')->pluck('name')->map(fn ($name) => (string) $name)->values()->all();
+        $staffRoles = self::STAFF_ROLES;
+        if ($actor !== null && ! $actor->hasRole('admin')) {
+            $staffRoles = array_values(array_filter(
+                $staffRoles,
+                static fn (string $role): bool => $role !== 'admin',
+            ));
+        }
 
         $departments = Department::query()
             ->where('is_active', true)
@@ -71,8 +77,8 @@ final class UserManagementService
             ->all();
 
         return [
-            'roles' => $roles,
-            'staff_roles' => self::STAFF_ROLES,
+            'roles' => $staffRoles,
+            'staff_roles' => $staffRoles,
             'departments' => $departments,
         ];
     }
@@ -82,7 +88,7 @@ final class UserManagementService
      */
     public function create(array $data, User $actor): User
     {
-        $this->assertAssignableStaffRole($data['role']);
+        $this->assertAssignableStaffRole($data['role'], $actor);
 
         return DB::transaction(function () use ($data, $actor): User {
             $user = $this->repository->create([
@@ -193,11 +199,17 @@ final class UserManagementService
         return (int) $department->id;
     }
 
-    private function assertAssignableStaffRole(string $role): void
+    private function assertAssignableStaffRole(string $role, User $actor): void
     {
         if (! in_array($role, self::STAFF_ROLES, true)) {
             throw ValidationException::withMessages([
                 'role' => [__('Staff accounts must use an office role (not applicant).')],
+            ]);
+        }
+
+        if ($role === 'admin' && ! $actor->hasRole('admin')) {
+            throw ValidationException::withMessages([
+                'role' => [__('Only administrators can assign the admin role.')],
             ]);
         }
 
@@ -210,6 +222,12 @@ final class UserManagementService
 
     private function assertRoleChangeAllowed(User $user, string $newRole, User $actor): void
     {
+        if (! in_array($newRole, self::STAFF_ROLES, true)) {
+            throw ValidationException::withMessages([
+                'role' => [__('Staff accounts must use an office role (not applicant).')],
+            ]);
+        }
+
         if (! Role::query()->where('name', $newRole)->exists()) {
             throw ValidationException::withMessages([
                 'role' => [__('Unknown role.')],
@@ -218,6 +236,12 @@ final class UserManagementService
 
         $wasAdmin = $user->hasRole('admin');
         $becomesAdmin = $newRole === 'admin';
+
+        if ($becomesAdmin && ! $actor->hasRole('admin')) {
+            throw ValidationException::withMessages([
+                'role' => [__('Only administrators can assign the admin role.')],
+            ]);
+        }
 
         if ($wasAdmin && ! $becomesAdmin) {
             if ((int) $user->id === (int) $actor->id) {

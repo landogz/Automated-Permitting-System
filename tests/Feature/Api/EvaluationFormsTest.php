@@ -182,7 +182,8 @@ class EvaluationFormsTest extends TestCase
             ['evaluation' => $evaluation->uuid, 'doc' => 'qms-63'],
         );
 
-        $this->get($printUrl)->assertOk()->assertSee('QMS-63', false);
+        $this->flushAuthState()->get($printUrl)->assertUnauthorized();
+        $this->withToken($token)->get($printUrl)->assertOk()->assertSee('QMS-63', false);
     }
 
     public function test_timer_attaches_department_and_time_summary_rolls_up(): void
@@ -231,6 +232,7 @@ class EvaluationFormsTest extends TestCase
         $this->assertNotEmpty($slip->json('data.print_urls.qms-62'));
 
         $printUrl = $slip->json('data.print_urls.qms-61');
-        $this->get($printUrl)->assertOk()->assertSee('QMS-61', false);
+        $this->flushAuthState()->get($printUrl)->assertUnauthorized();
+        $this->withToken($token)->get($printUrl)->assertOk()->assertSee('QMS-61', false);
     }
 }

@@ -1,4 +1,5 @@
 export { buildGovernmentPrintHtml, openGovernmentPrint } from './government-print';
+export { openAuthenticatedPrint } from './authenticated-print';
 export { printDataTableGovernment } from './datatable-print';
 export type {
     GovernmentPrintColumn,

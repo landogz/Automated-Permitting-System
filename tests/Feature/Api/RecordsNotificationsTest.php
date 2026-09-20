@@ -108,6 +108,15 @@ class RecordsNotificationsTest extends TestCase
             ->assertCreated()
             ->assertJsonPath('data.is_read', false);
 
+        $this->actingAsApiToken($recordsToken)
+            ->postJson('/api/v1/staff/notifications/send', [
+                'user_uuid' => $applicant->uuid,
+                'channel' => 'in_app',
+                'message' => 'Phish attempt',
+                'url' => 'https://evil.example/phish',
+            ])
+            ->assertUnprocessable();
+
         $notifUuid = $notification->json('data.uuid');
 
         $applicantToken = $this->postJson('/api/v1/auth/login', [
@@ -174,10 +183,12 @@ class RecordsNotificationsTest extends TestCase
         $this->assertNotEmpty($printUrl);
         $this->assertStringContainsString('signature=', $printUrl);
 
-        $this->get($printUrl)->assertOk();
+        $this->flushAuthState()->get($printUrl)->assertUnauthorized();
+        $this->withToken($recordsToken)->get($printUrl)->assertOk();
 
-        $this->get("/admin/logbooks/{$logbookUuid}/print")
-            ->assertForbidden();
+        // Unsigned / unauthenticated print must be denied (401 auth or 403 signature).
+        $denied = $this->flushAuthState()->get("/admin/logbooks/{$logbookUuid}/print");
+        $this->assertContains($denied->status(), [401, 403]);
     }
 
     public function test_admin_can_manage_notification_templates(): void

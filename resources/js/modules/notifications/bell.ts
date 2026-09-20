@@ -3,6 +3,7 @@ import { toastError, toastSuccess } from '../../utils/toast';
 import {
     escapeHtml,
     iconFor,
+    navigateInternal,
     resolveNotificationItems,
     timeAgo,
     type InboxNotification,
@@ -187,8 +188,8 @@ export function initNotificationBell(): void {
             event.preventDefault();
             event.stopPropagation();
             const url = openBtn.dataset.url || '';
-            if (url && url !== '#') {
-                window.location.href = url;
+            if (url && url !== '#' && !navigateInternal(url)) {
+                toastError('Unsafe notification link blocked.');
             }
             return;
         }

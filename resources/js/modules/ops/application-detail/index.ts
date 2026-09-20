@@ -1,4 +1,5 @@
 import { escapeHtml, showModal } from '../../../utils/bootstrap-modal';
+import { openAuthenticatedPrint } from '../../../utils/print';
 import { toastError } from '../../../utils/toast';
 import {
     mountSiteMapViewer,
@@ -22,11 +23,7 @@ import {
 import type { StaffApplicationDetail } from './types';
 
 function openSignedPrint(url: string): void {
-    if (!url) {
-        toastError('Print link unavailable. Reload details and try again.');
-        return;
-    }
-    window.open(url, '_blank', 'noopener,noreferrer');
+    void openAuthenticatedPrint(url);
 }
 
 let activeSiteMap: SiteMapViewerApi | null = null;
