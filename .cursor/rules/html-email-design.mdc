@@ -1,0 +1,78 @@
+---
+description: All outbound APICS emails must use modern, branded HTML templates that are mobile- and multi-client optimized — never plain text dumps or unstyled Markdown-only shells.
+alwaysApply: true
+---
+
+# HTML Email Design (ALL outbound mail)
+
+Every email APICS sends (registration, status, notifications, reminders, admin alerts) must look like a **modern, professional Philippine LGU / OCBO** message — not a bare Markdown dump, plain `nl2br` body, or browser-default page.
+
+Applies to: `app/Mail/**`, `resources/views/emails/**`, and any future Mailable.
+
+## Mandatory layout
+
+1. **Shared shell** — Always extend `emails.layouts.apics` (or a child of it). Do **not** invent one-off full HTML documents per Mailable.
+2. **Letterhead band**
+   - CSFP seal (`asset('images/branding/csfp-seal.png')` as absolute URL)
+   - LGU line: City of San Fernando, Pampanga · OCBO
+   - System line: APICS (Automated Permitting, Inspection, and Compliance System)
+3. **Document identity**
+   - Clear headline + optional eyebrow (e.g. Registration · Approved)
+   - Preheader text (hidden preview line for inbox clients)
+4. **Structured body**
+   - Short greeting, 1–3 short paragraphs, optional meta panel (label/value rows)
+   - Primary CTA as a **table-based button** (`emails.partials.button`) — never raw `<a>` styled only with Tailwind/utility classes
+   - Secondary link as plain URL under the button when useful (email clients strip fancy CSS)
+5. **Footer**
+   - Office name, system-generated notice, optional contact from `config('apics_public')`
+   - No Velzon chrome, no app sidebar, no interactive JS
+
+## Design & brand
+
+- Colors: civic navy `#0F172A`, brand red `#FF2222` for primary CTA only, slate text `#334155` / muted `#64748B`, white card on `#F1F5F9` canvas
+- Typography: system stack (`-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif`) — no web-font `@import` (blocked by many clients)
+- Card: max-width **600px**, centered, soft border, generous padding
+- Avoid purple gradients, dark-mode-only themes, and decorative clutter
+
+## Mobile & multi-client (required)
+
+Email clients are not browsers. Optimize for **Gmail, Apple Mail (iOS/macOS), Outlook, Yahoo, Samsung Mail**:
+
+| Requirement | Rule |
+|-------------|------|
+| Layout | Nested `<table role="presentation">` — **no** flexbox/grid as primary layout |
+| CSS | Prefer **inline** styles on elements; put `@media` only in `<style>` in the head |
+| Width | Fluid wrapper; inner content ≤ 600px; stack columns under ~620px |
+| Images | Absolute `https`/`APP_URL` URLs; `alt` text; `display:block`; width constrained |
+| Touch | CTA min height ~44px; full-width button on small screens |
+| Dark mode | Provide `@media (prefers-color-scheme: dark)` overrides where practical; keep contrast readable |
+| Plain text | Ship a matching `text` view (or `->text()`) alongside HTML |
+| Escape | Always `{{ }}` / `e()` — never inject raw user HTML into email bodies |
+
+## Implementation rules
+
+- Mailables use `Content(html: 'emails…', text: 'emails…-text', with: […])` — not bare `htmlString` for product mail
+- Reuse partials: `emails.partials.header`, `footer`, `button`, `panel`, `meta-row`
+- Absolute links via `url()` / `config('app.url')` — relative paths break in clients
+- Respect `MAIL_ENABLED` / `MailSender` — do not bypass the mail gate
+- No tracking scripts, no external CSS files, no `<script>`
+
+## Anti-patterns
+
+```text
+❌ Laravel default Markdown shell as the final product look
+❌ htmlString / nl2br-only notification bodies for user-facing mail
+❌ Tailwind classes / Vite CSS (clients strip them)
+❌ Flex/grid-only layouts; hover-only CTAs
+❌ Missing preheader, letterhead, or plain-text alternative
+❌ Oversized images, unescaped user content, relative asset URLs
+```
+
+## Checklist before saying done
+
+- [ ] Extends `emails.layouts.apics` (or shared child)
+- [ ] Letterhead + headline + preheader present
+- [ ] CTA uses table button partial; readable without CSS
+- [ ] Looks usable at ~320–414px width and on desktop
+- [ ] Plain-text sibling included
+- [ ] Dynamic values escaped; absolute URLs for images/links

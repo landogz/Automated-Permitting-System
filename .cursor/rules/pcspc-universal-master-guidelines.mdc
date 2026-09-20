@@ -29,6 +29,8 @@ Never start implementation or declare work complete without the senior multi-rol
 
 **Official prints:** All Print / Save PDF slips must follow `government-print-format.mdc` (LGU letterhead, form code, signature block) via `resources/js/utils/print/` or `resources/views/print/`.
 
+**Outbound email:** All mail must follow `html-email-design.mdc` — modern branded HTML via `resources/views/emails/layouts/apics.blade.php`, mobile/multi-client safe tables, plain-text sibling — never bare Markdown or `htmlString`-only product mail.
+
 ---
 
 ## 1. Core Principles & Architecture

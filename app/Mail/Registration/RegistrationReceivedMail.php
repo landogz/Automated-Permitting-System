@@ -30,7 +30,8 @@ final class RegistrationReceivedMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.registration.received',
+            html: 'emails.registration.received',
+            text: 'emails.registration.received-text',
             with: [
                 'applicantName' => $this->applicant->name,
             ],

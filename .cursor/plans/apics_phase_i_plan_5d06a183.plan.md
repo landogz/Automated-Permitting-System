@@ -530,6 +530,7 @@ Create [`.cursor/rules/update-project-plan-on-done.mdc`](.cursor/rules/update-pr
 | 2026-09-19 | **Form builder fix:** allow `location` (Map location) in form-definition schema validation — matched admin builder + FieldCatalog / applicant picker | Remaining: staging → KT → production |
 | 2026-09-19 | **Public privilege docs (EN + TL):** `/documentation/privileges/{en\|tl}` — every Spatie privilege + role matrix + applicant portal functions; linked from sitemap/footer/downloads | Remaining: staging → KT → production |
 | 2026-09-19 | **Privilege flowchart:** interactive pipeline + admin nodes at top of docs; click opens Bootstrap modal with functions; EN/TL | Remaining: staging → KT → production |
+| 2026-09-20 | **HTML email design rule + templates:** `.cursor/rules/html-email-design.mdc`; shared `emails.layouts.apics` (CSFP letterhead, mobile tables, dark-mode media); registration + status mailables use HTML+text | Remaining: staging → KT → production |
 | — | Next | Staging, training/KT, production go-live + warranty |
 
 Also mirror this requirement in [`CLAUDE.md`](CLAUDE.md) under engineering standards.

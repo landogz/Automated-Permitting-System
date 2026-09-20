@@ -30,7 +30,8 @@ final class RegistrationApprovedMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.registration.approved',
+            html: 'emails.registration.approved',
+            text: 'emails.registration.approved-text',
             with: [
                 'applicantName' => $this->applicant->name,
                 'loginUrl' => url('/login'),

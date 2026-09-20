@@ -30,7 +30,8 @@ final class RegistrationPendingAdminMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.registration.pending-admin',
+            html: 'emails.registration.pending-admin',
+            text: 'emails.registration.pending-admin-text',
             with: [
                 'applicantName' => $this->applicant->name,
                 'applicantEmail' => $this->applicant->email,

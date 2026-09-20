@@ -45,6 +45,11 @@ invent a parallel Tailwind-only look for app screens.
 modern Philippine LGU / OCBO government letterhead format via
 `resources/js/utils/print/` or `resources/views/print/` — never bare HTML dumps.
 
+**HTML email (mandatory for outbound mail)**
+(`.cursor/rules/html-email-design.mdc`): all emails use the shared responsive
+HTML shell in `resources/views/emails/` (letterhead, CTA button, mobile-safe
+tables, plain-text sibling) — never bare Markdown dumps or `htmlString`-only bodies.
+
 Non-negotiable gates before merge:
 
 - `composer qa` passes when quality tooling is configured

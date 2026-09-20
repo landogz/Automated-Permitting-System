@@ -32,7 +32,8 @@ final class RegistrationDeclinedMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.registration.declined',
+            html: 'emails.registration.declined',
+            text: 'emails.registration.declined-text',
             with: [
                 'applicantName' => $this->applicant->name,
                 'reason' => $this->reason,

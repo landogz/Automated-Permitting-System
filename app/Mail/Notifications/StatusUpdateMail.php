@@ -29,8 +29,23 @@ class StatusUpdateMail extends Mailable
 
     public function content(): Content
     {
+        $data = is_array($this->notification->data) ? $this->notification->data : [];
+        $actionUrl = isset($data['action_url']) && is_string($data['action_url'])
+            ? $data['action_url']
+            : null;
+        $actionLabel = isset($data['action_label']) && is_string($data['action_label'])
+            ? $data['action_label']
+            : 'Open in APICS';
+
         return new Content(
-            htmlString: nl2br(e($this->notification->body)),
+            html: 'emails.notifications.status-update',
+            text: 'emails.notifications.status-update-text',
+            with: [
+                'title' => $this->notification->title,
+                'body' => $this->notification->body,
+                'actionUrl' => $actionUrl,
+                'actionLabel' => $actionLabel,
+            ],
         );
     }
 }
