@@ -315,9 +315,15 @@ class InspectionFeesComplianceTest extends TestCase
                 'amount' => 100,
                 'priority' => 50,
                 'is_active' => true,
+                'conditions' => [
+                    ['field' => 'lot_area', 'operator' => '>=', 'value' => '50'],
+                ],
             ])
             ->assertCreated()
-            ->assertJsonPath('data.code', 'TEST-FEE');
+            ->assertJsonPath('data.code', 'TEST-FEE')
+            ->assertJsonPath('data.conditions.0.field', 'lot_area')
+            ->assertJsonPath('data.conditions.0.operator', '>=')
+            ->assertJsonPath('data.condition_count', 1);
 
         $uuid = $created->json('data.uuid');
         $this->actingAsApiToken($token)
@@ -326,10 +332,16 @@ class InspectionFeesComplianceTest extends TestCase
                 'amount' => 250.5,
                 'priority' => 40,
                 'is_active' => false,
+                'conditions' => [
+                    ['field' => 'lot_area', 'operator' => '>=', 'value' => 100],
+                    ['field' => 'occupancy', 'operator' => 'contains', 'value' => 'Commercial'],
+                ],
             ])
             ->assertOk()
             ->assertJsonPath('data.name', 'Test fee updated')
-            ->assertJsonPath('data.is_active', false);
+            ->assertJsonPath('data.is_active', false)
+            ->assertJsonPath('data.condition_count', 2)
+            ->assertJsonPath('data.conditions.0.value', 100);
 
         $fees = $this->actingAsApiToken($token)
             ->getJson('/api/v1/admin/fee-rules')

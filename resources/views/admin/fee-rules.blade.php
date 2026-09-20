@@ -68,7 +68,7 @@
                     <h4 class="card-title mb-1">Order of Payment fee engine</h4>
                     <p class="text-muted mb-0 fs-13">
                         Active rules drive G-02 Order of Payment lines (LGU / BFP / DPWH / CTO stubs).
-                        Use <strong>View rule</strong> for basis, rates, and conditions.
+                        Use <strong>View</strong> / <strong>Edit</strong> for basis, rates, and match conditions (e.g. lot_area ≥ 50).
                     </p>
                 </div>
                 <button type="button" class="btn btn-primary" id="btn-open-add-fee-rule">
@@ -149,6 +149,22 @@
                                 <option value="1" selected>Active</option>
                                 <option value="0">Inactive</option>
                             </select>
+                        </div>
+                        <div class="col-12">
+                            <hr class="my-1">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                                <div>
+                                    <h6 class="fs-13 text-muted text-uppercase mb-1">Conditions (optional)</h6>
+                                    <p class="text-muted mb-0 fs-12">
+                                        Pick a field from the dropdown. All rows must match (AND). Leave empty to apply to every application by priority.
+                                    </p>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-soft-primary" id="btn-fee-add-condition">
+                                    <i class="ri-add-line align-bottom me-1"></i> Add condition
+                                </button>
+                            </div>
+                            <div id="fee-conditions-list" class="d-flex flex-column gap-2" aria-live="polite"></div>
+                            <p id="fee-conditions-empty" class="text-muted fs-12 mb-0 mt-2">No conditions — rule applies to all matching applications.</p>
                         </div>
                     </div>
                 </div>

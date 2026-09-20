@@ -30,6 +30,27 @@ type FeeSummary = {
     total?: number;
 };
 
+const OPERATORS: Array<{ value: string; label: string }> = [
+    { value: '>=', label: '>=' },
+    { value: '>', label: '>' },
+    { value: '<=', label: '<=' },
+    { value: '<', label: '<' },
+    { value: '=', label: '=' },
+    { value: 'contains', label: 'contains' },
+];
+
+/** Known application / fee-engine fields for the condition dropdown. */
+const CONDITION_FIELDS: Array<{ value: string; label: string }> = [
+    { value: 'lot_area', label: 'Lot area (sqm)' },
+    { value: 'floor_area', label: 'Floor area (sqm)' },
+    { value: 'occupancy', label: 'Occupancy' },
+    { value: 'classification', label: 'Classification' },
+    { value: 'owner_name', label: 'Owner name' },
+    { value: 'project_title', label: 'Project title' },
+    { value: 'project_location', label: 'Project location' },
+    { value: 'permit_type', label: 'Permit type' },
+];
+
 function formatPhp(amount: string | number | null | undefined): string {
     const n = Number(amount ?? 0);
     if (Number.isNaN(n)) return '₱0.00';
@@ -153,6 +174,116 @@ function renderDetail(row: FeeRuleRow): string {
     `;
 }
 
+function operatorOptions(selected?: string): string {
+    return OPERATORS.map(
+        (op) =>
+            `<option value="${escapeHtml(op.value)}"${op.value === selected ? ' selected' : ''}>${escapeHtml(op.label)}</option>`,
+    ).join('');
+}
+
+function fieldOptions(selected?: string): string {
+    const selectedValue = String(selected || '').trim();
+    const known = new Set(CONDITION_FIELDS.map((f) => f.value));
+    const options = CONDITION_FIELDS.map(
+        (f) =>
+            `<option value="${escapeHtml(f.value)}"${f.value === selectedValue ? ' selected' : ''}>${escapeHtml(f.label)}</option>`,
+    );
+    // Preserve legacy / custom fields that are not in the catalog.
+    if (selectedValue && !known.has(selectedValue)) {
+        options.unshift(
+            `<option value="${escapeHtml(selectedValue)}" selected>${escapeHtml(selectedValue)} (custom)</option>`,
+        );
+    }
+    return `<option value="">Select field…</option>${options.join('')}`;
+}
+
+function syncConditionsEmptyState(): void {
+    const list = document.getElementById('fee-conditions-list');
+    const empty = document.getElementById('fee-conditions-empty');
+    if (!list || !empty) return;
+    empty.classList.toggle('d-none', list.children.length > 0);
+}
+
+function addConditionRow(condition?: FeeCondition): void {
+    const list = document.getElementById('fee-conditions-list');
+    if (!list) return;
+
+    const row = document.createElement('div');
+    row.className = 'fee-condition-row border rounded p-2 bg-light-subtle';
+    row.innerHTML = `
+        <div class="row g-2 align-items-end">
+            <div class="col-12 col-sm-4">
+                <label class="form-label fs-12 mb-1">Field</label>
+                <select class="form-select form-select-sm fee-cond-field" aria-label="Condition field">
+                    ${fieldOptions(condition?.field)}
+                </select>
+            </div>
+            <div class="col-6 col-sm-3">
+                <label class="form-label fs-12 mb-1">Operator</label>
+                <select class="form-select form-select-sm fee-cond-operator" aria-label="Condition operator">
+                    ${operatorOptions(condition?.operator || '>=')}
+                </select>
+            </div>
+            <div class="col-6 col-sm-3">
+                <label class="form-label fs-12 mb-1">Value</label>
+                <input type="text" class="form-control form-control-sm fee-cond-value"
+                    placeholder="e.g. 50" maxlength="255"
+                    value="${escapeHtml(String(condition?.value ?? ''))}">
+            </div>
+            <div class="col-12 col-sm-2">
+                <button type="button" class="btn btn-sm btn-soft-danger w-100 fee-cond-remove" aria-label="Remove condition">
+                    <i class="ri-delete-bin-line" aria-hidden="true"></i>
+                    <span class="d-sm-none ms-1">Remove</span>
+                </button>
+            </div>
+        </div>
+    `;
+    row.querySelector('.fee-cond-remove')?.addEventListener('click', () => {
+        row.remove();
+        syncConditionsEmptyState();
+    });
+    list.appendChild(row);
+    syncConditionsEmptyState();
+}
+
+function clearConditionRows(): void {
+    const list = document.getElementById('fee-conditions-list');
+    if (list) list.innerHTML = '';
+    syncConditionsEmptyState();
+}
+
+function setConditionRows(conditions?: FeeCondition[] | null): void {
+    clearConditionRows();
+    const list = conditions || [];
+    if (!list.length) return;
+    list.forEach((c) => addConditionRow(c));
+}
+
+function collectConditions(): FeeCondition[] {
+    const rows = document.querySelectorAll('.fee-condition-row');
+    const out: FeeCondition[] = [];
+    rows.forEach((row) => {
+        const field = (row.querySelector('.fee-cond-field') as HTMLSelectElement | null)?.value.trim() || '';
+        const operator =
+            (row.querySelector('.fee-cond-operator') as HTMLSelectElement | null)?.value || '>=';
+        const raw = (row.querySelector('.fee-cond-value') as HTMLInputElement | null)?.value.trim() || '';
+        if (!field && raw === '') return;
+        let value: string | number = raw;
+        if (operator !== 'contains' && raw !== '' && !Number.isNaN(Number(raw))) {
+            value = Number(raw);
+        }
+        out.push({ field, operator, value });
+    });
+    return out;
+}
+
+function setSaveLabel(label: string): void {
+    const btn = document.getElementById('btn-save-fee-rule');
+    const span = btn?.querySelector('.btn-label');
+    if (span) span.textContent = label;
+    else if (btn) btn.textContent = label;
+}
+
 function collectPayload(): Record<string, unknown> {
     return {
         code: (document.getElementById('fee-code') as HTMLInputElement).value.trim(),
@@ -163,6 +294,7 @@ function collectPayload(): Record<string, unknown> {
         rate: Number((document.getElementById('fee-rate') as HTMLInputElement).value || 0) || null,
         priority: Number((document.getElementById('fee-priority') as HTMLInputElement).value || 100),
         is_active: (document.getElementById('fee-active') as HTMLSelectElement).value === '1',
+        conditions: collectConditions(),
     };
 }
 
@@ -186,8 +318,9 @@ export function initFeeRulesPage(): void {
         (document.getElementById('fee-amount') as HTMLInputElement).value = '0';
         (document.getElementById('fee-rate') as HTMLInputElement).value = '0';
         (document.getElementById('fee-active') as HTMLSelectElement).value = '1';
+        clearConditionRows();
         if (formTitle) formTitle.textContent = 'Add fee rule';
-        if (saveBtn) saveBtn.textContent = 'Save rule';
+        setSaveLabel('Save rule');
     };
 
     const openCreate = (): void => {
@@ -207,8 +340,9 @@ export function initFeeRulesPage(): void {
         (document.getElementById('fee-rate') as HTMLInputElement).value =
             row.rate != null && row.rate !== '' ? String(row.rate) : '0';
         (document.getElementById('fee-active') as HTMLSelectElement).value = row.is_active ? '1' : '0';
+        setConditionRows(row.conditions);
         if (formTitle) formTitle.textContent = `Edit fee rule · ${row.code}`;
-        if (saveBtn) saveBtn.textContent = 'Update rule';
+        setSaveLabel('Update rule');
         hideModal('modal-fee-detail');
         showModal('modal-add-fee-rule');
     };
@@ -233,6 +367,9 @@ export function initFeeRulesPage(): void {
     };
 
     document.getElementById('btn-open-add-fee-rule')?.addEventListener('click', () => openCreate());
+    document.getElementById('btn-fee-add-condition')?.addEventListener('click', () =>
+        addConditionRow({ field: 'lot_area', operator: '>=', value: '' }),
+    );
     document.getElementById('btn-fee-edit')?.addEventListener('click', () => {
         if (!viewing) return;
         openEdit(viewing);
@@ -241,6 +378,7 @@ export function initFeeRulesPage(): void {
         if (!viewing) return;
         void deleteRule(viewing);
     });
+    syncConditionsEmptyState();
 
     void (async () => {
         try {
@@ -350,6 +488,12 @@ export function initFeeRulesPage(): void {
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
         const uuid = uuidInput?.value.trim() || '';
+        const conditions = collectConditions();
+        const incomplete = conditions.find((c) => !c.field || c.value === '' || c.value == null);
+        if (incomplete) {
+            toastError('Each condition needs a field and value, or remove the empty row.');
+            return;
+        }
         const payload = collectPayload();
         const btn = saveBtn as HTMLButtonElement | null;
         if (btn) btn.disabled = true;
